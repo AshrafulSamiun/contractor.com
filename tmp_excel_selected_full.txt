@@ -1,0 +1,981 @@
+
+===== SHEET: Service Plan  (rows=31, cols=6) =====
+R5: C3:DropDesk Service Plans
+R7: C3:Plan Name || C4:Basic Plan || C5:Standard Plan || C6:Enterprise Plan
+R8: C3:Price (per user/month) || C4:$15 USD || C5:$20 USD || C6:$25 USD
+R9: C3:Parcel Logging (record arrivals and departures) || C4:✅ || C5:✅ || C6:✅
+R10: C3:Track Parcel Handovers (who received what) || C4:✅ || C5:✅ || C6:✅
+R11: C3:Update Parcel Status (Picked Up, Delivered) || C4:✅ || C5:✅ || C6:✅
+R12: C3:Manage Storage Locations (Back Office, Lockers) || C4:❌ || C5:✅ || C6:✅
+R13: C3:Confirm Parcel Pickups || C4:❌ || C5:✅ || C6:✅
+R14: C3:Track Pending or Held Parcels || C4:❌ || C5:✅ || C6:✅
+R15: C3:Track External Lockers (e.g., third-party lockers) || C4:❌ || C5:❌ || C6:✅
+R16: C3:Delivery by Staff or Locker Access Management || C4:❌ || C5:❌ || C6:✅
+R17: C3:Record Parcel Final Outcomes (Returned, Lost, Damaged) || C4:❌ || C5:❌ || C6:✅
+R18: C3:Manage Multiple Locations || C4:❌ || C5:❌ || C6:✅
+R19: C3:Generate Reports & Basic Analytics || C4:❌ || C5:❌ || C6:✅
+R20: C3:Text Notifications for Parcel Status Updates || C4:❌ || C5:❌ || C6:✅
+R21: C3:Multi-language Support || C4:❌ || C5:✅ || C6:✅
+R22: C3:User Management (Add users, roles, active/inactive) || C4:❌ || C5:❌ || C6:✅
+R23: C3:Staff Administrative Tasks (Daily & Incident Reports, Timesheets) || C4:❌ || C5:❌ || C6:✅
+R24: C3:Full Account & Security Management (Billing, MFA, Recovery) || C4:❌ || C5:❌ || C6:✅
+R27: C3:Notes:
+R29: C3:Fees are exclusive of taxes or additional charges.
+R30: C3:Fees are per user/license.
+R31: C3:Fees are non-refundable.
+
+===== SHEET: Crt Account (rows=372, cols=6) =====
+R2: C2:Parcel Management System – Create Account
+R4: C2:Welcome to the Parcel Management Platform
+R6: C2:We are pleased to welcome you. Please complete all required fields accurately.
+R7: C2:Before submitting, you are required to read the Users Terms and Conditions at least twice and confirm your agreement.
+R11: C2:1. Company Information
+R13: C2:Company / Organization Name*: ___________________________
+R15: C2:Company Logo (Attach File)*: ___________________________
+R19: C2:2. Company Address
+R21: C2:Street Address*: ___________________________
+R23: C2:City*: ___________________________
+R24: C2:State / Province*: ___________________________
+R25: C2:ZIP / Postal Code*: ___________________________
+R26: C2:Country*: ___________________________
+R28: C2:Main Phone Number*: ___________________________
+R32: C2:3. Building / Facility Details
+R34: C2:Facility / Building Name*: ___________________________
+R36: C2:Part Number*: ___________________________
+R38: C2:Street Address*: ___________________________
+R39: C2:City*: ___________________________
+R40: C2:State / Province*: ___________________________
+R41: C2:ZIP / Postal Code*: ___________________________
+R43: C2:Country*: ___________________________
+R45: C2:Phone Number*: ___________________________
+R47: C2:Email Address*: ___________________________
+R51: C2:4. Facility Usage Table
+R53: C2:Facility Name || C3:Address || C4:Assigned Username || C5:Notes (Optional)
+R58: C2:Note:
+R60: C2:Each user license can be assigned to a maximum of 2 facilities only.
+R62: C2:Assigning a single user to more than 2 facilities is a license violation and may result in account suspension or additional licensing fees.
+R66: C2:5. Contact Information
+R68: C2:Primary Phone Number*: ___________________________
+R70: C2:Mobile Number (Optional): ___________________________
+R72: C2:Business Email Address*: ___________________________
+R74: C2:Alternate Email (Optional): ___________________________
+R76: C2:Website (Optional): ___________________________
+R80: C2:6. Account Preferences
+R82: C2:Time Zone*: ___________________________
+R84: C2:Preferred Language*: ___________________________
+R86: C2:Date Format*: ___________________________
+R90: C2:7. Notification Preferences
+R92: C2:☐ Email Notifications
+R93: C2:☐ SMS Notifications
+R94: C2:☐ Parcel Arrival Alerts
+R95: C2:☐ System & Security Alerts
+R96: C2:☐ Marketing / Promotional Updates (Optional)
+R100: C2:8. Account Security
+R102: C2:Login Credentials
+R104: C2:Username*: ___________________________
+R106: C2:Password*: ___________________________
+R108: C2:Confirm Password*: ___________________________
+R110: C2:Security PIN*: ___________________________
+R112: C2:☐ Enable Two‑Factor Authentication (Optional)
+R114: C2:Security & Device Policy
+R116: C2:Login attempts from multiple or unrecognized devices, or
+R118: C2:Three (3) failed attempts to recover username or password
+R120: C2:will result in automatic account lock.
+R122: C2:☐ I confirm that the devices used for this account are authorized for daily business operations only.
+R124: C2:Password & PIN Rotation Policy
+R126: C2:Authorized users must update password and PIN every 30 days
+R128: C2:The system sends 3 reminders
+R130: C2:Failure to update after the third reminder results in account lock & suspension
+R132: C2:Enforcement action occurs 24 hours after the third notification
+R136: C2:9. Subscription Plan
+R138: C2:Select Plan*: ☐ Basic ☐ Premium ☐ Enterprise
+R140: C2:Monthly Plan Fee per User: $__________ (plus applicable local taxes)
+R144: C2:10. User Licenses
+R146: C2:The amount in your current plan is per user.
+R148: C2:Sharing one user license with multiple users is strictly prohibited and considered a serious account violation.
+R150: C2:If you need additional users, please login to “My Account” and purchase additional licenses.
+R152: C2:Each additional user requires a separate license fee.
+R154: C2:Reminder: Each user license can only be used for a maximum of 2 facilities.
+R158: C2:11. Billing Information
+R160: C2:Payment Method*
+R161: C2:☐ Credit Card ☐ Bank Transfer ☐ PayPal ☐ Other
+R163: C2:Credit Card Details
+R165: C2:Name on Card*: ___________________________
+R167: C2:Card Number*: ___________________________
+R169: C2:Expiry Date*: ___________________________
+R171: C2:CVV / CVC*: ___________________________
+R173: C2:Billing Address*: ___________________________
+R175: C2:Billing Cycle: Monthly (Charged in Advance)
+R176: C2:☐ Auto‑Renew Subscription ☐ Yes ☐ No
+R178: C2:Billing Policy
+R180: C2:Charges occur at the beginning of each month, in advance.
+R182: C2:If your payment method is declined, the system will automatically attempt one more retry 48 hours later.
+R184: C2:If payment is still declined, your account will be suspended / out of service until payment is updated.
+R186: C2:Prorated billing applies for mid‑month starts:
+R190: C2:Example: Service starts Jan 15 → charged for remaining 16 days
+R192: C2:Next full charge on Feb 1
+R194: C2:All fees are NON‑REFUNDABLE
+R196: C2:Fees include applicable sales tax per local tax authority
+R200: C2:12. Account Administrator Details
+R202: C2:First Name*: ___________________________
+R204: C2:Last Name*: ___________________________
+R206: C2:Role / Position*: ___________________________
+R208: C2:☐ System Administrator
+R210: C2:Phone Number*: ___________________________
+R212: C2:Business Email Address*: ___________________________
+R214: C2:Account Creation Date*: ___________________________
+R216: C2:Add Secondary Admins (Optional)
+R218: C2:Name || C3:Role || C4:Email || C5:Phone || C6:System Admin?
+R223: C2:13. Account Recovery & Support
+R225: C2:Recovery Email Address*: ___________________________
+R227: C2:Security Contact Number (Optional): ___________________________
+R231: C2:14. Email Verification
+R233: C2:A confirmation email will be sent to the primary email address.
+R235: C2:Your account will not be fully activated until email is verified.
+R239: C2:15. Captcha / Anti-Bot Verification
+R241: C2:☐ I am not a robot [Captcha Placeholder]
+R245: C2:16. Users Required Account Safety
+R247: C2:1. Do not save username, password, or PIN in any web browser.
+R249: C2:2. Do not save username, password, or PIN in any documents, notes, phone apps, or other files on your devices.
+R251: C2:3. Do not share login credentials (username, password, PIN) with unauthorized persons or companies.
+R255: C2:Violation may result in account closure, legal action, and financial penalties.
+R257: C2:4. Only authorized personnel or admins may change passwords or PINs.
+R259: C2:5. Automatic logout for inactivity:
+R263: C2:If the system is idle for 1 hour, it will log you out automatically.
+R265: C2:You must login again to continue operations.
+R267: C2:6. Follow other common web application security best practices:
+R271: C2:Use strong, unique passwords
+R273: C2:Avoid public/shared devices
+R275: C2:Regularly review account activity logs
+R279: C2:17. Users Terms and Conditions (Full Legal Version)
+R281: C2:By creating an account, you confirm that you have read, understood, and agreed to all terms below:
+R283: C2:1. Platform is only for real parcel and delivery management purposes.
+R285: C2:2. Company is not responsible for lost, damaged, delayed, stolen, or missing parcels.
+R287: C2:3. No illegal, prohibited, or forbidden items may be managed, recorded, stored, or tracked using this Platform.
+R289: C2:4. Users must not use the Platform for illegal activities, abuse, fraud, money laundering, terrorism, or any unlawful purpose.
+R291: C2:5. If requested by police, courts, government authorities, or regulators, the Company will fully cooperate and may provide all user data, records, logs, and account information without notice.
+R293: C2:6. All service fees are strictly NON‑REFUNDABLE, including partial months, unused time, suspended, or closed accounts.
+R295: C2:7. Billing occurs monthly in advance, including applicable local taxes.
+R297: C2:8. Users are fully responsible for all activities under their account, including actions by employees, admins, or third parties.
+R299: C2:9. Credential Sharing Prohibited:
+R303: C2:Username, password, PIN, or account access must not be shared.
+R305: C2:Sharing one user license with multiple users is a serious violation and may result in account closure, fines, or legal action.
+R307: C2:10. Each user license is limited to a maximum of 2 facilities. Violations may result in account suspension or additional licensing fees.
+R309: C2:11. Login attempts from multiple devices or repeated failures may result in account lock or termination.
+R311: C2:12. Users confirm that all devices used are authorized business devices only.
+R313: C2:13. The Company may monitor, audit, suspend, or terminate accounts at its discretion.
+R315: C2:14. Unauthorized use (IT/dev work, testing, training, simulation without approval) is prohibited and may result in legal penalties up to USD 1,000,000 per violation.
+R317: C2:15. Users agree to indemnify and hold harmless the Company, owners, shareholders, employees, and partners from all claims or damages.
+R319: C2:16. Intellectual property, software, branding, and data structures are fully protected.
+R321: C2:17. The Platform is provided “as is”, without guarantee of uninterrupted or error‑free service.
+R323: C2:18. The Company may modify features, services, or terms at any time. Continued use constitutes acceptance.
+R325: C2:19. Account Closing:
+R329: C2:Customers must submit closure request via “Contact Us”
+R331: C2:Requests must be made 14 days in advance
+R333: C2:All fees remain payable
+R335: C2:20. Password & PIN Security Enforcement:
+R339: C2:Authorized users must update password and PIN every 30 days
+R341: C2:The system sends 3 notifications
+R343: C2:Failure to update after the third notification results in account lock & suspension
+R345: C2:The Company may enforce action 24 hours after the third notification
+R347: C2:21. Payment Decline Policy:
+R351: C2:Monthly charges occur at the beginning of each month
+R353: C2:If payment declines, the system retries once after 48 hours
+R355: C2:If still declined, account will be suspended / out of service until payment is updated
+R357: C2:22. Users will be logged out automatically after 1 hour of inactivity
+R359: C2:23. These Terms are governed by the Company’s legal jurisdiction, and users consent to that jurisdiction.
+R361: C2:☐ I have read, understood, and agree to the Users Terms and Conditions
+R363: C2:☐ I accept the Privacy Policy
+R367: C2:18. Final Confirmation
+R369: C2:☐ Save & Complete Registration
+R370: C2:☐ Go to Login Page
+
+===== SHEET: Admin- Expand  (rows=110, cols=6) =====
+R2: C3:1 || C4:Summary
+R3: C3:2 || C4:Calendar
+R4: C3:3 || C4:To Do
+R5: C3:4 || C4:Announcement
+R6: C3:5 || C4:Profiles
+R7: C5:Facilities / Property
+R8: C5:Lockers
+R9: C5:Parcels Room
+R10: C5:Recipients
+R11: C5:Couriers
+R12: C5:Seller
+R13: C5:Parcel / Delivery Items
+R14: C5:Delivery Methods :
+R15: C6:Pick up at Front Desk
+R16: C6:Pick up from Facility Locker
+R17: C6:Pick up from External Locker
+R18: C6:Pick up from Courier Staff
+R19: C6:Delivered by Courier
+R20: C6:Delivered by Facility Staff
+R22: C3:6 || C4:Delivery & Pick up
+R23: C5:New Arrival
+R24: C5:Pick Up
+R25: C5:Delivered
+R26: C5:Rejected Parcels
+R27: C5:Lost / Damaged
+R28: C5:Expired Holding
+R33: C3:7 || C4:Users Management :
+R34: C5:Add New User
+R35: C5:Roles & Permissions
+R36: C5:Active/ Deactivate user(s)
+R40: C3:8 || C4:Workforce Management
+R41: C5:Daily Reports
+R42: C5:Incident Reports
+R43: C5:Time Sheet
+R46: C3:9 || C4:Reports
+R48: C5:Profiles
+R49: C5:Parcels/ Delivery Report
+R50: C5:Workforce Management
+R51: C6:Daily Report
+R52: C6:Incident Report
+R53: C6:Time Sheet
+R54: C6:Wok Schedule
+R55: C6:Job/ Service Order
+R56: C5:Users Activity
+R60: C3:10 || C4:Settings
+R61: C5:Date & Time
+R62: C5:Theme
+R63: C5:Parcel Holding Limits
+R64: C5:Notification Settings
+R66: C3:11 || C4:Notifications
+R67: C5:Parcel Arrival
+R68: C5:Pickup Request
+R69: C5:Parcel Return
+R73: C3:12 || C4:Email
+R74: C5:9.1 New
+R75: C5:9.2 Inbox
+R76: C5:9.3 Sent
+R79: C3:14 || C4:My Account
+R81: C3:14-1 || C4:Profile
+R82: C5:Company name
+R83: C5:Address
+R84: C5:Contact
+R85: C5:Ph.
+R86: C5:Email
+R88: C3:14-2 || C4:Account Status || C5:Active/ Suspend
+R90: C3:14-3 || C4:Billing & Subscription
+R91: C5:Current Plans
+R92: C5:Payment Methods
+R93: C5:Billing/Invoices History
+R94: C5:Purchase New License(s)
+R97: C3:14-4 || C4:Account Security :
+R99: C4:Two-Factor Authentication (MFA)
+R100: C4:User Name
+R101: C4:Password
+R102: C4:PIN Code
+R104: C3:14-5 || C4:Account Recovery Options
+R105: C5:Recovery Email
+R106: C5:Recovery Phone
+R108: C3:15 || C4:Help & Support
+R110: C3:16 || C4:Log Out
+
+===== SHEET: 5 (rows=227, cols=12) =====
+R3: C2:5 || C3:Profiles
+R4: C2:5-1 || C3:Facilities / Property
+R5: C2:5-2 || C3:Locker/ Compartment  :
+R6: C3:Facility Owned
+R7: C3:Third Party Own
+R8: C2:5-3 || C3:Parcels Room
+R9: C2:5-4 || C3:Recipients
+R10: C2:5-5 || C3:Couriers
+R11: C2:5-6 || C3:Seller
+R12: C2:5-7 || C3:Parcel / Delivery Items
+R13: C2:5-8 || C3:Delivery Methods :
+R14: C4:Pick up at Front Desk
+R15: C4:Pick up from Facility Locker
+R16: C4:Pick up from External Locker
+R17: C4:Pick up from Courier Staff
+R18: C4:Delivered by Courier
+R19: C4:Delivered by Facility Staff
+R25: C2:5-1 || C3:Facilities / Property
+R27: C3:New
+R29: C3:No- Name
+R30: C3:Facility Type:
+R32: C4:Clinics
+R33: C4:Colleges
+R34: C4:Commercial Building
+R35: C4:Condominiums
+R36: C4:Corporate Offices
+R37: C4:Co-working Spaces
+R38: C4:Government Offices
+R39: C4:Hospitals
+R40: C4:Hostels
+R41: C4:Hotels
+R42: C4:Municipal Buildings
+R43: C4:Nursing Homes
+R44: C4:Office Buildings
+R45: C4:Police Stations
+R46: C4:Property Management
+R47: C4:Public Libraries
+R48: C4:Residential Buildings
+R49: C4:Schools
+R50: C4:Senior Living Communities
+R51: C4:Serviced Apartments
+R52: C4:Shopping Malls
+R53: C4:Universities
+R55: C3:Address
+R56: C4:No.
+R57: C4:Street:
+R58: C4:City:
+R59: C4:State / Province:
+R60: C4:Country:
+R61: C4:Zip / Postal Code:
+R65: C3:Contact
+R66: C4:Ph. Office:
+R67: C4:Ph. Mobile:
+R68: C4:Email:
+R69: C4:Fax:
+R70: C4:Website:
+R73: C3:New- Edit- Deleted- Save
+R80: C2:5-2 || C3:Locker/ Compartment  : || C4:See Sheet 4.1
+R87: C2:5-3 || C3:Parcels Room
+R90: C3:No- Name
+R91: C3:Property/ Facility
+R92: C3:Floor No
+R93: C3:Area / Section:
+R94: C3:Dedicated Item
+R95: C3:Active || C4:Yes/ No
+R96: C3:Note
+R99: C3:New- Edit- Delete- Save
+R104: C2:5-4 || C3:Recipients
+R106: C3:New
+R108: C3:No- Mame
+R109: C3:Recipient Type:
+R110: C4:Customer
+R111: C4:Employees
+R112: C4:Guest
+R113: C4:Landlord
+R114: C4:Student
+R115: C4:Tenant
+R116: C4:Visitor
+R117: C4:Add
+R121: C3:Residency/ Location
+R123: C3:Property/ Facility
+R124: C3:Floor No:
+R125: C3:Residential Suite No
+R126: C3:Commercial Unit No :
+R127: C3:Office
+R128: C3:Store
+R129: C3:Phone:
+R130: C3:Email:
+R132: C3:Active || C4:Yes/ No
+R133: C3:Notes
+R135: C3:New- Edit- Delete- Save
+R142: C2:5-5 || C3:Couriers
+R144: C3:New
+R146: C3:Company No- Name
+R147: C3:Email:
+R148: C3:Phone:
+R149: C3:Website:
+R150: C3:Active || C4:Yes/ No
+R151: C3:Notes
+R155: C3:New- Edit- Delete- Save
+R161: C2:5-6 || C3:Seller
+R164: C3:No- Name
+R165: C3:Email:
+R166: C3:Phone:
+R167: C3:Website:
+R168: C3:Active || C4:Yes/ No
+R169: C3:Notes
+R172: C3:New- Edit- Delete- Save
+R179: C2:5-7 || C3:Parcel / Delivery Items :
+R182: C3:New
+R184: C3:No-Name :
+R185: C4:Food
+R186: C4:Appliance
+R187: C4:Furniture
+R188: C4:Grocery
+R189: C4:Letters
+R190: C4:Medicine
+R191: C4:Parcels
+R192: C4:Add
+R195: C3:Active || C4:Yes/ No
+R196: C3:Note
+R199: C3:New- Edit- Delete- Save
+R206: C2:5-8 || C3:Delivery Methods :
+R209: C3:New
+R211: C3:No- Name
+R212: C4:Pick up at Front Desk
+R213: C4:Pick up from Facility Locker
+R214: C4:Pick up from External Locker
+R215: C4:Pick up from Courier Staff
+R216: C4:Delivered by Courier
+R217: C4:Delivered by Facility Staff
+R219: C3:Active || C4:Yes/ No
+R220: C3:Note
+R224: C3:New- Edit- Delete- Save
+
+===== SHEET: 6 (rows=144, cols=7) =====
+R1: C1:DROPDESK
+R2: C2:PARCEL MANAGEMENT SYSTEM
+R4: C2:[Enter Parcel No: _______] → [Search Button]
+R9: C2:[Enter Parcel No: _______] → [Search Button]
+R11: C2:PARCEL NO   PR- 2026-0001
+R13: C2:Current Status (Quick View)
+R14: C2:In Transit | Pending | Awaiting Pickup | Picked Up | Delivered | Returned | Lost | On Hold
+R18: C2:1. Property / Facility
+R20: C2:Property ID || C3:Name || C4:Phone || C5:Email
+R21: C2:1 || C3:Greenview Apartments || C4:123456789 || C5:info@greenview.com
+R24: C2:2. Employee on Duty
+R26: C2:Employee ID || C3:Name || C4:Phone || C5:Email || C6:Photo
+R27: C2:E001 || C3:John Smith || C4:111222333 || C5:john.smith@greenview.com || C6:[Photo]
+R30: C2:3. Parcel Info
+R32: C2:Parcel ID || C3:Description || C4:Weight/Dimensions || C5:Photo
+R33: C2:P001 || C3:Nike Air Shoes || C4:2 kg / 30x20x15 cm || C5:[Photo]
+R36: C2:4. Current Status
+R38: C2:Status || C3:By || C4:Mifificated Date- Time
+R39: C2:In Transit || C3:FedEx || C4:28-01-2026 08:30 AM
+R40: C2:Pending || C3:John Smith || C4:28-01-2026 09:15 AM
+R41: C2:Awaiting Pickup || C3:John Smith || C4:28-01-2026 09:45 AM
+R42: C2:Picked Up || C3:John Smith || C4:28-01-2026 10:30 AM
+R43: C2:Delivered || C3:John Smith || C4:28-01-2026 10:45 AM
+R44: C2:Returned || C3:– || C4:–
+R45: C2:Lost || C3:– || C4:–
+R46: C2:On Hold || C3:– || C4:–
+R49: C2:5. Courier Company
+R51: C2:Logo / Name || C3:Phone || C4:Email || C5:Website
+R52: C2:FedEx || C3:1122334455 || C4:support@fedex.com || C5:www.fedex.com
+R55: C2:6. Delivery Person
+R57: C2:Name || C3:Phone || C4:Badge No || C5:Vehicle Plate No
+R58: C2:Mike Johnson || C3:9988776655 || C4:D123 || C5:AB-4567
+R61: C2:7. Recipients
+R63: C2:Recipient ID || C3:Registered Recipient || C4:Type || C5:Actual Recipient / Received By || C6:Email
+R64: C2:R001 || C3:Alice Brown || C4:Tenant || C5:Alice Brown || C6:alice.brown@example.com
+R67: C2:8. Parcel Storage Location
+R69: C2:8.1 Parcel Room
+R71: C2:Room Name/Number || C3:Shelf/Section
+R72: C2:Main Parcel Room || C3:Shelf 2
+R74: C2:8.2 Third-Party Locker
+R76: C2:Locker Company || C3:Compartment No || C4:Size || C5:Days Left
+R77: C2:PackStation || C3:C12 || C4:Medium || C5:2
+R79: C2:8.3 Property/Facility-Owned Locker
+R81: C2:Compartment No || C3:Size || C4:Days Left
+R82: C2:L01 || C3:Large || C4:5
+R85: C2:9. Delivery / Pickup Method
+R87: C2:Method || C3:Date / Time || C4:Notes
+R88: C2:Front Desk Hand Over || C3:28-01-2026 10:45 AM || C4:Recipient signed and received parcel
+R91: C2:10. Current Status Updates / Notes
+R93: C2:Last Update || C3:Updated By || C4:Notes
+R94: C2:28-01-2026 08:30 AM || C3:FedEx || C4:Parcel in transit to facility
+R95: C2:28-01-2026 09:15 AM || C3:John Smith || C4:Parcel P001 received at front desk from FedEx
+R96: C2:28-01-2026 09:45 AM || C3:John Smith || C4:Parcel moved to Shelf 2 in Main Parcel Room
+R97: C2:28-01-2026 10:30 AM || C3:John Smith || C4:Parcel ready for pickup by recipient
+R98: C2:28-01-2026 10:45 AM || C3:John Smith || C4:Parcel delivered to Alice Brown; signature obtained
+R101: C2:11. Notification to Recipients
+R103: C2:Date || C3:Day || C4:Time || C5:Parcel No || C6:Method (Email / Text) || C7:Message Detail
+R104: C2:28-01-2026 || C3:Monday || C4:09:20:00 || C5:P001 || C6:Text || C7:Parcel received at Front Desk
+R105: C2:28-01-2026 || C3:Monday || C4:09:30:00 || C5:P001 || C6:Email || C7:Your parcel P001 is ready for pickup
+R106: C2:28-01-2026 || C3:Monday || C4:10:00:00 || C5:P001 || C6:Text || C7:Reminder: Pick up parcel before 5 PM
+R107: C2:28-01-2026 || C3:Monday || C4:10:15:00 || C5:P001 || C6:Email || C7:Reminder: Parcel P001 is at Shelf 2
+R108: C2:28-01-2026 || C3:Monday || C4:10:25:00 || C5:P001 || C6:Text || C7:Final pickup notice
+R109: C2:28-01-2026 || C3:Monday || C4:10:30:00 || C5:P001 || C6:Email || C7:Your parcel will be handed over shortly
+R110: C2:28-01-2026 || C3:Monday || C4:10:35:00 || C5:P001 || C6:Text || C7:Prepare to receive parcel
+R111: C2:28-01-2026 || C3:Monday || C4:10:40:00 || C5:P001 || C6:Email || C7:Parcel delivered to Front Desk
+R112: C2:28-01-2026 || C3:Monday || C4:10:45:00 || C5:P001 || C6:Text || C7:Parcel delivered to recipient: Alice Brown
+R113: C2:28-01-2026 || C3:Monday || C4:10:50:00 || C5:P001 || C6:Email || C7:Thank you, parcel delivery complete
+R116: C2:12. Recipients Communication Log
+R118: C2:Date-Time || C3:Recipient No || C4:Name || C5:Message || C6:Method (Phone / Text / Email)
+R119: C2:28-01-2026 09:30 AM || C3:R001 || C4:Alice Brown || C5:Parcel will be ready for pickup || C6:Text
+R120: C2:28-01-2026 10:15 AM || C3:R001 || C4:Alice Brown || C5:Reminder: Pickup at Front Desk || C6:Phone Call
+R121: C2:28-01-2026 10:40 AM || C3:R001 || C4:Alice Brown || C5:Confirmed receipt and signature || C6:Email
+R124: C2:13. Staff Notes
+R126: C2:Date-Time || C3:Staff No || C4:Name || C5:Photo || C6:Details
+R127: C2:28-01-2026 09:20 AM || C3:S001 || C4:John Smith || C5:[Photo] || C6:Parcel received and checked for damages
+R128: C2:28-01-2026 10:35 AM || C3:S001 || C4:John Smith || C5:[Photo] || C6:Moved parcel to Shelf 2 in Parcel Room
+R134: C2:NEW- SAVE
+R135: C4:NEXT PARCEL
+R144: C2:About DROPDESK || C3:Contact DROPDESK || C4:SHARE YOUR IDEA
+
+===== SHEET: 7-2 (rows=74, cols=14) =====
+R2: C2:7-2 Roles & Permissions
+R4: C2:All fields are mandatory
+R6: C2:Note: Access and permissions are based on user roles:
+R8: C2:Admin – Full access to all modules and sub-modules.
+R10: C2:Front Desk Staff – Limited access to parcel management, user management, and basic reporting.
+R12: C2:Other Employees – Access only to assigned modules and tasks according to their responsibility.
+R16: C2:7-2.1 User Selection
+R18: C2:7-2.1.1 User No: 001
+R19: C2:7-2.1.2 User Name: Mr. Mohit Sharma
+R20: C2:7-2.1.3 Email Address: mohit.sharma@example.com
+R24: C2:7-2.2 Role Assignment
+R26: C2:7-2.2.1 Role: [Dropdown: Admin / Front Desk Staff / Other Employees] **
+R30: C2:7-2.3 Module Permissions
+R32: C2:Role-Based Permission Table
+R34: C2:Tasks / Modules || C3:Open || C4:Read || C5:Edit || C6:Print || C7:Create || C8:Delete || C9:Export || C10:Send || C11:Activity Logs || C12:Admin || C13:Front Desk Staff || C14:Other Employees
+R35: C2:Summary || C3:✅ || C4:✅ || C5:✅ || C6:✅ || C7:❌ || C8:❌ || C9:❌ || C10:❌ || C11:❌ || C12:✅ || C13:✅ || C14:✅
+R36: C2:Calendar || C3:✅ || C4:✅ || C5:✅ || C6:✅ || C7:❌ || C8:❌ || C9:❌ || C10:❌ || C11:❌ || C12:✅ || C13:✅ || C14:❌
+R37: C2:To Do || C3:✅ || C4:✅ || C5:✅ || C6:✅ || C7:✅ || C8:❌ || C9:❌ || C10:❌ || C11:❌ || C12:✅ || C13:✅ || C14:✅
+R38: C2:Announcement || C3:✅ || C4:✅ || C5:✅ || C6:✅ || C7:✅ || C8:❌ || C9:❌ || C10:❌ || C11:❌ || C12:✅ || C13:✅ || C14:❌
+R39: C2:Profiles || C3:✅ || C4:✅ || C5:✅ || C6:✅ || C7:✅ || C8:✅ || C9:❌ || C10:❌ || C11:❌ || C12:✅ || C13:✅ || C14:❌
+R40: C2:Delivery & Pick up || C3:✅ || C4:✅ || C5:✅ || C6:✅ || C7:✅ || C8:✅ || C9:✅ || C10:❌ || C11:❌ || C12:✅ || C13:✅ || C14:✅
+R41: C2:Users Management || C3:✅ || C4:✅ || C5:✅ || C6:✅ || C7:✅ || C8:✅ || C9:✅ || C10:❌ || C11:✅ || C12:✅ || C13:✅ || C14:❌
+R42: C2:Workforce Management || C3:✅ || C4:✅ || C5:✅ || C6:✅ || C7:✅ || C8:❌ || C9:✅ || C10:❌ || C11:❌ || C12:✅ || C13:✅ || C14:❌
+R43: C2:Reports || C3:✅ || C4:✅ || C5:✅ || C6:✅ || C7:❌ || C8:❌ || C9:✅ || C10:❌ || C11:❌ || C12:✅ || C13:✅ || C14:❌
+R44: C2:Settings || C3:✅ || C4:✅ || C5:✅ || C6:✅ || C7:❌ || C8:❌ || C9:❌ || C10:❌ || C11:❌ || C12:✅ || C13:❌ || C14:❌
+R45: C2:Notifications || C3:✅ || C4:✅ || C5:✅ || C6:✅ || C7:❌ || C8:❌ || C9:❌ || C10:✅ || C11:❌ || C12:✅ || C13:✅ || C14:❌
+R46: C2:Email || C3:✅ || C4:✅ || C5:✅ || C6:✅ || C7:✅ || C8:❌ || C9:❌ || C10:✅ || C11:❌ || C12:✅ || C13:✅ || C14:❌
+R47: C2:My Account || C3:✅ || C4:✅ || C5:✅ || C6:✅ || C7:✅ || C8:✅ || C9:❌ || C10:❌ || C11:❌ || C12:✅ || C13:✅ || C14:✅
+R48: C2:Help & Support || C3:✅ || C4:✅ || C5:❌ || C6:✅ || C7:❌ || C8:❌ || C9:❌ || C10:❌ || C11:❌ || C12:✅ || C13:✅ || C14:✅
+R49: C2:Log Out || C3:✅ || C4:❌ || C5:❌ || C6:❌ || C7:❌ || C8:❌ || C9:❌ || C10:❌ || C11:❌ || C12:✅ || C13:✅ || C14:✅
+R52: C2:7-2.4 Advanced Permissions
+R54: C2:7-2.4.1 Password Reset Permission: [Yes / No] **
+R55: C2:7-2.4.2 License Assignment Permission: [Yes / No] **
+R56: C2:7-2.4.3 Access to System Configuration: [Yes / No] **
+R60: C2:7-2.5 Validity & Notes
+R62: C2:7-2.5.1 Permissions Valid From: 01-Feb-2026
+R63: C2:7-2.5.2 Permissions Valid To: 31-Jan-2027
+R64: C2:7-2.5.3 Notes / Comments: [Text Box]
+R68: C2:7-2.6 Actions
+R70: C2:7-2.6.1 Save Changes [Button]
+R71: C2:7-2.6.2 Cancel [Button]
+
+===== SHEET: 8 (rows=290, cols=16) =====
+R2: C2:8 || C3:Workforce Management
+R3: C2:8-1 || C3:Daily Report
+R4: C2:8-2 || C3:Incident Report
+R5: C2:8-3 || C3:Time Sheet
+R6: C2:8-4 || C3:Wok Schedule
+R7: C2:8-5 || C3:Job/ Service Order
+R19: C2:8-1 || C3:Daily Reports
+R21: C3:New
+R23: C3:No
+R24: C3:Date
+R25: C3:Employee Name
+R26: C3:Shift No
+R27: C3:Shitf Time || C4:From - to
+R29: C3:Time || C4:Description
+R45: C3:New- Save - Send
+R52: C2:8-2 || C3:Incident Report
+R54: C3:New
+R56: C3:Incident Report
+R58: C3:1. Report Details
+R59: C3:1.1 Report No: [Insert report number]
+R60: C3:1.2 Date of Incident: [Insert date]
+R61: C3:1.3 Shift No: [Insert shift number]
+R62: C3:1.4 Incident Type: [e.g., Accident, Near Miss, Property Damage, Injury, Fire, Security, Other]
+R64: C3:2. Employee Information
+R65: C3:2.1 Employee Name: [Insert your name]
+R66: C3:2.2 Position/Department: [Insert position/department]
+R68: C3:3. Incident Details
+R69: C3:3.1 Location: [Insert location]
+R70: C3:3.2 Time of Incident: [Insert time]
+R71: C3:3.3 Description of Incident:
+R72: C3:[Briefly describe what happened, who was involved, and any immediate causes.]
+R73: C3:3.4 Emergency Services Called (if any):
+R75: C3:911 Called: ☐ Yes ☐ No
+R76: C3:Police: ☐ Yes ☐ No
+R77: C3:Fire Department: ☐ Yes ☐ No
+R80: C3:Ambulance/EMS: ☐ Yes ☐ No
+R82: C3:Other: ____________________
+R84: C3:4. Injury and Property Damage
+R85: C3:4.1 Injury Details (if any):
+R86: C3:[Describe injuries sustained, affected body part, severity, and treatment given.]
+R87: C3:4.2 Property Damage (if any):
+R88: C3:[Describe damaged property, equipment, or facilities and estimated cost if known.]
+R90: C3:5. Witness Information
+R91: C3:5.1 Witnesses (if any):
+R92: C3:[Names and contact information]
+R94: C3:6. Actions Taken (Immediate and Follow-Up)
+R95: C3:[Describe first aid, corrective or preventive actions, equipment repair, safety measures implemented, area secured, employee counseled, etc.]
+R97: C3:7. Follow-Up Actions Required
+R98: C3:[Describe what needs to be done next, e.g., investigation, repair, or safety measures.]
+R100: C3:8. Reporting
+R101: C3:8.1 Reported To: [Supervisor/Manager Name]
+R102: C3:8.2 Signature of Employee: ____________________
+R103: C3:8.3 Date of Report: ____________________
+R111: C2:8-3 || C3:Time Sheet
+R115: C3:Timesheet for Mr. Mahboub
+R117: C3:Emp No: _______
+R118: C3:Name: Mr. Mahboub
+R119: C3:Shift No: _______
+R120: C3:Payroll Period: 2026-Jan-01 – 2026-Jan-15
+R122: C3:Date || C4:Day || C5:Day Type || C6:In || C7:Out || C8:Break || C9:Total Hours || C10:Regular || C11:OT || C12:Notes
+R123: C3:2026-Jan-01 || C4:Fri || C5:Holiday || C6:09:00:00 || C7:17:00:00 || C8:0 || C9:8 || C10:0 || C11:8 || C12:Worked on Holiday
+R124: C3:2026-Jan-02 || C4:Sat || C5:Weekend
+R125: C3:2026-Jan-03 || C4:Sun || C5:Weekend
+R126: C3:2026-Jan-04 || C4:Mon || C5:Regular || C6:09:00:00 || C7:17:00:00 || C8:0 || C9:8 || C10:8 || C11:0
+R127: C3:2026-Jan-05 || C4:Tue || C5:Regular || C6:09:00:00 || C7:17:00:00 || C8:0 || C9:8 || C10:8 || C11:0
+R128: C3:2026-Jan-06 || C4:Wed || C5:Regular || C6:09:00:00 || C7:17:00:00 || C8:0 || C9:8 || C10:8 || C11:0
+R129: C3:2026-Jan-07 || C4:Thu || C5:Regular || C6:09:00:00 || C7:17:00:00 || C8:0 || C9:8 || C10:8 || C11:0
+R130: C3:2026-Jan-08 || C4:Fri || C5:Holiday || C6:09:00:00 || C7:17:00:00 || C8:0 || C9:8 || C10:0 || C11:8 || C12:Worked on Holiday
+R131: C3:2026-Jan-09 || C4:Sat || C5:Weekend
+R132: C3:2026-Jan-10 || C4:Sun || C5:Weekend
+R133: C3:2026-Jan-11 || C4:Mon || C5:Regular || C6:09:00:00 || C7:17:00:00 || C8:0 || C9:8 || C10:8 || C11:0
+R134: C3:2026-Jan-12 || C4:Tue || C5:Regular || C6:09:00:00 || C7:17:00:00 || C8:0 || C9:8 || C10:8 || C11:0
+R135: C3:2026-Jan-13 || C4:Wed || C5:Regular || C6:09:00:00 || C7:17:00:00 || C8:0 || C9:8 || C10:8 || C11:0
+R136: C3:2026-Jan-14 || C4:Thu || C5:Regular || C6:09:00:00 || C7:17:00:00 || C8:0 || C9:8 || C10:8 || C11:0
+R137: C3:2026-Jan-15 || C4:Fri || C5:Regular || C6:09:00:00 || C7:17:00:00 || C8:0 || C9:8 || C10:8 || C11:0
+R139: C3:Totals
+R141: C3:Category || C4:Hours
+R142: C3:Total Hours || C4:112
+R143: C3:Regular Hours || C4:96
+R144: C3:OT Hours || C4:16
+R151: C2:8-4 || C3:Work Schedule
+R158: C3:Work Schedule (08:00–16:00)
+R160: C3:Payroll Period: 2026-Jan-01 – 2026-Jan-15
+R162: C3:2026-Jan-01 (Friday, Holiday)
+R164: C3:Date || C4:Day || C5:Shift || C6:Day Type || C7:Employee || C8:Total Hours || C9:Regular || C10:OT || C11:OT Allowed || C12:Holiday Allowed || C13:Notes
+R165: C3:2026-Jan-01 || C4:Fri || C5:1 || C6:Holiday || C7:Mr. Mahboub || C8:8 || C9:0 || C10:8 || C11:Y || C12:Y || C13:Worked Holiday
+R166: C3:2026-Jan-01 || C4:Fri || C5:2 || C6:Holiday || C7:Ms. Amina || C8:8 || C9:0 || C10:8 || C11:Y || C12:Y || C13:Worked Holiday
+R167: C3:2026-Jan-01 || C4:Fri || C5:3 || C6:Holiday || C7:Mr. Karim || C8:8 || C9:0 || C10:8 || C11:Y || C12:Y || C13:Worked Holiday
+R168: C3:2026-Jan-01 || C4:Fri || C5:1 || C6:Holiday || C7:Ms. Layla || C8:8 || C9:0 || C10:8 || C11:Y || C12:Y || C13:Worked Holiday
+R169: C3:2026-Jan-01 || C4:Fri || C5:2 || C6:Holiday || C7:Mr. Omar || C8:8 || C9:0 || C10:8 || C11:Y || C12:Y || C13:Worked Holiday
+R170: C3:2026-Jan-01 || C4:Fri || C5:3 || C6:Holiday || C7:Ms. Hana || C8:8 || C9:0 || C10:8 || C11:Y || C12:Y || C13:Worked Holiday
+R171: C3:2026-Jan-01 || C4:Fri || C5:1 || C6:Holiday || C7:Mr. Samir || C8:8 || C9:0 || C10:8 || C11:Y || C12:Y || C13:Worked Holiday
+R172: C3:2026-Jan-01 || C4:Fri || C5:2 || C6:Holiday || C7:Ms. Salma || C8:8 || C9:0 || C10:8 || C11:Y || C12:Y || C13:Worked Holiday
+R173: C3:2026-Jan-01 || C4:Fri || C5:3 || C6:Holiday || C7:Mr. Tarek || C8:8 || C9:0 || C10:8 || C11:Y || C12:Y || C13:Worked Holiday
+R174: C3:2026-Jan-01 || C4:Fri || C5:1 || C6:Holiday || C7:Ms. Noura || C8:8 || C9:0 || C10:8 || C11:Y || C12:Y || C13:Worked Holiday
+R177: C3:2026-Jan-02 (Saturday, Weekend)
+R179: C3:Date || C4:Day || C5:Shift || C6:Day Type || C7:Employee || C8:Total Hours || C9:Regular || C10:OT || C11:OT Allowed || C12:Holiday Allowed || C13:Notes
+R180: C3:2026-Jan-02 || C4:Sat || C5:1 || C6:Weekend || C7:Mr. Mahboub || C8:0 || C9:0 || C10:0 || C11:N || C12:N || C13:Weekend
+R181: C3:2026-Jan-02 || C4:Sat || C5:2 || C6:Weekend || C7:Ms. Amina || C8:0 || C9:0 || C10:0 || C11:N || C12:N || C13:Weekend
+R182: C3:2026-Jan-02 || C4:Sat || C5:3 || C6:Weekend || C7:Mr. Karim || C8:0 || C9:0 || C10:0 || C11:N || C12:N || C13:Weekend
+R183: C3:2026-Jan-02 || C4:Sat || C5:1 || C6:Weekend || C7:Ms. Layla || C8:0 || C9:0 || C10:0 || C11:N || C12:N || C13:Weekend
+R184: C3:2026-Jan-02 || C4:Sat || C5:2 || C6:Weekend || C7:Mr. Omar || C8:0 || C9:0 || C10:0 || C11:N || C12:N || C13:Weekend
+R185: C3:2026-Jan-02 || C4:Sat || C5:3 || C6:Weekend || C7:Ms. Hana || C8:0 || C9:0 || C10:0 || C11:N || C12:N || C13:Weekend
+R186: C3:2026-Jan-02 || C4:Sat || C5:1 || C6:Weekend || C7:Mr. Samir || C8:0 || C9:0 || C10:0 || C11:N || C12:N || C13:Weekend
+R187: C3:2026-Jan-02 || C4:Sat || C5:2 || C6:Weekend || C7:Ms. Salma || C8:0 || C9:0 || C10:0 || C11:N || C12:N || C13:Weekend
+R188: C3:2026-Jan-02 || C4:Sat || C5:3 || C6:Weekend || C7:Mr. Tarek || C8:0 || C9:0 || C10:0 || C11:N || C12:N || C13:Weekend
+R189: C3:2026-Jan-02 || C4:Sat || C5:1 || C6:Weekend || C7:Ms. Noura || C8:0 || C9:0 || C10:0 || C11:N || C12:N || C13:Weekend
+R192: C3:2026-Jan-03 (Sunday, Weekend)
+R194: C3:(Same as 2026-Jan-02 — all employees 0 hours, weekend)
+R198: C3:2026-Jan-04 (Monday, Regular)
+R200: C3:Date || C4:Day || C5:Shift No || C6:Day Type || C7:Employee || C8:Total Hours || C9:Regular || C10:OT || C11:OT Allowed || C12:Holiday Allowed || C13:Notes
+R201: C3:2026-Jan-04 || C4:Mon || C5:1 || C6:Regular || C7:Mr. Mahboub || C8:8 || C9:8 || C10:0 || C11:Y || C12:N || C13:Regular Work
+R202: C3:2026-Jan-04 || C4:Mon || C5:2 || C6:Regular || C7:Ms. Amina || C8:8 || C9:8 || C10:0 || C11:Y || C12:N || C13:Regular Work
+R203: C3:2026-Jan-04 || C4:Mon || C5:3 || C6:Regular || C7:Mr. Karim || C8:8 || C9:8 || C10:0 || C11:Y || C12:N || C13:Regular Work
+R204: C3:2026-Jan-04 || C4:Mon || C5:1 || C6:Regular || C7:Ms. Layla || C8:8 || C9:8 || C10:0 || C11:Y || C12:N || C13:Regular Work
+R205: C3:2026-Jan-04 || C4:Mon || C5:2 || C6:Regular || C7:Mr. Omar || C8:8 || C9:8 || C10:0 || C11:Y || C12:N || C13:Regular Work
+R206: C3:2026-Jan-04 || C4:Mon || C5:3 || C6:Regular || C7:Ms. Hana || C8:8 || C9:8 || C10:0 || C11:Y || C12:N || C13:Regular Work
+R207: C3:2026-Jan-04 || C4:Mon || C5:1 || C6:Regular || C7:Mr. Samir || C8:8 || C9:8 || C10:0 || C11:Y || C12:N || C13:Regular Work
+R208: C3:2026-Jan-04 || C4:Mon || C5:2 || C6:Regular || C7:Ms. Salma || C8:8 || C9:8 || C10:0 || C11:Y || C12:N || C13:Regular Work
+R209: C3:2026-Jan-04 || C4:Mon || C5:3 || C6:Regular || C7:Mr. Tarek || C8:8 || C9:8 || C10:0 || C11:Y || C12:N || C13:Regular Work
+R210: C3:2026-Jan-04 || C4:Mon || C5:1 || C6:Regular || C7:Ms. Noura || C8:8 || C9:8 || C10:0 || C11:Y || C12:N || C13:Regular Work
+R223: C3:8-5 Job / Service Entry Form
+R225: C3:New
+R227: C3:1. Job Order Info.
+R229: C3:Job Order No.: ____________________
+R231: C3:Created Date / Time: ____________________
+R233: C3:2. Service Details
+R235: C3:Service Needed Date / Time: ____________________
+R237: C3:Priority: ☐ High ☐ Medium ☐ Low
+R239: C3:Service Location: ____________________
+R241: C3:Access / Notes: ____________________
+R243: C3:3. Requested Services
+R245: C3:No. || C4:Requested Service || C5:Details / Description || C6:Status / Notes
+R246: C3:1
+R247: C3:2
+R248: C3:3
+R249: C3:4
+R250: C3:5
+R252: C3:4. List of Issues / Damages
+R254: C3:No. || C4:Issue / Damage || C5:Location / Equipment || C6:Severity / Remarks
+R255: C3:1
+R256: C3:2
+R257: C3:3
+R258: C3:4
+R259: C3:5
+R261: C3:5. Work Description / Action Taken
+R267: C3:6. Personnel Assigned
+R269: C3:Technician / Staff Name(s): ____________________
+R271: C3:Supervisor / Manager: ____________________
+R273: C3:7. Prepared By
+R275: C3:Name: ____________________
+R277: C3:Position: ____________________
+R279: C3:8. Approval
+R281: C3:Approved: ☐ Yes ☐ No
+R283: C3:9. Remarks / Additional Notes
+R290: C3:New - Edit - Delet- Save - Post
+
+===== SHEET: 9 (rows=170, cols=23) =====
+R1: C3:9 || C4:Reports:
+R3: C3:9-1 || C4:Recipients
+R4: C3:9-2 || C4:Parcels Room
+R5: C3:9-3 || C4:Locker/ Compartment
+R6: C3:9-4 || C4:Parcels
+R7: C3:9-5 || C4:Daily Report
+R8: C3:9-6 || C4:Incident Report
+R9: C3:9-7 || C4:Time Sheet
+R10: C3:9-8 || C4:Wok Schedule
+R11: C3:9-9 || C4:Job/ Service Order
+R12: C3:9-10 || C4:Users Activity
+R17: C3:9-1 || C4:Recipients
+R19: C3:No ↑↓ || C4:Name ↑↓ || C5:Type ↑↓ || C6:Location ↑↓ || C7:Property || C8:Floor No ↑↓ || C9:Resi. Suite No ↑↓ || C10:Com.l Unit No ↑↓ || C11:Office ↑↓ || C12:Store ↑↓ || C13:Phone ↑↓ || C14:Email ↑↓ || C15:Active ↑↓ || C16:Notes ↑↓
+R20: C3:1 || C4:Ahmed Ali || C5:Student || C6:Residential || C7:Maple Tower || C8:2 || C9:205 || C10:- || C11:- || C12:- || C13:555-0103 || C15:Yes || C16:-
+R21: C3:2 || C4:Ava Thompson || C5:Tenant || C6:Residential || C7:Maple Tower || C8:5 || C9:502 || C10:- || C11:- || C12:- || C13:555-0702 || C15:Yes || C16:-
+R22: C3:3 || C4:Benjamin White || C5:Customer || C6:Commercial || C7:Oak Business Park || C8:- || C9:- || C10:CU-404 || C11:- || C12:Store 22 || C13:555-0602 || C15:Yes || C16:-
+R23: C3:4 || C4:Daniel Moore || C5:Student || C6:Residential || C7:Maple Tower || C8:4 || C9:405 || C10:- || C11:- || C12:- || C13:555-0501 || C15:Yes || C16:-
+R24: C3:5 || C4:Emily Davis || C5:Tenant || C6:Residential || C7:Maple Tower || C8:6 || C9:602 || C10:- || C11:- || C12:- || C13:555-0302 || C15:Yes || C16:-
+R25: C3:6 || C4:Ethan Martin || C5:Tenant || C6:Commercial || C7:Oak Business Park || C8:4 || C9:- || C10:CU-402 || C11:402 || C12:- || C13:555-0701 || C15:Yes || C16:-
+R26: C3:7 || C4:Isabella Jackson || C5:Employee || C6:Commercial || C7:Oak Business Park || C8:3 || C9:- || C10:CU-303 || C11:303 || C12:- || C13:555-0601 || C15:Yes || C16:-
+R27: C3:8 || C4:James Taylor || C5:Tenant || C6:Residential || C7:Maple Tower || C8:1 || C9:101 || C10:- || C11:- || C12:- || C13:555-0303 || C15:Yes || C16:-
+R28: C3:9 || C4:John Smith || C5:Tenant || C6:Residential || C7:Maple Tower || C8:3 || C9:301 || C10:- || C11:- || C12:- || C13:555-0101 || C15:Yes || C16:-
+R29: C3:10 || C4:Karen Martinez || C5:Landlord || C6:Residential || C7:Maple Tower || C8:- || C9:- || C10:- || C11:- || C12:- || C13:555-0401 || C15:Yes || C16:-
+R30: C3:11 || C4:Lisa Brown || C5:Employee || C6:Commercial || C7:Oak Business Park || C8:1 || C9:- || C10:CU-101 || C11:101 || C12:- || C13:555-0201 || C15:Yes || C16:-
+R31: C3:12 || C4:Maria Johnson || C5:Tenant || C6:Residential || C7:Maple Tower || C8:4 || C9:402 || C10:- || C11:- || C12:- || C13:555-0102 || C15:Yes || C16:-
+R32: C3:13 || C4:Michael Chen || C5:Customer || C6:Commercial || C7:Oak Business Park || C8:- || C9:- || C10:CU-303 || C11:- || C12:Store 12 || C13:555-0301 || C15:Yes || C16:Frequent
+R33: C3:14 || C4:Mia Harris || C5:Visitor || C6:Residential || C7:Maple Tower || C8:2 || C9:206 || C10:- || C11:- || C12:- || C13:555-0603 || C15:Yes || C16:Guest
+R34: C3:15 || C4:Olivia Hernandez || C5:Guest || C6:Residential || C7:Maple Tower || C8:3 || C9:305 || C10:- || C11:- || C12:- || C13:555-0403 || C15:Yes || C16:Short stay
+R35: C3:16 || C4:Robert Garcia || C5:Tenant || C6:Residential || C7:Oak Business Park || C8:2 || C9:- || C10:CU-204 || C11:204 || C12:- || C13:555-0402 || C15:Yes || C16:-
+R36: C3:17 || C4:Sarah Lee || C5:Visitor || C6:Residential || C7:Maple Tower || C8:5 || C9:501 || C10:- || C11:- || C12:- || C13:555-0203 || C15:Yes || C16:Guest
+R37: C3:18 || C4:Sophia Anderson || C5:Tenant || C6:Residential || C7:Oak Business Park || C8:7 || C9:- || C10:CU-702 || C11:702 || C12:- || C13:555-0502 || C15:Yes || C16:-
+R38: C3:19 || C4:William Thomas || C5:Tenant || C6:Residential || C7:Maple Tower || C8:8 || C9:803 || C10:- || C11:- || C12:- || C13:555-0503 || C15:Yes || C16:-
+R39: C3:20 || C4:Robert Garcia || C5:Tenant || C6:Residential || C7:Oak Business Park || C8:2 || C9:- || C10:CU-204 || C11:204 || C12:- || C13:555-0402 || C15:Yes || C16:-
+R48: C3:9-2 || C4:Parcels Room
+R51: C3:| No – Name ↑↓ | Property / Facility ↑↓ | Floor No ↑↓ | Area / Section ↑↓ | Dedicated Item ↑↓ | Current Parcel No ↑↓ | Courier ↑↓ | Parcel ID ↑↓ | Carrier ↑↓ | Received Date ↑↓ | Recipient Name ↑↓ | Storage Area ↑↓ | Shelf/Row ↑↓ | Active ↑↓ | Note ↑↓ |
+R53: C3:No – Name || C4:Property / Facility || C5:Area / Section || C6:Dedicated Item || C7:Current Parcel No || C8:Courier || C9:Parcel ID || C10:Carrier || C11:Received Date || C12:Recipient Name || C13:Storage Area || C14:Shelf/Row || C15:Active || C16:Note
+R54: C3:PR-01 – Zone A || C4:Maple Tower || C5:Section A1 || C6:Shelf 1 || C7:P001 || C8:DHL || C9:P001 || C10:DHL || C11:2026-01-20 00:00:00 || C12:John Smith || C13:Zone A || C14:Row 1 || C15:Yes || C16:-
+R55: C3:PR-02 – Zone A || C4:Maple Tower || C5:Section A2 || C6:Shelf 2 || C7:P002 || C8:FedEx || C9:P002 || C10:FedEx || C11:2026-01-20 00:00:00 || C12:Maria Johnson || C13:Zone A || C14:Row 2 || C15:Yes || C16:-
+R56: C3:PR-03 – Zone A || C4:Maple Tower || C5:Section A3 || C6:Shelf 3 || C7:P003 || C8:UPS || C9:P003 || C10:UPS || C11:2026-01-19 00:00:00 || C12:Ahmed Ali || C13:Zone B || C14:Row 1 || C15:Yes || C16:Needs signature
+R57: C3:PR-04 – Zone B || C4:Maple Tower || C5:Section B1 || C6:Shelf 1 || C7:P004 || C8:Amazon || C9:P004 || C10:Amazon || C11:2026-01-19 00:00:00 || C12:Lisa Brown || C13:Zone B || C14:Row 2 || C15:Yes || C16:-
+R58: C3:PR-05 – Zone B || C4:Maple Tower || C5:Section B2 || C6:Shelf 2 || C7:P005 || C8:DHL || C9:P005 || C10:DHL || C11:2026-01-18 00:00:00 || C12:David Wilson || C13:Zone C || C14:Row 1 || C15:Yes || C16:Overdue
+R59: C3:PR-06 – Zone B || C4:Maple Tower || C5:Section B3 || C6:Shelf 3 || C7:P006 || C8:FedEx || C9:P006 || C10:FedEx || C11:2026-01-18 00:00:00 || C12:Sarah Lee || C13:Zone C || C14:Row 2 || C15:Yes || C16:-
+R60: C3:PR-07 – Zone C || C4:Oak Business Park || C5:Section C1 || C6:Shelf 1 || C7:P007 || C8:UPS || C9:P007 || C10:UPS || C11:2026-01-17 00:00:00 || C12:Michael Chen || C13:Zone A || C14:Row 3 || C15:Yes || C16:-
+R61: C3:PR-08 – Zone C || C4:Oak Business Park || C5:Section C2 || C6:Shelf 2 || C7:P008 || C8:Amazon || C9:P008 || C10:Amazon || C11:2026-01-17 00:00:00 || C12:Emily Davis || C13:Zone A || C14:Row 4 || C15:Yes || C16:-
+R62: C3:PR-09 – Zone C || C4:Oak Business Park || C5:Section C3 || C6:Shelf 3 || C7:P009 || C8:DHL || C9:P009 || C10:DHL || C11:2026-01-16 00:00:00 || C12:James Taylor || C13:Zone B || C14:Row 3 || C15:Yes || C16:-
+R63: C3:PR-10 – Zone D || C4:Oak Business Park || C5:Section D1 || C6:Shelf 1 || C7:P010 || C8:FedEx || C9:P010 || C10:FedEx || C11:2026-01-16 00:00:00 || C12:Karen Martinez || C13:Zone B || C14:Row 4 || C15:Yes || C16:Needs ID
+R64: C3:PR-11 – Zone D || C4:Oak Business Park || C5:Section D2 || C6:Shelf 2 || C7:P011 || C8:UPS || C9:P011 || C10:UPS || C11:2026-01-15 00:00:00 || C12:Robert Garcia || C13:Zone C || C14:Row 3 || C15:Yes || C16:-
+R65: C3:PR-12 – Zone D || C4:Oak Business Park || C5:Section D3 || C6:Shelf 3 || C7:P012 || C8:Amazon || C9:P012 || C10:Amazon || C11:2026-01-15 00:00:00 || C12:Olivia Hernandez || C13:Zone C || C14:Row 4 || C15:Yes || C16:-
+R66: C3:PR-13 – Zone E || C4:Maple Tower || C5:Section E1 || C6:Shelf 1 || C7:P013 || C8:DHL || C9:P013 || C10:DHL || C11:2026-01-14 00:00:00 || C12:Daniel Moore || C13:Zone A || C14:Row 5 || C15:Yes || C16:-
+R67: C3:PR-14 – Zone E || C4:Maple Tower || C5:Section E2 || C6:Shelf 2 || C7:P014 || C8:FedEx || C9:P014 || C10:FedEx || C11:2026-01-14 00:00:00 || C12:Sophia Anderson || C13:Zone A || C14:Row 6 || C15:Yes || C16:-
+R68: C3:PR-15 – Zone E || C4:Maple Tower || C5:Section E3 || C6:Shelf 3 || C7:P015 || C8:UPS || C9:P015 || C10:UPS || C11:2026-01-13 00:00:00 || C12:William Thomas || C13:Zone B || C14:Row 5 || C15:Yes || C16:Overdue
+R69: C3:PR-16 – Zone F || C4:Oak Business Park || C5:Section F1 || C6:Shelf 1 || C7:P016 || C8:Amazon || C9:P016 || C10:Amazon || C11:2026-01-13 00:00:00 || C12:Isabella Jackson || C13:Zone B || C14:Row 6 || C15:Yes || C16:-
+R70: C3:PR-17 – Zone F || C4:Oak Business Park || C5:Section F2 || C6:Shelf 2 || C7:P017 || C8:DHL || C9:P017 || C10:DHL || C11:2026-01-12 00:00:00 || C12:Benjamin White || C13:Zone C || C14:Row 5 || C15:Yes || C16:-
+R71: C3:PR-18 – Zone F || C4:Oak Business Park || C5:Section F3 || C6:Shelf 3 || C7:P018 || C8:FedEx || C9:P018 || C10:FedEx || C11:2026-01-12 00:00:00 || C12:Mia Harris || C13:Zone C || C14:Row 6 || C15:Yes || C16:-
+R72: C3:PR-19 – Zone G || C4:Maple Tower || C5:Section G1 || C6:Shelf 1 || C7:P019 || C8:UPS || C9:P019 || C10:UPS || C11:2026-01-11 00:00:00 || C12:Ethan Martin || C13:Zone A || C14:Row 7 || C15:Yes || C16:-
+R73: C3:PR-20 – Zone G || C4:Maple Tower || C5:Section G2 || C6:Shelf 2 || C7:P020 || C8:Amazon || C9:P020 || C10:Amazon || C11:2026-01-11 00:00:00 || C12:Ava Thompson || C13:Zone A || C14:Row 8 || C15:Yes || C16:-
+R76: C3:Sorting Icons (All Columns)
+R87: C3:9-3 Locker / Compartment Report
+R89: C3:Columns (sortable)
+R91: C3:| Locker No – Name ↑↓ | Property / Facility ↑↓ | Floor No ↑↓ | Area / Section ↑↓ | Locker Size ↑↓ | Current Parcel No ↑↓ | Courier ↑↓ | Parcel ID ↑↓ | Recipient Name ↑↓ | Stored Date ↑↓ | Release Date ↑↓ | Status ↑↓ | Active ↑↓ | Notes ↑↓ |
+R94: C3:Locker No – Name || C4:Property / Facility || C5:Floor No || C6:Area / Section || C7:Locker Size || C8:Current Parcel No || C9:Courier || C10:Parcel ID || C11:Recipient Name || C12:Stored Date || C13:Release Date || C14:Status || C15:Active || C16:Notes
+R95: C3:LK-01 || C4:Maple Tower || C5:1 || C6:Zone A || C7:Small || C8:P001 || C9:DHL || C10:P001 || C11:John Smith || C12:2026-01-20 00:00:00 || C13:- || C14:Occupied || C15:Yes || C16:-
+R96: C3:LK-02 || C4:Maple Tower || C5:1 || C6:Zone A || C7:Small || C8:- || C9:- || C10:- || C11:- || C12:- || C13:- || C14:Available || C15:Yes || C16:-
+R97: C3:LK-03 || C4:Maple Tower || C5:2 || C6:Zone B || C7:Medium || C8:P002 || C9:FedEx || C10:P002 || C11:Maria Johnson || C12:2026-01-20 00:00:00 || C13:- || C14:Occupied || C15:Yes || C16:-
+R98: C3:LK-04 || C4:Maple Tower || C5:2 || C6:Zone B || C7:Medium || C8:- || C9:- || C10:- || C11:- || C12:- || C13:- || C14:Available || C15:Yes || C16:-
+R99: C3:LK-05 || C4:Oak Business Park || C5:1 || C6:Zone C || C7:Large || C8:P003 || C9:UPS || C10:P003 || C11:Ahmed Ali || C12:2026-01-19 00:00:00 || C13:- || C14:Occupied || C15:Yes || C16:Needs signature
+R100: C3:LK-06 || C4:Oak Business Park || C5:1 || C6:Zone C || C7:Large || C8:- || C9:- || C10:- || C11:- || C12:- || C13:- || C14:Available || C15:Yes || C16:-
+R101: C3:LK-07 || C4:Maple Tower || C5:3 || C6:Zone A || C7:Small || C8:P004 || C9:Amazon || C10:P004 || C11:Lisa Brown || C12:2026-01-19 00:00:00 || C13:- || C14:Occupied || C15:Yes || C16:-
+R102: C3:LK-08 || C4:Maple Tower || C5:3 || C6:Zone A || C7:Small || C8:- || C9:- || C10:- || C11:- || C12:- || C13:- || C14:Available || C15:Yes || C16:-
+R103: C3:LK-09 || C4:Oak Business Park || C5:2 || C6:Zone D || C7:Medium || C8:P005 || C9:DHL || C10:P005 || C11:David Wilson || C12:2026-01-18 00:00:00 || C13:- || C14:Occupied || C15:Yes || C16:Overdue
+R104: C3:LK-10 || C4:Oak Business Park || C5:2 || C6:Zone D || C7:Medium || C8:- || C9:- || C10:- || C11:- || C12:- || C13:- || C14:Available || C15:Yes || C16:-
+R105: C3:LK-11 || C4:Maple Tower || C5:4 || C6:Zone B || C7:Large || C8:P006 || C9:FedEx || C10:P006 || C11:Sarah Lee || C12:2026-01-18 00:00:00 || C13:- || C14:Occupied || C15:Yes || C16:-
+R106: C3:LK-12 || C4:Maple Tower || C5:4 || C6:Zone B || C7:Large || C8:- || C9:- || C10:- || C11:- || C12:- || C13:- || C14:Available || C15:Yes || C16:-
+R107: C3:LK-13 || C4:Oak Business Park || C5:3 || C6:Zone C || C7:Small || C8:P007 || C9:UPS || C10:P007 || C11:Michael Chen || C12:2026-01-17 00:00:00 || C13:- || C14:Occupied || C15:Yes || C16:-
+R108: C3:LK-14 || C4:Oak Business Park || C5:3 || C6:Zone C || C7:Small || C8:- || C9:- || C10:- || C11:- || C12:- || C13:- || C14:Available || C15:Yes || C16:-
+R109: C3:LK-15 || C4:Maple Tower || C5:5 || C6:Zone A || C7:Medium || C8:P008 || C9:Amazon || C10:P008 || C11:Emily Davis || C12:2026-01-17 00:00:00 || C13:- || C14:Occupied || C15:Yes || C16:-
+R110: C3:LK-16 || C4:Maple Tower || C5:5 || C6:Zone A || C7:Medium || C8:- || C9:- || C10:- || C11:- || C12:- || C13:- || C14:Available || C15:Yes || C16:-
+R111: C3:LK-17 || C4:Oak Business Park || C5:4 || C6:Zone D || C7:Large || C8:P009 || C9:DHL || C10:P009 || C11:James Taylor || C12:2026-01-16 00:00:00 || C13:- || C14:Occupied || C15:Yes || C16:-
+R112: C3:LK-18 || C4:Oak Business Park || C5:4 || C6:Zone D || C7:Large || C8:- || C9:- || C10:- || C11:- || C12:- || C13:- || C14:Available || C15:Yes || C16:-
+R113: C3:LK-19 || C4:Maple Tower || C5:6 || C6:Zone B || C7:Small || C8:P010 || C9:FedEx || C10:P010 || C11:Karen Martinez || C12:2026-01-16 00:00:00 || C13:- || C14:Occupied || C15:Yes || C16:Needs ID
+R114: C3:LK-20 || C4:Maple Tower || C5:6 || C6:Zone B || C7:Small || C8:- || C9:- || C10:- || C11:- || C12:- || C13:- || C14:Available || C15:Yes || C16:-
+R138: C3:9-4 || C4:Parcels
+R142: C3:9-4 PARCELS REPORT (Final Updated Version)
+R144: C3:Sortable Columns (with Status included)
+R146: C3:| Parcel ID ↑↓ | Carrier ↑↓ | Courier Company ↑↓ | Received Date ↑↓ | Delivery Person Name ↑↓ | Delivery Person Phone ↑↓ | Recipient Name ↑↓ | Recipient Phone ↑↓ | Recipient Email ↑↓ | Recipient Type ↑↓ | Property / Facility ↑↓ | Floor No ↑↓ | Suite/Unit/Office ↑↓ | Store Location ↑↓ | Storage Area ↑↓ | Shelf/Row ↑↓ | Locker/Compartment ↑↓ | Status ↑↓ | Picked Up Date & Time ↑↓ | Staff ↑↓ | Notes ↑↓ |
+R147: C3:Parcel ID || C4:Carrier || C5:Courier Company || C6:Received Date || C7:Delivery Person Name || C8:Delivery Person Phone || C9:Recipient Name || C10:Recipient Phone || C11:Recipient Email || C12:Recipient Type || C13:Property / Facility || C14:Floor No || C15:Suite/Unit/Office || C16:Store Location || C17:Storage Area || C18:Shelf/Row || C19:Locker/Compartment || C20:Status || C21:Picked Up Date & Time || C22:Staff || C23:Notes
+R148: C3:P001 || C4:DHL || C5:DHL Express || C6:2026-01-20 00:00:00 || C7:Ahmed || C8:555-0101 || C9:John Smith || C10:555-1001 || C11:john@example.com || C12:Tenant || C13:Maple Tower || C14:3 || C15:301 || C16:Front Desk || C17:Zone A || C18:Row 1 || C19:LK-01 || C20:Stored || C21:- || C22:Staff A || C23:-
+R149: C3:P002 || C4:FedEx || C5:FedEx || C6:2026-01-20 00:00:00 || C7:Lisa || C8:555-0102 || C9:Maria Johnson || C10:555-1002 || C11:maria@example.com || C12:Tenant || C13:Maple Tower || C14:4 || C15:402 || C16:Back Room || C17:Zone A || C18:Row 2 || C19:LK-03 || C20:Stored || C21:- || C22:Staff B || C23:-
+R150: C3:P003 || C4:UPS || C5:UPS || C6:2026-01-19 00:00:00 || C7:Sam || C8:555-0103 || C9:Ahmed Ali || C10:555-1003 || C11:ahmed@example.com || C12:Student || C13:Maple Tower || C14:2 || C15:205 || C16:Front Desk || C17:Zone B || C18:Row 1 || C19:LK-05 || C20:Pending || C21:- || C22:Staff A || C23:Needs signature
+R151: C3:P004 || C4:Amazon || C5:Amazon Logistics || C6:2026-01-19 00:00:00 || C7:Noor || C8:555-0104 || C9:Lisa Brown || C10:555-1004 || C11:lisa@example.com || C12:Employee || C13:Maple Tower || C14:2 || C15:202 || C16:Back Room || C17:Zone B || C18:Row 2 || C19:LK-07 || C20:Stored || C21:- || C22:Staff C || C23:-
+R152: C3:P005 || C4:DHL || C5:DHL Express || C6:2026-01-18 00:00:00 || C7:Mike || C8:555-0105 || C9:David Wilson || C10:555-1005 || C11:david@example.com || C12:Customer || C13:Oak Business Park || C14:1 || C15:CU-101 || C16:Front Desk || C17:Zone C || C18:Row 1 || C19:LK-09 || C20:Overdue || C21:- || C22:Staff A || C23:Notify recipient
+R153: C3:P006 || C4:FedEx || C5:FedEx || C6:2026-01-18 00:00:00 || C7:Amy || C8:555-0106 || C9:Sarah Lee || C10:555-1006 || C11:sarah@example.com || C12:Tenant || C13:Oak Business Park || C14:1 || C15:CU-102 || C16:Back Room || C17:Zone C || C18:Row 2 || C19:LK-11 || C20:Stored || C21:- || C22:Staff B || C23:-
+R154: C3:P007 || C4:UPS || C5:UPS || C6:2026-01-17 00:00:00 || C7:John || C8:555-0107 || C9:Michael Chen || C10:555-1007 || C11:michael@example.com || C12:Customer || C13:Oak Business Park || C14:2 || C15:CU-203 || C16:Front Desk || C17:Zone A || C18:Row 3 || C19:LK-13 || C20:Picked Up || C21:2026-01-18 10:30:00 || C22:Staff C || C23:-
+R155: C3:P008 || C4:Amazon || C5:Amazon Logistics || C6:2026-01-17 00:00:00 || C7:Emma || C8:555-0108 || C9:Emily Davis || C10:555-1008 || C11:emily@example.com || C12:Tenant || C13:Maple Tower || C14:5 || C15:501 || C16:Back Room || C17:Zone A || C18:Row 4 || C19:LK-15 || C20:Stored || C21:- || C22:Staff A || C23:-
+R156: C3:P009 || C4:DHL || C5:DHL Express || C6:2026-01-16 00:00:00 || C7:Omar || C8:555-0109 || C9:James Taylor || C10:555-1009 || C11:james@example.com || C12:Tenant || C13:Maple Tower || C14:1 || C15:101 || C16:Front Desk || C17:Zone B || C18:Row 3 || C19:LK-17 || C20:Stored || C21:- || C22:Staff B || C23:-
+R157: C3:P010 || C4:FedEx || C5:FedEx || C6:2026-01-16 00:00:00 || C7:Nina || C8:555-0110 || C9:Karen Martinez || C10:555-1010 || C11:karen@example.com || C12:Landlord || C13:Maple Tower || C14:6 || C15:602 || C16:Back Room || C17:Zone B || C18:Row 4 || C19:LK-19 || C20:Pending || C21:- || C22:Staff C || C23:Needs ID
+R158: C3:P011 || C4:UPS || C5:UPS || C6:2026-01-15 00:00:00 || C7:Zack || C8:555-0111 || C9:Robert Garcia || C10:555-1011 || C11:robert@example.com || C12:Tenant || C13:Oak Business Park || C14:2 || C15:CU-204 || C16:Front Desk || C17:Zone C || C18:Row 3 || C19:LK-21 || C20:Stored || C21:- || C22:Staff A || C23:-
+R159: C3:P012 || C4:Amazon || C5:Amazon Logistics || C6:2026-01-15 00:00:00 || C7:Mia || C8:555-0112 || C9:Olivia Hernandez || C10:555-1012 || C11:olivia@example.com || C12:Guest || C13:Oak Business Park || C14:2 || C15:CU-205 || C16:Back Room || C17:Zone C || C18:Row 4 || C19:LK-22 || C20:Stored || C21:- || C22:Staff B || C23:-
+R160: C3:P013 || C4:DHL || C5:DHL Express || C6:2026-01-14 00:00:00 || C7:Sam || C8:555-0113 || C9:Daniel Moore || C10:555-1013 || C11:daniel@example.com || C12:Student || C13:Maple Tower || C14:4 || C15:405 || C16:Front Desk || C17:Zone A || C18:Row 5 || C19:LK-23 || C20:Stored || C21:- || C22:Staff C || C23:-
+R161: C3:P014 || C4:FedEx || C5:FedEx || C6:2026-01-14 00:00:00 || C7:Lisa || C8:555-0114 || C9:Sophia Anderson || C10:555-1014 || C11:sophia@example.com || C12:Tenant || C13:Maple Tower || C14:4 || C15:402 || C16:Back Room || C17:Zone A || C18:Row 6 || C19:LK-24 || C20:Stored || C21:- || C22:Staff A || C23:-
+R162: C3:P015 || C4:UPS || C5:UPS || C6:2026-01-13 00:00:00 || C7:John || C8:555-0115 || C9:William Thomas || C10:555-1015 || C11:william@example.com || C12:Tenant || C13:Maple Tower || C14:8 || C15:803 || C16:Front Desk || C17:Zone B || C18:Row 5 || C19:LK-25 || C20:Overdue || C21:- || C22:Staff B || C23:-
+R163: C3:P016 || C4:Amazon || C5:Amazon Logistics || C6:2026-01-13 00:00:00 || C7:Emma || C8:555-0116 || C9:Isabella Jackson || C10:555-1016 || C11:isabella@example.com || C12:Employee || C13:Oak Business Park || C14:3 || C15:CU-303 || C16:Back Room || C17:Zone B || C18:Row 6 || C19:LK-26 || C20:Stored || C21:- || C22:Staff C || C23:-
+R164: C3:P017 || C4:DHL || C5:DHL Express || C6:2026-01-12 00:00:00 || C7:Ahmed || C8:555-0117 || C9:Benjamin White || C10:555-1017 || C11:benjamin@example.com || C12:Customer || C13:Oak Business Park || C14:3 || C15:CU-304 || C16:Front Desk || C17:Zone C || C18:Row 5 || C19:LK-27 || C20:Stored || C21:- || C22:Staff A || C23:-
+R165: C3:P018 || C4:FedEx || C5:FedEx || C6:2026-01-12 00:00:00 || C7:Noor || C8:555-0118 || C9:Mia Harris || C10:555-1018 || C11:mia@example.com || C12:Visitor || C13:Oak Business Park || C14:4 || C15:CU-402 || C16:Back Room || C17:Zone C || C18:Row 6 || C19:LK-28 || C20:Stored || C21:- || C22:Staff B || C23:-
+R166: C3:P019 || C4:UPS || C5:UPS || C6:2026-01-11 00:00:00 || C7:Mike || C8:555-0119 || C9:Ethan Martin || C10:555-1019 || C11:ethan@example.com || C12:Tenant || C13:Maple Tower || C14:7 || C15:702 || C16:Front Desk || C17:Zone A || C18:Row 7 || C19:LK-29 || C20:Picked Up || C21:2026-01-12 14:00:00 || C22:Staff C || C23:-
+R167: C3:P020 || C4:Amazon || C5:Amazon Logistics || C6:2026-01-11 00:00:00 || C7:Amy || C8:555-0120 || C9:Ava Thompson || C10:555-1020 || C11:ava@example.com || C12:Tenant || C13:Maple Tower || C14:5 || C15:501 || C16:Back Room || C17:Zone A || C18:Row 8 || C19:LK-30 || C20:Stored || C21:- || C22:Staff A || C23:-
+R170: C3:If you want the next report (9-5 Daily Report), say NEXT.
+
+===== SHEET: 10 (rows=6, cols=5) =====
+R2: C3:10 || C4:Settings
+R3: C5:Date & Time
+R4: C5:Theme
+R5: C5:Parcel Holding Limits
+R6: C5:Notification Settings
+
+===== SHEET: 11 (rows=31, cols=5) =====
+R3: C3:11 || C4:Notifications
+R5: C4:NEW
+R7: C4:No
+R8: C4:Date - Day - Time
+R9: C4:Priority Level
+R10: C4:Recipient(s)
+R11: C4:No- Name
+R12: C4:Ph.
+R13: C4:Email
+R14: C4:Sender
+R15: C4:Parcel No
+R16: C4:Tracking Number
+R17: C4:Courier
+R18: C4:Locker
+R19: C4:Compartment
+R20: C4:Location
+R21: C4:Subject
+R22: C4:Status
+R23: C4:Message Detail
+R25: C4:Required Action
+R27: C4:Notes / Comments
+R28: C4:Deadline Date - Day - Time
+R31: C4:New - Edit- Delete- Save/ Send
+
+===== SHEET: 14 (rows=33, cols=5) =====
+R3: C3:14 || C4:My Account
+R5: C3:14-1 || C4:Profile
+R6: C5:Company name
+R7: C5:Address
+R8: C5:Contact
+R9: C5:Ph.
+R10: C5:Email
+R13: C3:14-2 || C4:Account Status || C5:Active/ Suspend
+R16: C3:14-3 || C4:Billing & Subscription
+R17: C5:Current Plans
+R18: C5:Payment Methods
+R19: C5:Billing/Invoices History
+R20: C5:Purchase New License(s)
+R23: C3:14-4 || C4:Account Security :
+R25: C4:Two-Factor Authentication (MFA)
+R26: C4:User Name
+R27: C4:Password
+R28: C4:PIN Code
+R31: C3:14-5 || C4:Account Recovery Options
+R32: C5:Recovery Email
+R33: C5:Recovery Phone
+
+===== SHEET: 15 (rows=50, cols=5) =====
+R1: C3:15 || C4:Help & Support
+R3: C4:New
+R5: C4:Ticket No
+R6: C4:Ticket Date- Day- Time
+R7: C4:Created By :
+R8: C3:* || C4:First Name
+R9: C4:Last Name
+R10: C4:Position
+R11: C4:Email Address
+R12: C4:Phone Number
+R14: C4:Subject / Title
+R16: C4:Category:
+R17: C5:Account / Login Issues
+R18: C5:Billing / Payments
+R19: C5:Complaints / Feedback
+R20: C5:Feature Request / Share Idea
+R21: C5:Jobs / Careers / HR
+R22: C5:Legal / Compliance
+R23: C5:Product / Service Inquiry
+R24: C5:Shipping / Delivery
+R25: C5:Technical / IT Support
+R26: C5:Other / Miscellaneous
+R28: C4:Priority || C5:Low
+R29: C5:Medium
+R30: C5:High
+R32: C4:Status || C5:Open
+R33: C5:Canceled
+R34: C5:Resolved
+R37: C4:Description / Issue Details
+R50: C4:New - Save- Cancel- Delet - Submite
+
+===== SHEET: WorkFlow  (rows=181, cols=5) =====
+R1: C3:Complete Parcel Management Workflow – Categorized, Classified, and Numbered
+R5: C3:1️⃣ Arrival
+R7: C3:Step 1.1 – Parcel Arrival at Facility
+R9: C3:Description: Parcel arrives from courier at facility.
+R10: C3:Status: Arrived
+R11: C3:Action: Log parcel details (Courier, Recipient, Date & Time)
+R12: C3:Notes: First step for all parcels
+R16: C3:2️⃣ Initial Handling
+R18: C3:Step 2.1 – Picked Up Immediately by Recipient
+R20: C3:Condition: Recipient is present at the facility upon arrival.
+R22: C3:Status: Picked Up
+R24: C3:Action: Hand over parcel to recipient
+R26: C3:Outcome: Completed
+R28: C3:Step 2.2 – Delivered Directly to Recipient by Courier
+R30: C3:Condition: Courier delivers directly to recipient without facility storage.
+R32: C3:Status: Delivered Directly
+R34: C3:Action: Courier confirms delivery
+R36: C3:Outcome: Completed
+R38: C3:Step 2.3 – Received by Facility Staff
+R40: C3:Condition: Courier leaves parcel at facility.
+R42: C3:Status: Received
+R44: C3:Action: Front desk or receiving staff logs parcel for storage
+R46: C3:Next Step: Decide on storage method
+R50: C3:3️⃣ Storage (if not picked up immediately)
+R52: C3:Step 3.1 – Stored in Back Office
+R54: C3:Condition: Facility staff stores parcel in secure back office
+R56: C3:Status: In Back Office
+R58: C3:Action: Parcel available for recipient request
+R60: C3:Next Step: Recipient Pickup or Pending/Return
+R62: C3:Step 3.2 – Stored in Facility-Owned Locker
+R64: C3:Condition: Parcel placed in self-access locker
+R66: C3:Status: In Locker
+R68: C3:Action: Recipient accesses locker using code
+R70: C3:Next Step: Pickup by recipient
+R72: C3:Step 3.3 – Stored in Third-Party Compartment
+R74: C3:Condition: Delivery person did not hand parcel to facility; placed in external lockers (e.g., Amazon)
+R76: C3:Status: In External Locker
+R78: C3:Action: Recipient accesses locker using external system
+R80: C3:Next Step: Pickup by recipient
+R84: C3:4️⃣ Pickup / Delivery Steps
+R86: C3:Step 4.1 – Picked Up by Recipient (from any storage type)
+R88: C3:Status: Picked Up
+R90: C3:Action: Staff confirms recipient collection
+R92: C3:Outcome: Completed
+R94: C3:Step 4.2 – Delivered by Staff to Recipient (Staff Delivered)
+R96: C3:Status: Staff Delivered
+R98: C3:Action: Staff hands parcel to recipient directly
+R100: C3:Outcome: Completed
+R102: C3:Step 4.3 – Drop in Facility-Owned Compartment
+R104: C3:Status: Stored
+R106: C3:Action: Staff places parcel in facility lockers for self-access
+R108: C3:Next Step: Recipient Pickup
+R112: C3:5️⃣ Parcel Outcomes / Final Status
+R114: C3:Step 5.1 – Returned to Sender
+R116: C3:Condition: Recipient refuses or cannot be reached
+R118: C3:Status: Returned
+R120: C3:Action: Prepare parcel for return shipment
+R122: C3:Step 5.2 – Lost
+R124: C3:Condition: Parcel misplaced by courier, facility, or external locker
+R126: C3:Status: Lost
+R128: C3:Action: Record incident, initiate investigation
+R130: C3:Step 5.3 – Damaged
+R132: C3:Condition: Parcel damaged during transit or handling
+R134: C3:Status: Damaged
+R136: C3:Action: Notify sender and recipient, claims initiated
+R138: C3:Step 5.4 – Pending / Awaiting Action
+R140: C3:Condition: Parcel not yet picked up or in transition
+R142: C3:Status: Pending
+R144: C3:Action: Monitor until final status is determined
+R148: C3:6️⃣ Summary of All Step Numbering
+R150: C3:Category || C4:Step No || C5:Step Description
+R151: C3:Arrival || C4:1.1 || C5:Parcel arrives at facility
+R152: C3:Initial Handling || C4:2.1 || C5:Picked up immediately by recipient
+R153: C4:2.2 || C5:Delivered directly to recipient by courier
+R154: C4:2.3 || C5:Received by facility staff
+R155: C3:Storage || C4:3.1 || C5:Stored in Back Office
+R156: C4:3.2 || C5:Stored in Facility-Owned Locker
+R157: C4:3.3 || C5:Stored in Third-Party Compartment
+R158: C3:Pickup / Delivery || C4:4.1 || C5:Picked up by recipient
+R159: C4:4.2 || C5:Delivered by staff
+R160: C4:4.3 || C5:Dropped in facility-owned compartment
+R161: C3:Final Outcomes || C4:5.1 || C5:Returned to Sender
+R162: C4:5.2 || C5:Lost
+R163: C4:5.3 || C5:Damaged
+R164: C4:5.4 || C5:Pending / Awaiting Action
+R167: C3:✅ Key Features of This Workflow
+R169: C3:1. Fully numbered and categorized, easy to reference in reports or system logs.
+R171: C3:2. Covers all possible scenarios: direct pickup, courier delivery, storage, lost, damaged, returned.
+R173: C3:3. Allows tracking step by step for each parcel.
+R175: C3:4. Can be easily translated into a visual flowchart or system table.
+R179: C3:If you want, I can convert this entire numbered workflow into a master table with Courier Name, Parcel No, Date & Time, Step, Storage, Staff Action, and Notes, ready to use for tracking every parcel like UPS/FedEx.
+R181: C3:Do you want me to do that next?

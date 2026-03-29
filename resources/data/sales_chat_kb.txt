@@ -1,0 +1,73 @@
+DeskDrop Sales Chat Knowledge Base (FAQ)
+
+1) What is DeskDrop?
+DeskDrop is a parcel management platform for buildings and front desk teams. It helps log, track, and deliver parcels with clear audit trails.
+
+2) Core features
+- Parcel intake with tracking, storage location, and status updates.
+- Recipient notifications via email/SMS.
+- Dashboard KPIs, parcel lists, and CSV exports.
+- Role-based access for admin and staff.
+- Facilities/properties management.
+- Recipient directory and contact profiles.
+- Parcel storage locations.
+- Couriers, delivery items, delivery methods, and sellers.
+- To-do task tracking.
+
+3) How to get started
+- Create an account and verify email/SMS.
+- Complete Account Setup (facility + contacts + notification preferences).
+- Add recipients and storage locations.
+- Start logging parcels and scanning status.
+
+4) Notifications
+DeskDrop supports email and SMS notifications. You can enable them during Account Setup or update later in settings.
+
+5) Reporting
+You can export parcel reports as CSV from the dashboard. Filter by status or dates as needed.
+
+6) Plans and pricing
+Plans are Basic, Standard, and Enterprise. Pricing is per user per month. Choose a plan during onboarding.
+
+7) Integrations
+API and webhook integrations are available for parcel workflows. Share your system and requirements.
+
+8) Security
+Role-based access for admin/staff. Activity logs for parcel status history. Use strong passwords and 2FA where supported.
+
+9) Profiles module
+- Facilities/Property: building details, contacts, status.
+- Recipients: type, contact, unit info, active status.
+- Couriers: company info, phone/email, website.
+- Parcel/Delivery Items: item types and categories.
+- Delivery Methods: pickup/delivery method definitions.
+- Seller: vendor/seller directory.
+
+10) Task management
+- Create to-do tasks with due dates and reminders.
+- Track task status and assignments.
+
+11) Parcel lifecycle
+- Create parcel with recipient, status, location, tracking code.
+- Status values: pending, delivered, held, returned.
+- Scan updates status and records history.
+
+12) Account setup steps
+- Facility details
+- Facility usage
+- Contact information
+- Notification preferences
+- Subscription plan
+- Captcha verification
+
+13) Admin tools
+- Admins can add users and set roles (admin/staff).
+- View plan change history.
+- Notification logs show email/SMS delivery results.
+
+14) Common troubleshooting
+- OTP not received: check email/SMS settings and resend.
+- Captcha failed: refresh and try again.
+- No data in lists: confirm you are logged in and filters are cleared.
+
+If a question is unclear, ask for the building size, parcel volume, and team size to give better guidance.

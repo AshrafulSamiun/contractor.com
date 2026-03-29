@@ -1,0 +1,1544 @@
+1\t<template>
+2\t  <div class="pm-setup-page">
+3\t    <div class="pm-setup-topbar">
+4\t      <div class="container pm-setup-topbar-inner">
+5\t        <div></div>
+6\t        <button class="pm-setup-help" type="button" @click="goSupport">Help &amp; Support</button>
+7\t      </div>
+8\t    </div>
+9\t    <section class="pm-setup">
+10\t      <div class="container">
+11\t        <div class="pm-setup-grid">
+12\t          <aside class="pm-setup-sidebar">
+13\t            <div class="pm-setup-brand">
+14\t              <img :src="brandLogo" :alt="brandName" />
+15\t              <div>
+16\t                <div class="pm-setup-title">{{ brandName }}</div>
+17\t                <div class="pm-muted">Front Desk Parcel Management</div>
+18\t              </div>
+19\t            </div>
+20\t            <div class="pm-setup-progress">
+21\t              <div class="pm-progress-circle">
+22\t                <span>{{ progressPercent }}%</span>
+23\t                <small>Complete</small>
+24\t              </div>
+25\t              <div class="pm-muted">Complete all steps to create your account.</div>
+26\t            </div>
+27\t            <div class="pm-setup-steps">
+28\t              <button
+29\t                v-for="(step, index) in steps"
+30\t                :key="step.key"
+31\t                type="button"
+32\t                :class="['pm-setup-step', { active: currentStep === index + 1, done: currentStep > index + 1 }]"
+33\t                @click="goToStep(index + 1)"
+34\t              >
+35\t                <span class="pm-step-index" aria-hidden="true">{{ currentStep > index + 1 ? '✓' : '' }}</span>
+36\t                <div>
+37\t                  <div class="pm-step-title">{{ step.title }}</div>
+38\t                  <div class="pm-step-status">{{ stepStatus(index + 1) }}</div>
+39\t                </div>
+40\t              </button>
+41\t            </div>
+42\t            <div class="pm-setup-footer">Step {{ currentStep }} of {{ steps.length }}</div>
+43\t          </aside>
+44\t
+45\t          <main class="pm-setup-content">
+46\t            <div v-if="currentStep === 1" class="pm-setup-banner">
+47\t              <div class="pm-setup-banner-icon">
+48\t                <img :src="brandLogo" :alt="brandName" />
+49\t              </div>
+50\t              <div>
+51\t                <h4>Welcome to the Parcel Management Platform</h4>
+52\t                <p>
+53\t                  We are pleased to welcome you. Please complete all required fields accurately. Before submitting, you are
+54\t                  required to read the Users Terms and Conditions at least twice and confirm your agreement.
+55\t                </p>
+56\t              </div>
+57\t            </div>
+58\t
+59\t            <div class="pm-setup-card">
+60\t              <div v-if="currentStep !== 18" class="pm-setup-card-header">
+61\t                <h5>{{ steps[currentStep - 1].title }}</h5>
+62\t                <p class="pm-muted">{{ steps[currentStep - 1].subtitle }}</p>
+63\t              </div>
+64\t
+65\t              <div v-if="currentStep === 1" class="pm-setup-form">
+66\t                <div class="mb-3">
+67\t                  <label class="pm-field-label">Company / Organization Name *</label>
+68\t                  <input
+69\t                    v-model="form.company_name"
+70\t                    class="form-control"
+71\t                    placeholder="Enter your company name"
+72\t                    readonly
+73\t                    disabled
+74\t                  />
+75\t                </div>
+76\t                <div class="mb-3">
+77\t                  <label class="pm-field-label">Company Logo (Attach File)</label>
+78\t                  <div class="pm-file-drop">
+79\t                    <input
+80\t                      id="companyLogo"
+81\t                      class="pm-file-input"
+82\t                      type="file"
+83\t                      accept="image/png,image/jpeg"
+84\t                      @change="onLogoSelect"
+85\t                    />
+86\t                    <label class="pm-file-label" for="companyLogo">
+87\t                      <span class="pm-file-icon">&#8679;</span>
+88\t                      <span>Click to upload company logo</span>
+89\t                      <span class="pm-file-hint">JPG or PNG (max 5MB)</span>
+90\t                    </label>
+91\t                  </div>
+92\t                </div>
+93\t                <div v-if="form.company_logo_url" class="pm-logo-preview">
+94\t                  <img :src="form.company_logo_url" alt="Company logo" />
+95\t                </div>
+96\t              </div>
+97\t
+98\t              <div v-if="currentStep === 2" class="pm-setup-form">
+99\t                <div class="mb-3">
+100\t                  <label class="pm-field-label">Street Address *</label>
+101\t                  <input v-model="form.company_address" class="form-control" placeholder="Enter street address" />
+102\t                </div>
+103\t                <div class="row g-3">
+104\t                  <div class="col-md-6">
+105\t                    <label class="pm-field-label">City *</label>
+106\t                    <input v-model="form.company_city" class="form-control" placeholder="Enter city" />
+107\t                  </div>
+108\t                  <div class="col-md-6">
+109\t                    <label class="pm-field-label">State / Province *</label>
+110\t                    <input v-model="form.company_state" class="form-control" placeholder="Enter state/province" />
+111\t                  </div>
+112\t                  <div class="col-md-6">
+113\t                    <label class="pm-field-label">ZIP / Postal Code *</label>
+114\t                    <input v-model="form.company_zip" class="form-control" placeholder="Enter ZIP/postal code" />
+115\t                  </div>
+116\t                  <div class="col-md-6">
+117\t                    <label class="pm-field-label">Country *</label>
+118\t                    <select v-model.number="form.company_country_id" class="form-control">
+119\t                      <option value="">Select country</option>
+120\t                      <option v-for="c in countries" :key="c.id" :value="c.id">
+121\t                        {{ c.country_name }}
+122\t                      </option>
+123\t                    </select>
+124\t                  </div>
+125\t                </div>
+126\t                <div class="mt-3">
+127\t                  <label class="pm-field-label">Main Phone Number *</label>
+128\t                  <input v-model="form.company_phone" class="form-control" placeholder="+1 (555) 123-4567" />
+129\t                </div>
+130\t              </div>
+131\t
+132\t              <div v-if="currentStep === 3" class="pm-setup-form">
+133\t                <div class="row g-3">
+134\t                  <div class="col-md-6">
+135\t                    <label class="pm-field-label">Facility / Building Name *</label>
+136\t                    <input v-model="form.facility_name" class="form-control" placeholder="Enter facility name" />
+137\t                  </div>
+138\t                  <div class="col-md-6">
+139\t                    <label class="pm-field-label">Part Number *</label>
+140\t                    <input v-model="form.facility_part_number" class="form-control" placeholder="Enter part number" />
+141\t                  </div>
+142\t                </div>
+143\t                <div class="mt-3">
+144\t                  <label class="pm-field-label">Street Address *</label>
+145\t                  <input v-model="form.facility_address" class="form-control" placeholder="Enter street address" />
+146\t                </div>
+147\t                <div class="row g-3 mt-1">
+148\t                  <div class="col-md-6">
+149\t                    <label class="pm-field-label">City *</label>
+150\t                    <input v-model="form.facility_city" class="form-control" placeholder="Enter city" />
+151\t                  </div>
+152\t                  <div class="col-md-6">
+153\t                    <label class="pm-field-label">State / Province *</label>
+154\t                    <input v-model="form.facility_state" class="form-control" placeholder="Enter state/province" />
+155\t                  </div>
+156\t                  <div class="col-md-6">
+157\t                    <label class="pm-field-label">ZIP / Postal Code *</label>
+158\t                    <input v-model="form.facility_zip" class="form-control" placeholder="Enter ZIP/postal code" />
+159\t                  </div>
+160\t                  <div class="col-md-6">
+161\t                    <label class="pm-field-label">Country *</label>
+162\t                    <select v-model.number="form.facility_country_id" class="form-control">
+163\t                      <option value="">Select country</option>
+164\t                      <option v-for="c in countries" :key="`facility-country-${c.id}`" :value="c.id">
+165\t                        {{ c.country_name }}
+166\t                      </option>
+167\t                    </select>
+168\t                  </div>
+169\t                  <div class="col-md-6">
+170\t                    <label class="pm-field-label">Phone Number *</label>
+171\t                    <input v-model="form.facility_phone" class="form-control" placeholder="+1 (555) 123-4567" />
+172\t                  </div>
+173\t                  <div class="col-md-6">
+174\t                    <label class="pm-field-label">Email Address *</label>
+175\t                    <input v-model="form.facility_email" class="form-control" placeholder="facility@company.com" />
+176\t                  </div>
+177\t                </div>
+178\t              </div>
+179\t
+180\t              <div v-if="currentStep === 4" class="pm-setup-form">
+181\t                <div class="pm-setup-table-header">
+182\t                  <div class="pm-table-title">Facility Usage Table</div>
+183\t                  <button class="btn btn-primary btn-sm" type="button" @click="addFacilityRow">+ Add Facility</button>
+184\t                </div>
+185\t                <div class="table-responsive">
+186\t                  <table class="table pm-setup-table">
+187\t                    <thead>
+188\t                      <tr>
+189\t                        <th>Facility Name</th>
+190\t                        <th>Facility ID / Part Number</th>
+191\t                        <th>City</th>
+192\t                        <th>Country</th>
+193\t                        <th class="text-center">Assigned Users</th>
+194\t                        <th class="text-center">Status</th>
+195\t                        <th class="text-center">Actions</th>
+196\t                      </tr>
+197\t                    </thead>
+198\t                    <tbody>
+199\t                      <tr v-for="(row, idx) in form.facility_usage" :key="`facility-${idx}`">
+200\t                        <td><input v-model="row.name" class="form-control" placeholder="Facility name" /></td>
+201\t                        <td><input v-model="row.part" class="form-control" placeholder="Part number" /></td>
+202\t                        <td><input v-model="row.city" class="form-control" placeholder="City" /></td>
+203\t                        <td>
+204\t                          <select v-model.number="row.country_id" class="form-control">
+205\t                            <option value="">Select country</option>
+206\t                            <option v-for="c in countries" :key="`usage-country-${idx}-${c.id}`" :value="c.id">
+207\t                              {{ c.country_name }}
+208\t                            </option>
+209\t                          </select>
+210\t                        </td>
+211\t                        <td class="text-center">
+212\t                          <input v-model="row.assigned" class="form-control pm-setup-count" type="number" min="0" />
+213\t                        </td>
+214\t                        <td class="text-center">
+215\t                          <span :class="['pm-status-pill', row.status === 'active' ? 'active' : '']">
+216\t                            {{ row.status === 'active' ? 'Active' : 'Inactive' }}
+217\t                          </span>
+218\t                        </td>
+219\t                        <td class="text-center">
+220\t                          <button class="btn btn-link p-0" type="button" @click="toggleStatus(idx)">&#9998;</button>
+221\t                          <button class="btn btn-link text-danger p-0 ms-2" type="button" @click="removeFacilityRow(idx)">&#128465;</button>
+222\t                        </td>
+223\t                      </tr>
+224\t                      <tr v-if="!form.facility_usage.length">
+225\t                        <td colspan="7" class="text-center pm-muted">No facilities added yet.</td>
+226\t                      </tr>
+227\t                    </tbody>
+228\t                  </table>
+229\t                </div>
+230\t
+231\t                <div class="pm-setup-note">
+232\t                  <strong>Usage Rules & Notes</strong>
+233\t                  <ul>
+234\t                    <li>Each user license may be assigned to a maximum of two (2) facilities only.</li>
+235\t                    <li>Assigning a single user to more than two facilities is considered a license violation.</li>
+236\t                    <li>License violations may result in:</li>
+237\t                    <li class="ps-4">Account suspension</li>
+238\t                    <li class="ps-4">Additional licensing fees</li>
+239\t                    <li class="ps-4">Enforcement or administrative review</li>
+240\t                  </ul>
+241\t                </div>
+242\t              </div>
+243\t
+244\t              <div v-if="currentStep === 5" class="pm-setup-form">
+245\t                <div class="mb-3">
+246\t                  <label class="pm-field-label">Primary Phone Number *</label>
+247\t                  <input v-model="form.contact_primary_phone" class="form-control" placeholder="+1 (555) 123-4567" />
+248\t                </div>
+249\t                <div class="mb-3">
+250\t                  <label class="pm-field-label">Mobile Number <span class="pm-muted">(Optional)</span></label>
+251\t                  <input v-model="form.contact_mobile_phone" class="form-control" placeholder="+1 (555) 987-6543" />
+252\t                </div>
+253\t                <div class="mb-3">
+254\t                  <label class="pm-field-label">Business Email Address *</label>
+255\t                  <input v-model="form.contact_business_email" class="form-control" placeholder="contact@company.com" />
+256\t                </div>
+257\t                <div class="mb-3">
+258\t                  <label class="pm-field-label">Alternate Email <span class="pm-muted">(Optional)</span></label>
+259\t                  <input v-model="form.contact_alt_email" class="form-control" placeholder="alternate@company.com" />
+260\t                </div>
+261\t                <div class="mb-3">
+262\t                  <label class="pm-field-label">Website <span class="pm-muted">(Optional)</span></label>
+263\t                  <input v-model="form.contact_website" class="form-control" placeholder="https://www.company.com" />
+264\t                </div>
+265\t              </div>
+266\t
+267\t              <div v-if="currentStep === 6" class="pm-setup-form">
+268\t                <div class="mb-3">
+269\t                  <label class="pm-field-label">Time Zone *</label>
+270\t                  <select v-model="form.pref_timezone" class="form-control">
+271\t                    <option value="">Select time zone</option>
+272\t                    <option
+273\t                      v-if="form.pref_timezone && !timezoneOptions.includes(form.pref_timezone)"
+274\t                      :value="form.pref_timezone"
+275\t                    >
+276\t                      {{ form.pref_timezone }}
+277\t                    </option>
+278\t                    <option v-for="tz in timezoneOptions" :key="tz" :value="tz">
+279\t                      {{ tz }}
+280\t                    </option>
+281\t                  </select>
+282\t                </div>
+283\t                <div class="mb-3">
+284\t                  <label class="pm-field-label">Preferred Language *</label>
+285\t                  <select v-model="form.pref_language" class="form-control">
+286\t                    <option value="">Select language</option>
+287\t                    <option
+288\t                      v-if="form.pref_language && !languageOptions.includes(form.pref_language)"
+289\t                      :value="form.pref_language"
+290\t                    >
+291\t                      {{ form.pref_language }}
+292\t                    </option>
+293\t                    <option v-for="lang in languageOptions" :key="lang" :value="lang">
+294\t                      {{ lang }}
+295\t                    </option>
+296\t                  </select>
+297\t                </div>
+298\t                <div class="mb-3">
+299\t                  <label class="pm-field-label">Date Format *</label>
+300\t                  <select v-model="form.pref_date_format" class="form-control">
+301\t                    <option value="">Select date format</option>
+302\t                    <option v-for="fmt in dateFormatOptions" :key="fmt" :value="fmt">
+303\t                      {{ fmt }}
+304\t                    </option>
+305\t                  </select>
+306\t                </div>
+307\t              </div>
+308\t
+309\t              <div v-if="currentStep === 7" class="pm-setup-form">
+310\t                <div class="pm-setup-options">
+311\t                  <label class="pm-option-card">
+312\t                    <input type="checkbox" v-model="form.notify_email" />
+313\t                    <div>
+314\t                      <div class="pm-option-title">Email Notifications</div>
+315\t                      <div class="pm-muted">Receive notifications via email</div>
+316\t                    </div>
+317\t                  </label>
+318\t                  <label class="pm-option-card">
+319\t                    <input type="checkbox" v-model="form.notify_sms" />
+320\t                    <div>
+321\t                      <div class="pm-option-title">SMS Notifications</div>
+322\t                      <div class="pm-muted">Receive notifications via text message</div>
+323\t                    </div>
+324\t                  </label>
+325\t                  <label class="pm-option-card">
+326\t                    <input type="checkbox" v-model="form.notify_arrival" />
+327\t                    <div>
+328\t                      <div class="pm-option-title">Parcel Arrival Alerts</div>
+329\t                      <div class="pm-muted">Get notified when parcels arrive</div>
+330\t                    </div>
+331\t                  </label>
+332\t                  <label class="pm-option-card">
+333\t                    <input type="checkbox" v-model="form.notify_security" />
+334\t                    <div>
+335\t                      <div class="pm-option-title">System & Security Alerts</div>
+336\t                      <div class="pm-muted">Important security and system notifications</div>
+337\t                    </div>
+338\t                  </label>
+339\t                  <label class="pm-option-card">
+340\t                    <input type="checkbox" v-model="form.notify_marketing" />
+341\t                    <div>
+342\t                      <div class="pm-option-title">Marketing / Promotional Updates</div>
+343\t                      <div class="pm-muted">Optional promotional content and updates</div>
+344\t                    </div>
+345\t                  </label>
+346\t                </div>
+347\t              </div>
+348\t
+349\t              <div v-if="currentStep === 8" class="pm-setup-form">
+350\t                <div class="pm-setup-panel">
+351\t                  <h6>Login Credentials</h6>
+352\t                  <div class="mb-3">
+353\t                    <label class="pm-field-label">Username *</label>
+354\t                    <input v-model="form.security_username" class="form-control" placeholder="Choose a username" />
+355\t                  </div>
+356\t                  <div class="mb-3">
+357\t                    <label class="pm-field-label">Password *</label>
+358\t                    <input v-model="form.security_password" type="password" class="form-control" placeholder="Create a strong password" />
+359\t                  </div>
+360\t                  <div class="mb-3">
+361\t                    <label class="pm-field-label">Confirm Password *</label>
+362\t                    <input v-model="form.security_password_confirm" type="password" class="form-control" placeholder="Confirm your password" />
+363\t                  </div>
+364\t                </div>
+365\t
+366\t                <div class="mb-3 mt-3">
+367\t                  <label class="pm-field-label">Security PIN *</label>
+368\t                  <input v-model="form.security_pin" class="form-control" placeholder="Enter 4-6 digit PIN" />
+369\t                </div>
+370\t
+371\t                <div class="pm-toggle-row">
+372\t                  <div>
+373\t                    <div class="pm-option-title">Enable Two-Factor Authentication <span class="pm-muted">(Optional)</span></div>
+374\t                    <div class="pm-muted">Add extra security with 2FA verification codes</div>
+375\t                  </div>
+376\t                  <label class="pm-switch">
+377\t                    <input type="checkbox" v-model="form.security_2fa" />
+378\t                    <span></span>
+379\t                  </label>
+380\t                </div>
+381\t
+382\t                <div class="pm-policy-card pm-policy-warning">
+383\t                  <strong>Security & Device Policy</strong>
+384\t                  <p>Multiple device login or 3 failed attempts will automatically lock your account for security.</p>
+385\t                  <div class="pm-policy-confirm">I confirm this device is authorized for business use only</div>
+386\t                </div>
+387\t
+388\t                <div class="pm-policy-card pm-policy-danger">
+389\t                  <strong>Password & PIN Rotation Policy</strong>
+390\t                  <ul>
+391\t                    <li>Authorized users are required to update their password and security PIN every thirty (30) days.</li>
+392\t                    <li>The system sends three (3) reminder notifications before expiration.</li>
+393\t                    <li>If not updated after the third reminder, your account will be automatically locked.</li>
+394\t                    <li>Enforcement occurs 24 hours after the third notification.</li>
+395\t                    <li>Locked accounts require password/PIN update or admin verification.</li>
+396\t                  </ul>
+397\t                  <div class="pm-policy-ack">
+398\t                    <label>
+399\t                      <input type="checkbox" v-model="form.security_policy_ack" />
+400\t                      I understand and agree to comply with the Password & PIN Rotation Policy *
+401\t                    </label>
+402\t                  </div>
+403\t                </div>
+404\t              </div>
+405\t
+406\t              <div v-if="currentStep === 9" class="pm-setup-form">
+407\t                <div class="text-center mb-3">
+408\t                  <h4 class="fw-semibold">Contractor Service Plans</h4>
+409\t                  <p class="pm-muted">Choose the plan that best fits your organization's needs</p>
+410\t                </div>
+411\t                <div class="table-responsive">
+412\t                  <table class="table pm-plan-table text-start">
+413\t                    <thead>
+414\t                      <tr>
+415\t                        <th class="pm-plan-head">Plan Name</th>
+416\t                        <th
+417\t                          v-for="plan in planOptions"
+418\t                          :key="plan.key"
+419\t                          class="pm-plan-col text-center"
+420\t                          :class="plan.key === 'standard' ? 'pm-plan-highlight' : ''"
+421\t                        >
+422\t                          <span v-if="plan.popular" class="pm-popular-badge">Most Popular</span>
+423\t                          <div>{{ plan.label }}</div>
+424\t                        </th>
+425\t                      </tr>
+426\t                      <tr>
+427\t                        <th class="pm-plan-head">Price (per user/month)</th>
+428\t                        <th
+429\t                          v-for="plan in planOptions"
+430\t                          :key="`${plan.key}-price`"
+431\t                          class="text-center"
+432\t                          :class="plan.key === 'standard' ? 'pm-plan-highlight' : ''"
+433\t                        >
+434\t                          ${{ plan.price }} USD
+435\t                        </th>
+436\t                      </tr>
+437\t                      <tr>
+438\t                        <th></th>
+439\t                        <th
+440\t                          v-for="plan in planOptions"
+441\t                          :key="`${plan.key}-btn`"
+442\t                          class="text-center"
+443\t                          :class="plan.key === 'standard' ? 'pm-plan-highlight' : ''"
+444\t                        >
+445\t                          <button
+446\t                            class="btn btn-sm"
+447\t                            :class="form.subscription_plan === plan.key ? 'btn-primary' : 'btn-outline-primary'"
+448\t                            type="button"
+449\t                            @click="selectPlan(plan.key)"
+450\t                          >
+451\t                            {{ form.subscription_plan === plan.key ? 'Selected' : 'Select Plan' }}
+452\t                          </button>
+453\t                        </th>
+454\t                      </tr>
+455\t                    </thead>
+456\t                    <tbody>
+457\t                      <tr v-for="row in planFeatureRows" :key="row.label">
+458\t                        <td>{{ row.label }}</td>
+459\t                        <td class="text-center">
+460\t                          <span :class="row.basic ? 'pm-check' : 'pm-x'">
+461\t                            <span v-if="row.basic">&#10003;</span>
+462\t                            <span v-else>&#10005;</span>
+463\t                          </span>
+464\t                        </td>
+465\t                        <td class="text-center pm-plan-highlight">
+466\t                          <span :class="row.standard ? 'pm-check' : 'pm-x'">
+467\t                            <span v-if="row.standard">&#10003;</span>
+468\t                            <span v-else>&#10005;</span>
+469\t                          </span>
+470\t                        </td>
+471\t                        <td class="text-center">
+472\t                          <span :class="row.enterprise ? 'pm-check' : 'pm-x'">
+473\t                            <span v-if="row.enterprise">&#10003;</span>
+474\t                            <span v-else>&#10005;</span>
+475\t                          </span>
+476\t                        </td>
+477\t                      </tr>
+478\t                    </tbody>
+479\t                  </table>
+480\t                </div>
+481\t              </div>
+482\t              <div v-if="currentStep === 10" class="pm-setup-form">
+483\t                <div class="pm-license-card">
+484\t                  <div class="pm-license-header">
+485\t                    <strong>User License Policy - Mandatory Review</strong>
+486\t                    <div class="pm-muted">The amount charged under your selected subscription plan is calculated per user license.</div>
+487\t                  </div>
+488\t                  <div class="pm-license-body">
+489\t                    <ol>
+490\t                      <li>One user license is strictly assigned to one individual user only.</li>
+491\t                      <li>Sharing a single user license with multiple users is strictly prohibited and considered a serious account violation.</li>
+492\t                      <li>Each additional user requires the purchase of a separate user license.</li>
+493\t                      <li>Each user license may be assigned to a maximum of two (2) facilities only.</li>
+494\t                      <li>Assigning one user to more than two facilities is a license violation and may result in:
+495\t                        <ul>
+496\t                          <li>Account suspension</li>
+497\t                          <li>Additional licensing fees</li>
+498\t                          <li>Enforcement action by the Company</li>
+499\t                        </ul>
+500\t                      </li>
+501\t                    </ol>
+502\t                    <div class="pm-license-alert">
+503\t                      <strong>Important Notice</strong>
+504\t                      <p>
+505\t                        Violations of the User License policy may result in immediate suspension, account termination,
+506\t                        financial penalties, or legal action, depending on severity.
+507\t                      </p>
+508\t                    </div>
+509\t                  </div>
+510\t                  <div class="pm-license-ack">
+511\t                    <label>
+512\t                      <input type="checkbox" v-model="form.license_ack" />
+513\t                      I understand and agree to comply with the User License rules *
+514\t                    </label>
+515\t                  </div>
+516\t                </div>
+517\t              </div>
+518\t
+519\t              <div v-if="currentStep === 11" class="pm-setup-form">
+520\t                <div class="mb-3">
+521\t                  <label class="pm-field-label">Payment Method *</label>
+522\t                  <div class="pm-method-grid">
+523\t                    <button
+524\t                      v-for="method in billingMethods"
+525\t                      :key="method.value"
+526\t                      type="button"
+527\t                      :class="['pm-method-card', { active: form.billing_method === method.value }]"
+528\t                      @click="form.billing_method = method.value"
+529\t                    >
+530\t                      <span class="pm-method-icon">{{ method.icon }}</span>
+531\t                      <span class="pm-method-label">{{ method.label }}</span>
+532\t                    </button>
+533\t                  </div>
+534\t                </div>
+535\t                <div class="mb-3">
+536\t                  <label class="pm-field-label">Billing Address *</label>
+537\t                  <input v-model="form.billing_address" class="form-control" placeholder="Enter complete billing address" />
+538\t                </div>
+539\t                <div class="row g-3">
+540\t                  <div class="col-md-6">
+541\t                    <label class="pm-field-label">Billing Cycle</label>
+542\t                    <input v-model="form.billing_cycle" class="form-control" placeholder="Monthly (Charged in Advance)" />
+543\t                  </div>
+544\t                  <div class="col-md-6">
+545\t                    <label class="pm-field-label">Auto-Renew Subscription *</label>
+546\t                    <div class="pm-toggle-row">
+547\t                      <div class="pm-muted">Automatic monthly renewal</div>
+548\t                      <label class="pm-switch">
+549\t                        <input type="checkbox" v-model="form.billing_auto_renew" />
+550\t                        <span></span>
+551\t                      </label>
+552\t                    </div>
+553\t                  </div>
+554\t                </div>
+555\t                <div class="pm-policy-card pm-policy-info">
+556\t                  <strong>Billing Policy (Mandatory - Read Carefully)</strong>
+557\t                  <ul>
+558\t                    <li>All subscription charges occur at the beginning of each month, billed in advance.</li>
+559\t                    <li>If a payment method is declined, the system will automatically attempt one (1) retry after 48 hours.</li>
+560\t                    <li>If the second attempt fails, the account will be suspended until valid payment information is updated.</li>
+561\t                    <li>Prorated billing applies for mid-month service starts.</li>
+562\t                    <li>All service fees are strictly non-refundable, including partial months or unused time.</li>
+563\t                    <li>All fees include applicable sales tax or VAT as required by local tax authorities.</li>
+564\t                  </ul>
+565\t                </div>
+566\t                <div class="pm-policy-ack-inline">
+567\t                  <label>
+568\t                    <input type="checkbox" v-model="form.billing_policy_ack" />
+569\t                    I have read and agree to the Billing Policy *
+570\t                  </label>
+571\t                </div>
+572\t              </div>
+573\t
+574\t              <div v-if="currentStep === 12" class="pm-setup-form">
+575\t                <div class="row g-3">
+576\t                  <div class="col-md-6">
+577\t                    <label class="pm-field-label">First Name *</label>
+578\t                    <input v-model="form.admin_first_name" class="form-control" placeholder="Enter first name" />
+579\t                  </div>
+580\t                  <div class="col-md-6">
+581\t                    <label class="pm-field-label">Last Name *</label>
+582\t                    <input v-model="form.admin_last_name" class="form-control" placeholder="Enter last name" />
+583\t                  </div>
+584\t                </div>
+585\t                <div class="mt-3">
+586\t                  <label class="pm-field-label">Role / Position *</label>
+587\t                  <input v-model="form.admin_role" class="form-control" placeholder="e.g., System Administrator" />
+588\t                </div>
+589\t                <div class="mt-3">
+590\t                  <label class="pm-field-label">System Administrator</label>
+591\t                  <div class="pm-toggle-row">
+592\t                    <div class="pm-muted">Grant full administrative privileges to this user</div>
+593\t                    <label class="pm-switch">
+594\t                      <input type="checkbox" v-model="form.admin_is_system" />
+595\t                      <span></span>
+596\t                    </label>
+597\t                  </div>
+598\t                </div>
+599\t                <div class="row g-3 mt-1">
+600\t                  <div class="col-md-6">
+601\t                    <label class="pm-field-label">Phone Number *</label>
+602\t                    <input v-model="form.admin_phone" class="form-control" placeholder="+1 (555) 123-4567" />
+603\t                  </div>
+604\t                  <div class="col-md-6">
+605\t                    <label class="pm-field-label">Business Email Address *</label>
+606\t                    <input v-model="form.admin_email" class="form-control" placeholder="admin@company.com" />
+607\t                  </div>
+608\t                </div>
+609\t                <div class="mt-3">
+610\t                  <label class="pm-field-label">Account Creation Date *</label>
+611\t                  <input v-model="form.admin_created_date" type="date" class="form-control" />
+612\t                  <div class="pm-muted mt-1">Auto-filled with today's date</div>
+613\t                </div>
+614\t              </div>
+615\t
+616\t              <div v-if="currentStep === 13" class="pm-setup-form">
+617\t                <div class="mb-3">
+618\t                  <label class="pm-field-label">Recovery Email Address *</label>
+619\t                  <input v-model="form.recovery_email" class="form-control" placeholder="recovery@company.com" />
+620\t                  <div class="pm-muted mt-1">This email will be used to recover your account if needed.</div>
+621\t                </div>
+622\t                <div class="mb-3">
+623\t                  <label class="pm-field-label">Security Contact Number <span class="pm-muted">(Optional)</span></label>
+624\t                  <input v-model="form.recovery_phone" class="form-control" placeholder="+1 (555) 123-4567" />
+625\t                  <div class="pm-muted mt-1">Alternate contact number for account recovery purposes.</div>
+626\t                </div>
+627\t              </div>
+628\t
+629\t              <div v-if="currentStep === 14" class="pm-setup-form">
+630\t                <div class="pm-terms-progress">
+631\t                  <div class="pm-info-title">
+632\t                    <span class="pm-info-icon" aria-hidden="true">@</span>
+633\t                    <span>Email Verification Required</span>
+634\t                  </div>
+635\t                  <div class="pm-muted">
+636\t                    A verification email will be sent to your primary email address. Please check your inbox and follow the
+637\t                    verification link to activate your account.
+638\t                  </div>
+639\t                </div>
+640\t                <div class="pm-policy-card pm-policy-warning">
+641\t                  <strong>Important Notice</strong>
+642\t                  <p>Your account will remain inactive until verified. Please complete email verification within 48 hours.</p>
+643\t                </div>
+644\t                <div class="pm-policy-card">
+645\t                  <strong>Didn't receive the email?</strong>
+646\t                  <ul>
+647\t                    <li>Check your spam or junk folder.</li>
+648\t                    <li>Ensure the email address is correct.</li>
+649\t                    <li>Contact support if you need assistance.</li>
+650\t                  </ul>
+651\t                </div>
+652\t              </div>
+653\t
+654\t              <div v-if="currentStep === 15" class="pm-setup-form">
+655\t                <div class="pm-terms-box text-center">
+656\t                  <div class="pm-captcha-icon">Shield</div>
+657\t                  <div class="pm-terms-header">Security Verification</div>
+658\t                  <div class="pm-muted">Please verify that you are human to proceed with account creation.</div>
+659\t                  <div class="pm-policy-ack-inline mt-3">
+660\t                    <label>
+661\t                      <input type="checkbox" v-model="form.captcha_ack" />
+662\t                      I'm not a robot
+663\t                    </label>
+664\t                  </div>
+665\t                </div>
+666\t                <div class="pm-policy-card pm-policy-info">
+667\t                  <strong>Note:</strong>
+668\t                  <p>This verification helps protect our platform from automated abuse and ensures the security of all user accounts.</p>
+669\t                </div>
+670\t              </div>
+671\t
+672\t              <div v-if="currentStep === 16" class="pm-setup-form">
+673\t                <div class="pm-policy-card pm-policy-danger">
+674\t                  <div class="pm-policy-title">
+675\t                    <span class="pm-safety-icon">Shield</span>
+676\t                    Mandatory Security Awareness Section
+677\t                  </div>
+678\t                  <div class="pm-license-body">
+679\t                    <ol>
+680\t                      <li>Users must not save their username, password, or security PIN in any web browser.</li>
+681\t                      <li>Users must not store credentials in documents, notes, phone apps, screenshots, or physical files.</li>
+682\t                      <li>Users must not share login credentials with unauthorized parties, vendors, or contractors.</li>
+683\t                      <li>Only authorized personnel may change passwords or security PINs.</li>
+684\t                      <li>Automatic logout: Users will be logged out after one (1) hour of inactivity.</li>
+685\t                      <li>Users must follow standard web application security best practices.</li>
+686\t                    </ol>
+687\t                  </div>
+688\t                </div>
+689\t                <div class="pm-policy-ack-inline">
+690\t                  <label>
+691\t                    <input type="checkbox" v-model="form.safety_ack" />
+692\t                    I understand and agree to follow all Account Safety requirements *
+693\t                  </label>
+694\t                </div>
+695\t              </div>
+696\t
+697\t              <div v-if="currentStep === 17" class="pm-setup-form">
+698\t                <div class="pm-terms-progress">
+699\t                  <div class="pm-terms-progress-label">Scroll Progress: {{ termsScrollCount }} of 2 required</div>
+700\t                  <div class="pm-terms-progress-hint">Scroll to bottom {{ termsRemainingHint }}</div>
+701\t                </div>
+702\t                <div class="pm-terms-box">
+703\t                  <div class="pm-terms-header">Terms and Conditions (Full Legal Version)</div>
+704\t                  <div class="pm-terms-body" ref="termsScrollRef" @scroll="onTermsScroll">
+705\t                    <ol>
+706\t                      <li>The Platform is strictly for parcel and delivery management purposes only.</li>
+707\t                      <li>The Company is not responsible for lost, damaged, delayed, stolen, or missing parcels.</li>
+708\t                      <li>No illegal, prohibited, or forbidden items may be managed, recorded, stored, or tracked using this Platform.</li>
+709\t                      <li>Users must not use the Platform for illegal activities, abuse, fraud, or unlawful purposes.</li>
+710\t                      <li>All service fees are strictly non-refundable, including partial months or unused time.</li>
+711\t                      <li>Users are fully responsible for actions under their account, including actions by staff or agents.</li>
+712\t                      <li>Credential sharing is prohibited. Unauthorized sharing may result in account closure and legal action.</li>
+713\t                      <li>The Platform is provided "as is" without any guarantee of uninterrupted or error-free service.</li>
+714\t                      <li>These Terms are governed by the Company's legal jurisdiction, and users consent to that jurisdiction.</li>
+715\t                      <li>Account closure requests must be submitted via Contact Us at least 14 days in advance.</li>
+716\t                    </ol>
+717\t                    <div class="pm-terms-highlight">
+718\t                      Unauthorized use of the Platform (including development, testing, training, or simulation without approval) is prohibited.
+719\t                    </div>
+720\t                    <div class="pm-terms-updated">Last Updated: January 26, 2026</div>
+721\t                  </div>
+722\t                  <div class="pm-terms-footer">
+723\t                    <span class="pm-terms-warning">Please scroll to the bottom 1 more time to enable acceptance</span>
+724\t                  </div>
+725\t                </div>
+726\t
+727\t                <div class="pm-terms-ack">
+728\t                  <label>
+729\t                    <input type="checkbox" v-model="form.terms_ack" :disabled="!termsAcceptedEnabled" />
+730\t                    I have read, understood, and agree to the Users Terms and Conditions *
+731\t                  </label>
+732\t                </div>
+733\t                <div class="pm-terms-ack">
+734\t                  <label>
+735\t                    <input type="checkbox" v-model="form.privacy_ack" :disabled="!termsAcceptedEnabled" />
+736\t                    I accept the Privacy Policy *
+737\t                  </label>
+738\t                </div>
+739\t              </div>
+740\t
+741\t              <div v-if="currentStep === 18" class="pm-setup-form">
+742\t                <div class="pm-final-header">
+743\t                  <div class="pm-final-icon">OK</div>
+744\t                  <h4>Final Confirmation</h4>
+745\t                  <p class="pm-muted">You're all set! Review your information and complete your registration.</p>
+746\t                </div>
+747\t
+748\t                <div class="pm-final-summary">
+749\t                  <div class="pm-final-summary-title">Registration Summary</div>
+750\t                  <div class="pm-final-summary-grid">
+751\t                    <div v-for="item in summaryItems" :key="item.label">
+752\t                      <div class="pm-final-label">{{ item.label }}:</div>
+753\t                      <div>{{ item.value }}</div>
+754\t                    </div>
+755\t                  </div>
+756\t                </div>
+757\t
+758\t                <div class="pm-final-reminders">
+759\t                  <strong>Important Reminders</strong>
+760\t                  <ul>
+761\t                    <li>A verification email will be sent to {{ form.recovery_email || 'your primary email' }}.</li>
+762\t                    <li>Your account will remain inactive until email verification is complete.</li>
+763\t                    <li>Please verify your email within 48 hours.</li>
+764\t                    <li>Remember to update your password and PIN every 30 days.</li>
+765\t                    <li>Monthly billing will begin after account activation.</li>
+766\t                  </ul>
+767\t                </div>
+768\t
+769\t                <div class="pm-final-next">
+770\t                  <strong>What happens next?</strong>
+771\t                  <ol>
+772\t                    <li>Your account will be created and a confirmation email sent to your inbox.</li>
+773\t                    <li>Click the verification link in the email to activate your account.</li>
+774\t                    <li>Log in with your username and password to access the platform.</li>
+775\t                    <li>Complete your profile setup and start managing your parcels.</li>
+776\t                  </ol>
+777\t                </div>
+778\t
+779\t                <div class="pm-final-ack">
+780\t                  <span>You have agreed to the Terms & Conditions and Privacy Policy</span>
+781\t                </div>
+782\t
+783\t                <div class="pm-final-actions">
+784\t                  <button class="btn btn-outline-primary" type="button" @click="goToStep(17)">Back to Review</button>
+785\t                  <button class="btn btn-success" type="button" @click="next">Save & Complete Registration</button>
+786\t                </div>
+787\t              </div>
+788\t
+789\t              <div v-if="currentStep < 1 || currentStep > steps.length" class="pm-setup-placeholder">
+790\t                <p>
+791\t                  Step content will appear here. You can continue to the next step and we will attach the next screen
+792\t                  when you provide it.
+793\t                </p>
+794\t              </div>
+795\t
+796\t              <div v-if="error" class="pm-form-error">{{ error }}</div>
+797\t              <div v-if="success" class="pm-form-success">Saved. Continue to the next step.</div>
+798\t
+799\t              <div v-if="!isFinalStep" class="pm-setup-actions">
+800\t                <button class="btn btn-outline-primary" type="button" :disabled="currentStep === 1" @click="prev">
+801\t                  Back
+802\t                </button>
+803\t                <button class="btn btn-primary" type="button" :disabled="loading" @click="next">
+804\t                  {{ isFinalStep ? 'Finish Setup' : 'Next' }}
+805\t                </button>
+806\t              </div>
+807\t            </div>
+808\t          </main>
+809\t        </div>
+810\t      </div>
+811\t    </section>
+812\t  </div>
+813\t</template>
+814\t
+815\t<script setup>
+816\timport { computed, nextTick, onMounted, ref, watch } from 'vue'
+817\timport { useRouter } from 'vue-router'
+818\timport logoWhite from '../assets/logo-white.png'
+819\timport client from '../api/client'
+820\timport { clearToken, logout } from '../api/auth'
+821\timport { authState } from '../store/auth'
+822\t
+823\tconst router = useRouter()
+824\tconst loading = ref(false)
+825\tconst error = ref('')
+826\tconst success = ref(false)
+827\tconst countries = ref([])
+828\t
+829\tconst steps = [
+830\t  { key: 'company', title: 'Company Information', subtitle: 'Please provide your company details and logo.' },
+831\t  { key: 'address', title: 'Company Address', subtitle: 'Provide office address and location details.' },
+832\t  { key: 'facility', title: 'Building / Facility Details', subtitle: 'Share building configuration and size.' },
+833\t  { key: 'usage', title: 'Facility Usage', subtitle: 'Tell us how parcels are handled today.' },
+834\t  { key: 'contact', title: 'Contact Information', subtitle: 'Primary contacts for your account.' },
+835\t  { key: 'preferences', title: 'Account Preferences', subtitle: 'Set operational preferences and defaults.' },
+836\t  { key: 'notifications', title: 'Notification Preferences', subtitle: 'Select email and SMS delivery rules.' },
+837\t  { key: 'security', title: 'Account Security', subtitle: 'Configure security and recovery options.' },
+838\t  { key: 'subscription', title: 'Subscription Plan', subtitle: 'Choose plan and billing cadence.' },
+839\t  { key: 'licenses', title: 'User Licenses', subtitle: 'Allocate staff access and roles.' },
+840\t  { key: 'billing', title: 'Billing Information', subtitle: 'Provide billing address and invoice details.' },
+841\t  { key: 'admin', title: 'Account Administrator', subtitle: 'Set primary admin information.' },
+842\t  { key: 'recovery', title: 'Account Recovery & Support', subtitle: 'Recovery contacts and escalation.' },
+843\t  { key: 'email', title: 'Email Verification', subtitle: 'Confirm primary email routing.' },
+844\t  { key: 'captcha', title: 'Captcha Verification', subtitle: 'Add security verification.' },
+845\t  { key: 'safety', title: 'Account Safety Rules', subtitle: 'Set usage and compliance rules.' },
+846\t  { key: 'terms', title: 'Users Terms & Conditions', subtitle: 'Confirm acceptance of platform terms.' },
+847\t  { key: 'final', title: 'Final Confirmation', subtitle: 'Review and submit your setup.' },
+848\t]
+849\t
+850\tconst currentStep = ref(1)
+851\tconst termsScrollRef = ref(null)
+852\tconst termsScrollCount = ref(0)
+853\tconst termsAcceptedEnabled = computed(() => termsScrollCount.value >= 2)
+854\tconst termsRemainingHint = computed(() => {
+855\t  const remaining = Math.max(0, 2 - termsScrollCount.value)
+856\t  if (remaining === 0) return 'done'
+857\t  if (remaining === 1) return '1 more time'
+858\t  return `${remaining} more times`
+859\t})
+860\tconst summaryItems = computed(() => {
+861\t  const adminName = [form.value.admin_first_name, form.value.admin_last_name].filter(Boolean).join(' ')
+862\t  const items = [
+863\t    { label: 'Company', value: form.value.company_name },
+864\t    { label: 'Facility', value: form.value.facility_name },
+865\t    { label: 'Business Email', value: form.value.contact_business_email || form.value.recovery_email },
+866\t    { label: 'Username', value: form.value.security_username },
+867\t    { label: 'Subscription Plan', value: form.value.subscription_plan },
+868\t    { label: 'Administrator', value: adminName },
+869\t  ]
+870\t  return items.map((item) => ({
+871\t    label: item.label,
+872\t    value: item.value || 'Not Provided',
+873\t  }))
+874\t})
+875\t
+876\tconst timezoneOptions = computed(() => {
+877\t  if (typeof Intl !== 'undefined' && typeof Intl.supportedValuesOf === 'function') {
+878\t    try {
+879\t      const values = Intl.supportedValuesOf('timeZone')
+880\t      if (Array.isArray(values) && values.length) {
+881\t        return values
+882\t      }
+883\t    } catch {
+884\t      // Fall back to static list.
+885\t    }
+886\t  }
+887\t
+888\t  return [
+889\t    'UTC',
+890\t    'America/New_York',
+891\t    'America/Chicago',
+892\t    'America/Denver',
+893\t    'America/Los_Angeles',
+894\t    'America/Toronto',
+895\t    'Europe/London',
+896\t    'Europe/Paris',
+897\t    'Asia/Dhaka',
+898\t    'Asia/Kolkata',
+899\t    'Asia/Dubai',
+900\t    'Asia/Singapore',
+901\t    'Asia/Tokyo',
+902\t    'Australia/Sydney',
+903\t  ]
+904\t})
+905\t
+906\tconst languageOptions = [
+907\t  'English',
+908\t  'Bengali',
+909\t  'French',
+910\t  'Spanish',
+911\t  'Arabic',
+912\t  'Hindi',
+913\t  'Urdu',
+914\t  'Chinese',
+915\t  'Japanese',
+916\t]
+917\t
+918\tconst dateFormatOptions = [
+919\t  'YYYY-MM-DD',
+920\t  'DD-MM-YYYY',
+921\t  'MM-DD-YYYY',
+922\t  'DD/MM/YYYY',
+923\t  'MM/DD/YYYY',
+924\t  'YYYY/MM/DD',
+925\t]
+926\t
+927\tconst form = ref({
+928\t  company_name: '',
+929\t  company_logo_url: '',
+930\t  company_logo_path: '',
+931\t  company_logo_preview: '',
+932\t  company_address: '',
+933\t  company_city: '',
+934\t  company_state: '',
+935\t  company_zip: '',
+936\t  company_country_id: '',
+937\t  company_country: '',
+938\t  company_phone: '',
+939\t  facility_name: '',
+940\t  facility_part_number: '',
+941\t  facility_address: '',
+942\t  facility_city: '',
+943\t  facility_state: '',
+944\t  facility_zip: '',
+945\t  facility_country_id: '',
+946\t  facility_country: '',
+947\t  facility_phone: '',
+948\t  facility_email: '',
+949\t  facility_usage: [
+950\t    {
+951\t      name: '',
+952\t      part: '',
+953\t      city: '',
+954\t      country_id: '',
+955\t      country: '',
+956\t      assigned: 1,
+957\t      status: 'active',
+958\t    },
+959\t  ],
+960\t  contact_primary_phone: '',
+961\t  contact_mobile_phone: '',
+962\t  contact_business_email: '',
+963\t  contact_alt_email: '',
+964\t  contact_website: '',
+965\t  pref_timezone: '',
+966\t  pref_language: '',
+967\t  pref_date_format: '',
+968\t  notify_email: true,
+969\t  notify_sms: false,
+970\t  notify_arrival: true,
+971\t  notify_security: true,
+972\t  notify_marketing: false,
+973\t  security_username: '',
+974\t  security_password: '',
+975\t  security_password_confirm: '',
+976\t  security_pin: '',
+977\t  security_2fa: false,
+978\t  security_policy_ack: false,
+979\t  subscription_plan: 'standard',
+980\t  license_ack: false,
+981\t  billing_method: '',
+982\t  billing_address: '',
+983\t  billing_cycle: 'Monthly (Charged in Advance)',
+984\t  billing_auto_renew: false,
+985\t  billing_policy_ack: false,
+986\t  admin_first_name: '',
+987\t  admin_last_name: '',
+988\t  admin_role: '',
+989\t  admin_is_system: false,
+990\t  admin_phone: '',
+991\t  admin_email: '',
+992\t  admin_created_date: new Date().toISOString().slice(0, 10),
+993\t  recovery_email: '',
+994\t  recovery_phone: '',
+995\t  email_verify_status: 'pending',
+996\t  captcha_ack: false,
+997\t  safety_ack: false,
+998\t  terms_ack: false,
+999\t  privacy_ack: false,
+1000\t  final_ack: true,
+1001\t})
+1002\t
+1003\tconst brandName = computed(() => (form.value.company_name || authState.user?.company_name || '').trim() || 'DeskDrop')
+1004\tconst brandLogo = computed(() => form.value.company_logo_url || form.value.company_logo_preview || logoWhite)
+1005\t
+1006\tconst applyAuthDefaults = () => {
+1007\t  if (!form.value.company_name && authState.user?.company_name) {
+1008\t    form.value.company_name = authState.user.company_name
+1009\t  }
+1010\t}
+1011\t
+1012\tconst progressPercent = computed(() => {
+1013\t  if (currentStep.value >= steps.length) return 100
+1014\t  const raw = Math.round(((currentStep.value - 1) / steps.length) * 100)
+1015\t  return raw > 0 ? raw : 5
+1016\t})
+1017\tconst isFinalStep = computed(() => currentStep.value >= steps.length)
+1018\t
+1019\tconst stepStatus = (stepIndex) => {
+1020\t  if (currentStep.value === stepIndex) return 'In Progress'
+1021\t  if (currentStep.value > stepIndex) return 'Completed'
+1022\t  return 'Pending'
+1023\t}
+1024\t
+1025\tconst goToStep = (step) => {
+1026\t  if (step < currentStep.value) {
+1027\t    currentStep.value = step
+1028\t  }
+1029\t}
+1030\t
+1031\tconst goSupport = () => {
+1032\t  router.push('/contact')
+1033\t}
+1034\t
+1035\tconst resolveCountryIdByName = (name) => {
+1036\t  const normalized = (name || '').trim().toLowerCase()
+1037\t  if (!normalized) return ''
+1038\t  const found = countries.value.find((country) => (country.country_name || '').toLowerCase() === normalized)
+1039\t  return found?.id || ''
+1040\t}
+1041\t
+1042\tconst resolveCountryNameById = (id) => {
+1043\t  if (!id) return ''
+1044\t  const found = countries.value.find((country) => Number(country.id) === Number(id))
+1045\t  return found?.country_name || ''
+1046\t}
+1047\t
+1048\tconst syncCountryNamesFromIds = (payload) => {
+1049\t  if (payload.company_country_id) {
+1050\t    payload.company_country = resolveCountryNameById(payload.company_country_id) || payload.company_country || ''
+1051\t  }
+1052\t  if (payload.facility_country_id) {
+1053\t    payload.facility_country = resolveCountryNameById(payload.facility_country_id) || payload.facility_country || ''
+1054\t  }
+1055\t  if (Array.isArray(payload.facility_usage)) {
+1056\t    payload.facility_usage = payload.facility_usage.map((row) => {
+1057\t      if (!row) return row
+1058\t      const next = { ...row }
+1059\t      if (next.country_id) {
+1060\t        next.country = resolveCountryNameById(next.country_id) || next.country || ''
+1061\t      }
+1062\t      return next
+1063\t    })
+1064\t  }
+1065\t}
+1066\t
+1067\tconst loadCountries = async () => {
+1068\t  try {
+1069\t    const { data } = await client.get('/countries')
+1070\t    if (data?.success && Array.isArray(data.data)) {
+1071\t      countries.value = data.data
+1072\t      return
+1073\t    }
+1074\t  } catch {
+1075\t    // Keep UI usable even if country API fails.
+1076\t  }
+1077\t  countries.value = []
+1078\t}
+1079\t
+1080\tconst loadSetup = async () => {
+1081\t  try {
+1082\t    const { data } = await client.get('/account-setup')
+1083\t    if (data?.success && data?.data) {
+1084\t      const setup = data.data
+1085\t      currentStep.value = Number(setup.current_step) || 1
+1086\t      const next = { ...form.value }
+1087\t      Object.keys(next).forEach((key) => {
+1088\t        if (setup[key] !== undefined && setup[key] !== null) {
+1089\t          next[key] = setup[key]
+1090\t        }
+1091\t      })
+1092\t      if (!next.company_country_id && next.company_country) {
+1093\t        next.company_country_id = resolveCountryIdByName(next.company_country)
+1094\t      }
+1095\t      if (!next.company_country && next.company_country_id) {
+1096\t        next.company_country = resolveCountryNameById(next.company_country_id)
+1097\t      }
+1098\t      if (!next.facility_country_id && next.facility_country) {
+1099\t        next.facility_country_id = resolveCountryIdByName(next.facility_country)
+1100\t      }
+1101\t      if (!next.facility_country && next.facility_country_id) {
+1102\t        next.facility_country = resolveCountryNameById(next.facility_country_id)
+1103\t      }
+1104\t      if (Array.isArray(setup.facility_usage) && setup.facility_usage.length) {
+1105\t        next.facility_usage = setup.facility_usage.map((row) => ({
+1106\t          name: row.name || '',
+1107\t          part: row.part || '',
+1108\t          city: row.city || '',
+1109\t          country_id: row.country_id || resolveCountryIdByName(row.country),
+1110\t          country: row.country || resolveCountryNameById(row.country_id),
+1111\t          assigned: row.assigned ?? 0,
+1112\t          status: row.status || 'active',
+1113\t        }))
+1114\t      }
+1115\t      if (!next.company_name && authState.user?.company_name) {
+1116\t        next.company_name = authState.user.company_name
+1117\t      }
+1118\t      form.value = next
+1119\t    }
+1120\t  } catch {
+1121\t    if (!form.value.company_name && authState.user?.company_name) {
+1122\t      form.value.company_name = authState.user.company_name
+1123\t    }
+1124\t  }
+1125\t}
+1126\t
+1127\tconst onLogoSelect = async (event) => {
+1128\t  const file = event.target.files?.[0]
+1129\t  if (!file) return
+1130\t  error.value = ''
+1131\t  success.value = false
+1132\t  if (form.value.company_logo_preview?.startsWith('blob:')) {
+1133\t    URL.revokeObjectURL(form.value.company_logo_preview)
+1134\t  }
+1135\t  form.value.company_logo_preview = URL.createObjectURL(file)
+1136\t  const formData = new FormData()
+1137\t  formData.append('logo', file)
+1138\t  try {
+1139\t    const { data } = await client.post('/account-setup/logo', formData, {
+1140\t      headers: { 'Content-Type': 'multipart/form-data' },
+1141\t    })
+1142\t    if (data?.success) {
+1143\t      form.value.company_logo_url = data.data.url
+1144\t      form.value.company_logo_path = data.data.path
+1145\t      form.value.company_logo_preview = data.data.url || form.value.company_logo_preview
+1146\t    }
+1147\t  } catch {
+1148\t    error.value = 'Logo upload failed. Please try again.'
+1149\t  }
+1150\t}
+1151\t
+1152\tconst saveStep = async () => {
+1153\t  error.value = ''
+1154\t  success.value = false
+1155\t  if (currentStep.value === 1 && !form.value.company_name) {
+1156\t    error.value = 'Company name is required.'
+1157\t    return false
+1158\t  }
+1159\t  if (currentStep.value === 2) {
+1160\t    if (!form.value.company_address) {
+1161\t      error.value = 'Street address is required.'
+1162\t      return false
+1163\t    }
+1164\t    if (!form.value.company_city) {
+1165\t      error.value = 'City is required.'
+1166\t      return false
+1167\t    }
+1168\t    if (!form.value.company_state) {
+1169\t      error.value = 'State / Province is required.'
+1170\t      return false
+1171\t    }
+1172\t    if (!form.value.company_zip) {
+1173\t      error.value = 'ZIP / Postal Code is required.'
+1174\t      return false
+1175\t    }
+1176\t    if (!form.value.company_country_id) {
+1177\t      error.value = 'Country is required.'
+1178\t      return false
+1179\t    }
+1180\t    if (!form.value.company_phone) {
+1181\t      error.value = 'Main phone number is required.'
+1182\t      return false
+1183\t    }
+1184\t  }
+1185\t  if (currentStep.value === 3) {
+1186\t    if (!form.value.facility_name) {
+1187\t      error.value = 'Facility name is required.'
+1188\t      return false
+1189\t    }
+1190\t    if (!form.value.facility_part_number) {
+1191\t      error.value = 'Part number is required.'
+1192\t      return false
+1193\t    }
+1194\t    if (!form.value.facility_address) {
+1195\t      error.value = 'Street address is required.'
+1196\t      return false
+1197\t    }
+1198\t    if (!form.value.facility_city) {
+1199\t      error.value = 'City is required.'
+1200\t      return false
+1201\t    }
+1202\t    if (!form.value.facility_state) {
+1203\t      error.value = 'State / Province is required.'
+1204\t      return false
+1205\t    }
+1206\t    if (!form.value.facility_zip) {
+1207\t      error.value = 'ZIP / Postal Code is required.'
+1208\t      return false
+1209\t    }
+1210\t    if (!form.value.facility_country_id) {
+1211\t      error.value = 'Country is required.'
+1212\t      return false
+1213\t    }
+1214\t    if (!form.value.facility_phone) {
+1215\t      error.value = 'Phone number is required.'
+1216\t      return false
+1217\t    }
+1218\t    if (!form.value.facility_email) {
+1219\t      error.value = 'Email address is required.'
+1220\t      return false
+1221\t    }
+1222\t  }
+1223\t  if (currentStep.value === 4) {
+1224\t    if (!form.value.facility_usage.length) {
+1225\t      error.value = 'Please add at least one facility.'
+1226\t      return false
+1227\t    }
+1228\t    const invalidRowIndex = form.value.facility_usage.findIndex((row) => {
+1229\t      const assigned = Number(row.assigned)
+1230\t      return !row.name || !row.part || !row.city || !row.country_id || Number.isNaN(assigned) || assigned < 0
+1231\t    })
+1232\t    if (invalidRowIndex !== -1) {
+1233\t      error.value = `Please complete all required fields in Facility row ${invalidRowIndex + 1}.`
+1234\t      return false
+1235\t    }
+1236\t  }
+1237\t  if (currentStep.value === 5) {
+1238\t    if (!form.value.contact_primary_phone) {
+1239\t      error.value = 'Primary phone number is required.'
+1240\t      return false
+1241\t    }
+1242\t    if (!form.value.contact_business_email) {
+1243\t      error.value = 'Business email address is required.'
+1244\t      return false
+1245\t    }
+1246\t  }
+1247\t  if (currentStep.value === 6) {
+1248\t    if (!form.value.pref_timezone) {
+1249\t      error.value = 'Time zone is required.'
+1250\t      return false
+1251\t    }
+1252\t    if (!form.value.pref_language) {
+1253\t      error.value = 'Preferred language is required.'
+1254\t      return false
+1255\t    }
+1256\t    if (!form.value.pref_date_format) {
+1257\t      error.value = 'Date format is required.'
+1258\t      return false
+1259\t    }
+1260\t  }
+1261\t  if (currentStep.value === 7) {
+1262\t    if (!form.value.notify_email && !form.value.notify_sms) {
+1263\t      error.value = 'Select at least one notification channel.'
+1264\t      return false
+1265\t    }
+1266\t  }
+1267\t  if (currentStep.value === 8) {
+1268\t    if (!form.value.security_username) {
+1269\t      error.value = 'Username is required.'
+1270\t      return false
+1271\t    }
+1272\t    if (!form.value.security_password) {
+1273\t      error.value = 'Password is required.'
+1274\t      return false
+1275\t    }
+1276\t    if (form.value.security_password.length < 8) {
+1277\t      error.value = 'Password must be at least 8 characters.'
+1278\t      return false
+1279\t    }
+1280\t    if (form.value.security_password !== form.value.security_password_confirm) {
+1281\t      error.value = 'Passwords do not match.'
+1282\t      return false
+1283\t    }
+1284\t    if (!form.value.security_pin) {
+1285\t      error.value = 'Security PIN is required.'
+1286\t      return false
+1287\t    }
+1288\t    if (!/^\d{4,6}$/.test(form.value.security_pin)) {
+1289\t      error.value = 'Security PIN must be 4 to 6 digits.'
+1290\t      return false
+1291\t    }
+1292\t    if (!form.value.security_policy_ack) {
+1293\t      error.value = 'You must accept the Password & PIN Rotation Policy.'
+1294\t      return false
+1295\t    }
+1296\t  }
+1297\t  if (currentStep.value === 9) {
+1298\t    if (!form.value.subscription_plan) {
+1299\t      error.value = 'Please select a subscription plan.'
+1300\t      return false
+1301\t    }
+1302\t  }
+1303\t  if (currentStep.value === 10) {
+1304\t    if (!form.value.license_ack) {
+1305\t      error.value = 'You must accept the User License rules.'
+1306\t      return false
+1307\t    }
+1308\t  }
+1309\t  if (currentStep.value === 11) {
+1310\t    if (!form.value.billing_method) {
+1311\t      error.value = 'Please select a payment method.'
+1312\t      return false
+1313\t    }
+1314\t    if (!form.value.billing_address) {
+1315\t      error.value = 'Billing address is required.'
+1316\t      return false
+1317\t    }
+1318\t    if (!form.value.billing_policy_ack) {
+1319\t      error.value = 'You must accept the Billing Policy.'
+1320\t      return false
+1321\t    }
+1322\t  }
+1323\t  if (currentStep.value === 12) {
+1324\t    if (!form.value.admin_first_name) {
+1325\t      error.value = 'First name is required.'
+1326\t      return false
+1327\t    }
+1328\t    if (!form.value.admin_last_name) {
+1329\t      error.value = 'Last name is required.'
+1330\t      return false
+1331\t    }
+1332\t    if (!form.value.admin_role) {
+1333\t      error.value = 'Role / position is required.'
+1334\t      return false
+1335\t    }
+1336\t    if (!form.value.admin_phone) {
+1337\t      error.value = 'Phone number is required.'
+1338\t      return false
+1339\t    }
+1340\t    if (!form.value.admin_email) {
+1341\t      error.value = 'Business email is required.'
+1342\t      return false
+1343\t    }
+1344\t    if (!form.value.admin_created_date) {
+1345\t      error.value = 'Account creation date is required.'
+1346\t      return false
+1347\t    }
+1348\t  }
+1349\t  if (currentStep.value === 13) {
+1350\t    if (!form.value.recovery_email) {
+1351\t      error.value = 'Recovery email address is required.'
+1352\t      return false
+1353\t    }
+1354\t  }
+1355\t  if (currentStep.value === 14) {
+1356\t    // allow save to mark step as done
+1357\t  }
+1358\t  if (currentStep.value === 15) {
+1359\t    if (!form.value.captcha_ack) {
+1360\t      error.value = 'Please confirm the anti-bot verification.'
+1361\t      return false
+1362\t    }
+1363\t  }
+1364\t  if (currentStep.value === 16) {
+1365\t    if (!form.value.safety_ack) {
+1366\t      error.value = 'You must accept the Account Safety requirements.'
+1367\t      return false
+1368\t    }
+1369\t  }
+1370\t  if (currentStep.value === 17) {
+1371\t    if (!termsAcceptedEnabled.value) {
+1372\t      error.value = 'Please scroll through the Terms and Conditions twice.'
+1373\t      return false
+1374\t    }
+1375\t    if (!form.value.terms_ack) {
+1376\t      error.value = 'You must accept the Users Terms and Conditions.'
+1377\t      return false
+1378\t    }
+1379\t    if (!form.value.privacy_ack) {
+1380\t      error.value = 'You must accept the Privacy Policy.'
+1381\t      return false
+1382\t    }
+1383\t  }
+1384\t  if (currentStep.value === 18) {
+1385\t    return true
+1386\t  }
+1387\t  loading.value = true
+1388\t  try {
+1389\t    const payload = { ...form.value }
+1390\t    syncCountryNamesFromIds(payload)
+1391\t    payload.company_country_id = payload.company_country_id || null
+1392\t    payload.facility_country_id = payload.facility_country_id || null
+1393\t    if (Array.isArray(payload.facility_usage)) {
+1394\t      payload.facility_usage = payload.facility_usage.map((row) => ({
+1395\t        ...row,
+1396\t        country_id: row.country_id || null,
+1397\t      }))
+1398\t    }
+1399\t    delete payload.company_logo_preview
+1400\t    if (currentStep.value !== 8) {
+1401\t      delete payload.security_password
+1402\t      delete payload.security_pin
+1403\t      delete payload.security_password_confirm
+1404\t    }
+1405\t    await client.post('/account-setup', {
+1406\t      step: currentStep.value,
+1407\t      data: payload,
+1408\t    })
+1409\t    success.value = true
+1410\t    return true
+1411\t  } catch (e) {
+1412\t    error.value = e?.response?.data?.message || 'Failed to save. Please try again.'
+1413\t    return false
+1414\t  } finally {
+1415\t    loading.value = false
+1416\t  }
+1417\t}
+1418\t
+1419\tconst next = async () => {
+1420\t  const ok = await saveStep()
+1421\t  if (!ok) return
+1422\t  if (isFinalStep.value) {
+1423\t    loading.value = true
+1424\t    error.value = ''
+1425\t    try {
+1426\t      await client.post('/account-setup/complete')
+1427\t      sessionStorage.setItem(
+1428\t        'account_setup_summary',
+1429\t        JSON.stringify({
+1430\t          company: form.value.company_name,
+1431\t          facility: form.value.facility_name,
+1432\t          username: form.value.security_username,
+1433\t          email: form.value.contact_business_email || form.value.recovery_email,
+1434\t          plan: form.value.subscription_plan,
+1435\t          created: form.value.admin_created_date,
+1436\t        })
+1437\t      )
+1438\t      try {
+1439\t        await logout()
+1440\t      } catch {
+1441\t        // ignore logout errors, local token is still cleared
+1442\t      }
+1443\t      clearToken()
+1444\t      router.push('/account-setup/success')
+1445\t      return
+1446\t    } catch (e) {
+1447\t      error.value = e?.response?.data?.message || 'Failed to complete setup. Please try again.'
+1448\t      return
+1449\t    } finally {
+1450\t      loading.value = false
+1451\t    }
+1452\t  }
+1453\t  currentStep.value += 1
+1454\t}
+1455\t
+1456\tconst prev = () => {
+1457\t  if (currentStep.value > 1) currentStep.value -= 1
+1458\t}
+1459\t
+1460\tconst addFacilityRow = () => {
+1461\t  form.value.facility_usage.push({
+1462\t    name: '',
+1463\t    part: '',
+1464\t    city: '',
+1465\t    country_id: '',
+1466\t    country: '',
+1467\t    assigned: 1,
+1468\t    status: 'active',
+1469\t  })
+1470\t}
+1471\t
+1472\tconst removeFacilityRow = (index) => {
+1473\t  form.value.facility_usage.splice(index, 1)
+1474\t}
+1475\t
+1476\tconst toggleStatus = (index) => {
+1477\t  const row = form.value.facility_usage[index]
+1478\t  row.status = row.status === 'active' ? 'inactive' : 'active'
+1479\t}
+1480\t
+1481\tconst selectPlan = (plan) => {
+1482\t  form.value.subscription_plan = plan
+1483\t}
+1484\t
+1485\tconst planOptions = [
+1486\t  { key: 'basic', label: 'Basic Plan', price: 15 },
+1487\t  { key: 'standard', label: 'Standard Plan', price: 20, popular: true },
+1488\t  { key: 'enterprise', label: 'Enterprise Plan', price: 25 },
+1489\t]
+1490\t
+1491\tconst planFeatureRows = [
+1492\t  { label: 'Parcel Logging (record arrivals and departures)', basic: true, standard: true, enterprise: true },
+1493\t  { label: 'Track Parcel Handovers (who received what)', basic: true, standard: true, enterprise: true },
+1494\t  { label: 'Update Parcel Status (Picked Up, Delivered)', basic: true, standard: true, enterprise: true },
+1495\t  { label: 'Manage Storage Locations (Back Office, Lockers)', basic: false, standard: true, enterprise: true },
+1496\t  { label: 'Confirm Parcel Pickups', basic: false, standard: true, enterprise: true },
+1497\t  { label: 'Track Pending or Held Parcels', basic: false, standard: true, enterprise: true },
+1498\t  { label: 'Track External Lockers (third-party lockers)', basic: false, standard: false, enterprise: true },
+1499\t  { label: 'Delivery by Staff or Locker Access Management', basic: false, standard: false, enterprise: true },
+1500\t  { label: 'Record Parcel Final Outcomes (Returned, Lost, Damaged)', basic: false, standard: false, enterprise: true },
+1501\t  { label: 'Generate Reports & Basic Analytics', basic: false, standard: false, enterprise: true },
+1502\t  { label: 'Multi-language Support', basic: false, standard: true, enterprise: true },
+1503\t  { label: 'User Management (add users, roles, active/inactive)', basic: false, standard: false, enterprise: true },
+1504\t]
+1505\t
+1506\tconst billingMethods = [
+1507\t  { value: 'card', label: 'Credit Card', icon: 'CC' },
+1508\t  { value: 'bank', label: 'Bank Transfer', icon: 'Bank' },
+1509\t  { value: 'paypal', label: 'PayPal', icon: 'PayPal' },
+1510\t  { value: 'other', label: 'Other', icon: 'Other' },
+1511\t]
+1512\t
+1513\tconst onTermsScroll = () => {
+1514\t  const el = termsScrollRef.value
+1515\t  if (!el) return
+1516\t  const nearBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 4
+1517\t  if (!nearBottom) return
+1518\t  if (termsScrollCount.value < 2) {
+1519\t    termsScrollCount.value += 1
+1520\t  }
+1521\t}
+1522\t
+1523\tonMounted(async () => {
+1524\t  await loadCountries()
+1525\t  await loadSetup()
+1526\t  applyAuthDefaults()
+1527\t})
+1528\t
+1529\twatch(
+1530\t  () => authState.user?.company_name,
+1531\t  () => applyAuthDefaults()
+1532\t)
+1533\t
+1534\twatch(currentStep, async (step) => {
+1535\t  if (step !== 17) return
+1536\t  termsScrollCount.value = 0
+1537\t  await nextTick()
+1538\t  const el = termsScrollRef.value
+1539\t  if (!el) return
+1540\t  if (el.scrollHeight <= el.clientHeight + 2) {
+1541\t    termsScrollCount.value = 2
+1542\t  }
+1543\t})
+1544\t</script>

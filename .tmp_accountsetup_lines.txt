@@ -1,0 +1,742 @@
+1\t<?php
+2\t
+3\tnamespace App\Http\Controllers\Api;
+4\t
+5\tuse App\Http\Controllers\Controller;
+6\tuse App\Models\AccountSetup;
+7\tuse App\Models\Country;
+8\tuse App\Models\User;
+9\tuse Illuminate\Http\Request;
+10\tuse Illuminate\Support\Facades\DB;
+11\tuse Illuminate\Support\Facades\Hash;
+12\tuse Illuminate\Support\Facades\Storage;
+13\tuse Illuminate\Validation\Rule;
+14\tuse Illuminate\Validation\ValidationException;
+15\t
+16\tclass AccountSetupController extends Controller
+17\t{
+18\t    protected array $stepFieldMap = [
+19\t        1 => ['company_name', 'company_logo_url', 'company_logo_path'],
+20\t        2 => ['company_address', 'company_city', 'company_state', 'company_zip', 'company_country_id', 'company_country', 'company_phone'],
+21\t        3 => [
+22\t            'facility_name',
+23\t            'facility_part_number',
+24\t            'facility_address',
+25\t            'facility_city',
+26\t            'facility_state',
+27\t            'facility_zip',
+28\t            'facility_country_id',
+29\t            'facility_country',
+30\t            'facility_phone',
+31\t            'facility_email',
+32\t        ],
+33\t        4 => [],
+34\t        5 => ['contact_primary_phone', 'contact_mobile_phone', 'contact_business_email', 'contact_alt_email', 'contact_website'],
+35\t        6 => ['pref_timezone', 'pref_language', 'pref_date_format'],
+36\t        7 => ['notify_email', 'notify_sms', 'notify_arrival', 'notify_security', 'notify_marketing'],
+37\t        8 => ['security_username', 'security_password_hash', 'security_pin_hash', 'security_2fa', 'security_policy_ack'],
+38\t        9 => ['subscription_plan'],
+39\t        10 => ['license_ack'],
+40\t        11 => ['billing_method', 'billing_address', 'billing_cycle', 'billing_auto_renew', 'billing_policy_ack'],
+41\t        12 => ['admin_first_name', 'admin_last_name', 'admin_role', 'admin_is_system', 'admin_phone', 'admin_email', 'admin_created_date'],
+42\t        13 => ['recovery_email', 'recovery_phone'],
+43\t        14 => ['email_verify_status'],
+44\t        15 => ['captcha_ack'],
+45\t        16 => ['safety_ack'],
+46\t        17 => ['terms_ack', 'privacy_ack'],
+47\t        18 => ['final_ack'],
+48\t    ];
+49\t
+50\t    protected array $fillableFields = [
+51\t        'company_name',
+52\t        'company_logo_url',
+53\t        'company_logo_path',
+54\t        'company_address',
+55\t        'company_city',
+56\t        'company_state',
+57\t        'company_zip',
+58\t        'company_country_id',
+59\t        'company_country',
+60\t        'company_phone',
+61\t        'facility_name',
+62\t        'facility_part_number',
+63\t        'facility_address',
+64\t        'facility_city',
+65\t        'facility_state',
+66\t        'facility_zip',
+67\t        'facility_country_id',
+68\t        'facility_country',
+69\t        'facility_phone',
+70\t        'facility_email',
+71\t        'contact_primary_phone',
+72\t        'contact_mobile_phone',
+73\t        'contact_business_email',
+74\t        'contact_alt_email',
+75\t        'contact_website',
+76\t        'pref_timezone',
+77\t        'pref_language',
+78\t        'pref_date_format',
+79\t        'notify_email',
+80\t        'notify_sms',
+81\t        'notify_arrival',
+82\t        'notify_security',
+83\t        'notify_marketing',
+84\t        'security_username',
+85\t        'security_password_hash',
+86\t        'security_pin_hash',
+87\t        'security_2fa',
+88\t        'security_policy_ack',
+89\t        'subscription_plan',
+90\t        'license_ack',
+91\t        'billing_method',
+92\t        'billing_address',
+93\t        'billing_cycle',
+94\t        'billing_auto_renew',
+95\t        'billing_policy_ack',
+96\t        'admin_first_name',
+97\t        'admin_last_name',
+98\t        'admin_role',
+99\t        'admin_is_system',
+100\t        'admin_phone',
+101\t        'admin_email',
+102\t        'admin_created_date',
+103\t        'recovery_email',
+104\t        'recovery_phone',
+105\t        'email_verify_status',
+106\t        'captcha_ack',
+107\t        'safety_ack',
+108\t        'terms_ack',
+109\t        'privacy_ack',
+110\t        'final_ack',
+111\t    ];
+112\t
+113\t    public function show(Request $request)
+114\t    {
+115\t        $user = $request->user();
+116\t        $setup = AccountSetup::firstOrCreate(
+117\t            ['user_id' => $user->id],
+118\t            ['current_step' => 1]
+119\t        );
+120\t
+121\t        if ($this->isBlank($setup->company_name) && !$this->isBlank($user->company_name)) {
+122\t            $setup->company_name = $user->company_name;
+123\t            $setup->save();
+124\t        }
+125\t
+126\t        $setup->load('facilityUsage');
+127\t        $setup->makeHidden(['data']);
+128\t
+129\t        return response()->json([
+130\t            'success' => true,
+131\t            'data' => $setup,
+132\t        ]);
+133\t    }
+134\t
+135\t    public function store(Request $request)
+136\t    {
+137\t        $validated = $request->validate([
+138\t            'step' => ['required', 'integer', 'min:1', 'max:18'],
+139\t            'data' => ['nullable', 'array'],
+140\t        ]);
+141\t
+142\t        $setup = AccountSetup::firstOrCreate(
+143\t            ['user_id' => $request->user()->id],
+144\t            ['current_step' => 1]
+145\t        );
+146\t
+147\t        $payload = $validated['data'] ?? [];
+148\t        if (!is_array($payload)) {
+149\t            $payload = [];
+150\t        }
+151\t
+152\t        $step = (int) $validated['step'];
+153\t        $user = $request->user();
+154\t        $payload = $this->normalizeCountryPayload($step, $payload);
+155\t        $this->validateStepPayload($step, $payload, $user);
+156\t
+157\t        $jsonPayload = $payload;
+158\t        $facilityUsage = $payload['facility_usage'] ?? null;
+159\t        $normalizedFacilityUsage = $this->normalizeFacilityUsage($facilityUsage);
+160\t        $rawSecurityPassword = $payload['security_password'] ?? null;
+161\t        $rawSecurityPin = $payload['security_pin'] ?? null;
+162\t
+163\t        unset($jsonPayload['company_logo_preview'], $jsonPayload['security_password'], $jsonPayload['security_password_confirm'], $jsonPayload['security_pin']);
+164\t
+165\t        unset($payload['facility_usage'], $payload['company_logo_preview'], $payload['security_password_confirm']);
+166\t
+167\t        if ($step === 8) {
+168\t            if (!empty($payload['security_password'])) {
+169\t                $payload['security_password_hash'] = Hash::make($payload['security_password']);
+170\t            }
+171\t            if (!empty($payload['security_pin'])) {
+172\t                $payload['security_pin_hash'] = Hash::make($payload['security_pin']);
+173\t            }
+174\t            $jsonPayload['security_password_configured'] = !empty($rawSecurityPassword);
+175\t            $jsonPayload['security_pin_configured'] = !empty($rawSecurityPin);
+176\t        }
+177\t        unset($payload['security_password'], $payload['security_pin']);
+178\t
+179\t        $allowedFields = $this->stepFieldMap[$step] ?? $this->fillableFields;
+180\t        $filtered = array_intersect_key($payload, array_flip($allowedFields));
+181\t        $stepDone = 'step_' . $step . '_done';
+182\t
+183\t        DB::transaction(function () use (
+184\t            $setup,
+185\t            $filtered,
+186\t            $step,
+187\t            $stepDone,
+188\t            $payload,
+189\t            $user,
+190\t            $rawSecurityPassword,
+191\t            $jsonPayload,
+192\t            $normalizedFacilityUsage
+193\t        ) {
+194\t            if ($step === 8) {
+195\t                $userDirty = false;
+196\t                if (!empty($payload['security_username']) && $payload['security_username'] !== $user->username) {
+197\t                    $user->username = $payload['security_username'];
+198\t                    $userDirty = true;
+199\t                }
+200\t                if (!empty($rawSecurityPassword)) {
+201\t                    $user->password = $rawSecurityPassword;
+202\t                    $userDirty = true;
+203\t                }
+204\t                if ($userDirty) {
+205\t                    $user->save();
+206\t                }
+207\t            }
+208\t
+209\t            if (!empty($filtered)) {
+210\t                $setup->fill($filtered);
+211\t            }
+212\t            $setup->current_step = max((int) $setup->current_step, $step);
+213\t            $setup->{$stepDone} = true;
+214\t
+215\t            $jsonSnapshot = $jsonPayload;
+216\t            if (!empty($setup->security_password_hash)) {
+217\t                $jsonSnapshot['security_password_hash'] = $setup->security_password_hash;
+218\t            }
+219\t            if (!empty($setup->security_pin_hash)) {
+220\t                $jsonSnapshot['security_pin_hash'] = $setup->security_pin_hash;
+221\t            }
+222\t
+223\t            $columnSnapshot = $filtered;
+224\t            $columnSnapshot['current_step'] = $setup->current_step;
+225\t            $columnSnapshot[$stepDone] = true;
+226\t
+227\t            $this->syncJsonBackup(
+228\t                $setup,
+229\t                $step,
+230\t                $jsonSnapshot,
+231\t                $columnSnapshot,
+232\t                is_array($normalizedFacilityUsage) ? $normalizedFacilityUsage : null
+233\t            );
+234\t            $setup->save();
+235\t
+236\t            if (is_array($normalizedFacilityUsage) && $step >= 4) {
+237\t                $setup->facilityUsage()->delete();
+238\t                foreach ($normalizedFacilityUsage as $facility) {
+239\t                    $setup->facilityUsage()->create([
+240\t                        'name' => $facility['name'],
+241\t                        'part' => $facility['part'],
+242\t                        'city' => $facility['city'],
+243\t                        'country_id' => $facility['country_id'],
+244\t                        'country' => $facility['country'],
+245\t                        'assigned' => $facility['assigned'],
+246\t                        'status' => $facility['status'],
+247\t                    ]);
+248\t                }
+249\t            }
+250\t        });
+251\t
+252\t        if (!empty($filtered['subscription_plan'])) {
+253\t            $plan = $filtered['subscription_plan'];
+254\t            if (in_array($plan, ['basic', 'standard', 'enterprise'], true)) {
+255\t                $user = $request->user();
+256\t                $user->selected_plan = $plan;
+257\t                $user->save();
+258\t            }
+259\t        }
+260\t
+261\t        return response()->json([
+262\t            'success' => true,
+263\t            'data' => $setup,
+264\t        ]);
+265\t    }
+266\t
+267\t    public function uploadLogo(Request $request)
+268\t    {
+269\t        $validated = $request->validate([
+270\t            'logo' => ['required', 'file', 'mimes:jpg,jpeg,png', 'max:5120'],
+271\t        ]);
+272\t
+273\t        $path = $validated['logo']->store('account-logos', 'public');
+274\t        $url = Storage::disk('public')->url($path);
+275\t
+276\t        $setup = AccountSetup::firstOrCreate(
+277\t            ['user_id' => $request->user()->id],
+278\t            ['current_step' => 1]
+279\t        );
+280\t
+281\t        $setup->company_logo_path = $path;
+282\t        $setup->company_logo_url = $url;
+283\t        $this->syncJsonBackup(
+284\t            $setup,
+285\t            max((int) $setup->current_step, 1),
+286\t            [
+287\t                'company_logo_path' => $path,
+288\t                'company_logo_url' => $url,
+289\t            ],
+290\t            [
+291\t                'company_logo_path' => $path,
+292\t                'company_logo_url' => $url,
+293\t            ]
+294\t        );
+295\t        $setup->save();
+296\t
+297\t        return response()->json([
+298\t            'success' => true,
+299\t            'data' => [
+300\t                'path' => $path,
+301\t                'url' => $url,
+302\t            ],
+303\t        ]);
+304\t    }
+305\t
+306\t    public function complete(Request $request)
+307\t    {
+308\t        $setup = AccountSetup::firstOrCreate(
+309\t            ['user_id' => $request->user()->id],
+310\t            ['current_step' => 1]
+311\t        );
+312\t        $this->assertSetupCanBeCompleted($setup);
+313\t
+314\t        $completedAt = now();
+315\t        $setup->current_step = max((int) $setup->current_step, 18);
+316\t        $setup->completed_at = $completedAt;
+317\t        $setup->final_ack = true;
+318\t        for ($i = 1; $i <= 18; $i += 1) {
+319\t            $stepDone = 'step_' . $i . '_done';
+320\t            $setup->{$stepDone} = true;
+321\t        }
+322\t        $this->syncJsonBackup(
+323\t            $setup,
+324\t            18,
+325\t            [
+326\t                'setup_completed' => true,
+327\t                'completed_at' => $completedAt->toIso8601String(),
+328\t                'final_ack' => true,
+329\t            ],
+330\t            [
+331\t                'current_step' => $setup->current_step,
+332\t                'completed_at' => $completedAt->toIso8601String(),
+333\t                'final_ack' => true,
+334\t                'step_18_done' => true,
+335\t            ]
+336\t        );
+337\t        $setup->save();
+338\t
+339\t        $user = $request->user();
+340\t        $user->account_setup_completed_at = $completedAt;
+341\t        if (!$user->selected_plan && $setup->subscription_plan) {
+342\t            $plan = $setup->subscription_plan;
+343\t            if (in_array($plan, ['basic', 'standard', 'enterprise'], true)) {
+344\t                $user->selected_plan = $plan;
+345\t            }
+346\t        }
+347\t        $user->save();
+348\t
+349\t        return response()->json([
+350\t            'success' => true,
+351\t            'data' => $setup,
+352\t        ]);
+353\t    }
+354\t
+355\t    protected function validateStepPayload(int $step, array $payload, User $user): void
+356\t    {
+357\t        $rules = match ($step) {
+358\t            1 => [
+359\t                'company_name' => ['required', 'string', 'max:255'],
+360\t            ],
+361\t            2 => [
+362\t                'company_address' => ['required', 'string', 'max:255'],
+363\t                'company_city' => ['required', 'string', 'max:120'],
+364\t                'company_state' => ['required', 'string', 'max:120'],
+365\t                'company_zip' => ['required', 'string', 'max:30'],
+366\t                'company_country_id' => ['nullable', 'integer', Rule::exists('countries', 'id')],
+367\t                'company_country' => ['nullable', 'string', 'max:120'],
+368\t                'company_phone' => ['required', 'string', 'max:50'],
+369\t            ],
+370\t            3 => [
+371\t                'facility_name' => ['required', 'string', 'max:255'],
+372\t                'facility_part_number' => ['required', 'string', 'max:120'],
+373\t                'facility_address' => ['required', 'string', 'max:255'],
+374\t                'facility_city' => ['required', 'string', 'max:120'],
+375\t                'facility_state' => ['required', 'string', 'max:120'],
+376\t                'facility_zip' => ['required', 'string', 'max:30'],
+377\t                'facility_country_id' => ['nullable', 'integer', Rule::exists('countries', 'id')],
+378\t                'facility_country' => ['nullable', 'string', 'max:120'],
+379\t                'facility_phone' => ['required', 'string', 'max:50'],
+380\t                'facility_email' => ['required', 'email', 'max:255'],
+381\t            ],
+382\t            4 => [
+383\t                'facility_usage' => ['required', 'array', 'min:1'],
+384\t                'facility_usage.*.name' => ['required', 'string', 'max:255'],
+385\t                'facility_usage.*.part' => ['required', 'string', 'max:120'],
+386\t                'facility_usage.*.city' => ['required', 'string', 'max:120'],
+387\t                'facility_usage.*.country_id' => ['nullable', 'integer', Rule::exists('countries', 'id')],
+388\t                'facility_usage.*.country' => ['nullable', 'string', 'max:120'],
+389\t                'facility_usage.*.assigned' => ['required', 'integer', 'min:0'],
+390\t                'facility_usage.*.status' => ['required', Rule::in(['active', 'inactive'])],
+391\t            ],
+392\t            5 => [
+393\t                'contact_primary_phone' => ['required', 'string', 'max:50'],
+394\t                'contact_business_email' => ['required', 'email', 'max:255'],
+395\t                'contact_alt_email' => ['nullable', 'email', 'max:255'],
+396\t                'contact_website' => ['nullable', 'url', 'max:255'],
+397\t            ],
+398\t            6 => [
+399\t                'pref_timezone' => ['required', 'string', 'max:120'],
+400\t                'pref_language' => ['required', 'string', 'max:120'],
+401\t                'pref_date_format' => ['required', 'string', 'max:120'],
+402\t            ],
+403\t            7 => [
+404\t                'notify_email' => ['required', 'boolean'],
+405\t                'notify_sms' => ['required', 'boolean'],
+406\t                'notify_arrival' => ['nullable', 'boolean'],
+407\t                'notify_security' => ['nullable', 'boolean'],
+408\t                'notify_marketing' => ['nullable', 'boolean'],
+409\t            ],
+410\t            8 => [
+411\t                'security_username' => [
+412\t                    'required',
+413\t                    'string',
+414\t                    'max:50',
+415\t                    Rule::unique('users', 'username')->ignore($user->id),
+416\t                ],
+417\t                'security_password' => ['required', 'string', 'min:8'],
+418\t                'security_password_confirm' => ['required', 'same:security_password'],
+419\t                'security_pin' => ['required', 'digits_between:4,6'],
+420\t                'security_policy_ack' => ['accepted'],
+421\t            ],
+422\t            9 => [
+423\t                'subscription_plan' => ['required', Rule::in(['basic', 'standard', 'enterprise'])],
+424\t            ],
+425\t            10 => [
+426\t                'license_ack' => ['accepted'],
+427\t            ],
+428\t            11 => [
+429\t                'billing_method' => ['required', Rule::in(['card', 'bank', 'paypal', 'other'])],
+430\t                'billing_address' => ['required', 'string', 'max:255'],
+431\t                'billing_cycle' => ['nullable', 'string', 'max:120'],
+432\t                'billing_auto_renew' => ['nullable', 'boolean'],
+433\t                'billing_policy_ack' => ['accepted'],
+434\t            ],
+435\t            12 => [
+436\t                'admin_first_name' => ['required', 'string', 'max:120'],
+437\t                'admin_last_name' => ['required', 'string', 'max:120'],
+438\t                'admin_role' => ['required', 'string', 'max:120'],
+439\t                'admin_phone' => ['required', 'string', 'max:50'],
+440\t                'admin_email' => ['required', 'email', 'max:255'],
+441\t                'admin_created_date' => ['required', 'date'],
+442\t                'admin_is_system' => ['nullable', 'boolean'],
+443\t            ],
+444\t            13 => [
+445\t                'recovery_email' => ['required', 'email', 'max:255'],
+446\t                'recovery_phone' => ['nullable', 'string', 'max:50'],
+447\t            ],
+448\t            15 => [
+449\t                'captcha_ack' => ['accepted'],
+450\t            ],
+451\t            16 => [
+452\t                'safety_ack' => ['accepted'],
+453\t            ],
+454\t            17 => [
+455\t                'terms_ack' => ['accepted'],
+456\t                'privacy_ack' => ['accepted'],
+457\t            ],
+458\t            default => [],
+459\t        };
+460\t
+461\t        if (empty($rules)) {
+462\t            return;
+463\t        }
+464\t
+465\t        $validator = validator($payload, $rules);
+466\t
+467\t        if ($step === 7) {
+468\t            $validator->after(function ($validator) use ($payload) {
+469\t                $emailEnabled = filter_var($payload['notify_email'] ?? false, FILTER_VALIDATE_BOOLEAN);
+470\t                $smsEnabled = filter_var($payload['notify_sms'] ?? false, FILTER_VALIDATE_BOOLEAN);
+471\t                if (!$emailEnabled && !$smsEnabled) {
+472\t                    $validator->errors()->add('notify_email', 'Select at least one notification channel.');
+473\t                }
+474\t            });
+475\t        }
+476\t
+477\t        if ($step === 2) {
+478\t            $validator->after(function ($validator) use ($payload) {
+479\t                if (empty($payload['company_country_id']) && $this->isBlank($payload['company_country'] ?? null)) {
+480\t                    $validator->errors()->add('company_country_id', 'Country is required.');
+481\t                }
+482\t            });
+483\t        }
+484\t
+485\t        if ($step === 3) {
+486\t            $validator->after(function ($validator) use ($payload) {
+487\t                if (empty($payload['facility_country_id']) && $this->isBlank($payload['facility_country'] ?? null)) {
+488\t                    $validator->errors()->add('facility_country_id', 'Country is required.');
+489\t                }
+490\t            });
+491\t        }
+492\t
+493\t        if ($step === 4) {
+494\t            $validator->after(function ($validator) use ($payload) {
+495\t                $rows = $payload['facility_usage'] ?? [];
+496\t                if (!is_array($rows)) {
+497\t                    return;
+498\t                }
+499\t                foreach ($rows as $index => $row) {
+500\t                    if (!is_array($row)) {
+501\t                        continue;
+502\t                    }
+503\t                    if (empty($row['country_id']) && $this->isBlank($row['country'] ?? null)) {
+504\t                        $validator->errors()->add("facility_usage.$index.country_id", 'Country is required.');
+505\t                    }
+506\t                }
+507\t            });
+508\t        }
+509\t
+510\t        $validator->validate();
+511\t    }
+512\t
+513\t    protected function assertSetupCanBeCompleted(AccountSetup $setup): void
+514\t    {
+515\t        $errors = [];
+516\t        $missingSteps = [];
+517\t
+518\t        for ($i = 1; $i <= 17; $i += 1) {
+519\t            $key = 'step_' . $i . '_done';
+520\t            if (!(bool) $setup->{$key}) {
+521\t                $missingSteps[] = $i;
+522\t            }
+523\t        }
+524\t
+525\t        if (!empty($missingSteps)) {
+526\t            $errors['steps'][] = 'Please complete all setup steps before finishing. Missing steps: ' . implode(', ', $missingSteps) . '.';
+527\t        }
+528\t
+529\t        $requiredFields = [
+530\t            'company_name' => 'Company name is required before completion.',
+531\t            'company_address' => 'Company address is required before completion.',
+532\t            'facility_name' => 'Facility name is required before completion.',
+533\t            'contact_business_email' => 'Business email is required before completion.',
+534\t            'security_username' => 'Security username is required before completion.',
+535\t            'billing_method' => 'Billing method is required before completion.',
+536\t            'billing_address' => 'Billing address is required before completion.',
+537\t            'recovery_email' => 'Recovery email is required before completion.',
+538\t        ];
+539\t
+540\t        foreach ($requiredFields as $field => $message) {
+541\t            if ($this->isBlank($setup->{$field} ?? null)) {
+542\t                $errors[$field][] = $message;
+543\t            }
+544\t        }
+545\t
+546\t        if (!$setup->facilityUsage()->exists()) {
+547\t            $errors['facility_usage'][] = 'At least one facility usage row is required before completion.';
+548\t        }
+549\t
+550\t        if (!in_array($setup->subscription_plan, ['basic', 'standard', 'enterprise'], true)) {
+551\t            $errors['subscription_plan'][] = 'A valid subscription plan is required before completion.';
+552\t        }
+553\t
+554\t        $requiredFlags = [
+555\t            'security_policy_ack' => 'Password and PIN policy must be accepted before completion.',
+556\t            'license_ack' => 'User license policy must be accepted before completion.',
+557\t            'billing_policy_ack' => 'Billing policy must be accepted before completion.',
+558\t            'captcha_ack' => 'Captcha verification must be confirmed before completion.',
+559\t            'safety_ack' => 'Account safety requirements must be accepted before completion.',
+560\t            'terms_ack' => 'Terms and Conditions must be accepted before completion.',
+561\t            'privacy_ack' => 'Privacy Policy must be accepted before completion.',
+562\t        ];
+563\t
+564\t        foreach ($requiredFlags as $field => $message) {
+565\t            if (!(bool) ($setup->{$field} ?? false)) {
+566\t                $errors[$field][] = $message;
+567\t            }
+568\t        }
+569\t
+570\t        if (empty($setup->security_password_hash) || empty($setup->security_pin_hash)) {
+571\t            $errors['security'][] = 'Security credentials must be configured before completion.';
+572\t        }
+573\t
+574\t        if (!empty($errors)) {
+575\t            throw ValidationException::withMessages($errors);
+576\t        }
+577\t    }
+578\t
+579\t    protected function normalizeFacilityUsage(mixed $facilityUsage): ?array
+580\t    {
+581\t        if (!is_array($facilityUsage)) {
+582\t            return null;
+583\t        }
+584\t
+585\t        $normalized = [];
+586\t        foreach ($facilityUsage as $facility) {
+587\t            if (!is_array($facility)) {
+588\t                continue;
+589\t            }
+590\t            $resolvedCountry = $this->resolveCountryByIdOrName(
+591\t                $facility['country_id'] ?? null,
+592\t                $facility['country'] ?? null
+593\t            );
+594\t            $status = $facility['status'] ?? 'active';
+595\t            $normalized[] = [
+596\t                'name' => $facility['name'] ?? null,
+597\t                'part' => $facility['part'] ?? null,
+598\t                'city' => $facility['city'] ?? null,
+599\t                'country_id' => $resolvedCountry['id'],
+600\t                'country' => $resolvedCountry['name'] ?? ($facility['country'] ?? null),
+601\t                'assigned' => (int) ($facility['assigned'] ?? 0),
+602\t                'status' => in_array($status, ['active', 'inactive'], true) ? $status : 'active',
+603\t            ];
+604\t        }
+605\t
+606\t        return $normalized;
+607\t    }
+608\t
+609\t    protected function normalizeCountryPayload(int $step, array $payload): array
+610\t    {
+611\t        if ($step === 2) {
+612\t            $country = $this->resolveCountryByIdOrName(
+613\t                $payload['company_country_id'] ?? null,
+614\t                $payload['company_country'] ?? null
+615\t            );
+616\t            if ($country['id']) {
+617\t                $payload['company_country_id'] = $country['id'];
+618\t                $payload['company_country'] = $country['name'];
+619\t            }
+620\t        }
+621\t
+622\t        if ($step === 3) {
+623\t            $country = $this->resolveCountryByIdOrName(
+624\t                $payload['facility_country_id'] ?? null,
+625\t                $payload['facility_country'] ?? null
+626\t            );
+627\t            if ($country['id']) {
+628\t                $payload['facility_country_id'] = $country['id'];
+629\t                $payload['facility_country'] = $country['name'];
+630\t            }
+631\t        }
+632\t
+633\t        if ($step === 4 && is_array($payload['facility_usage'] ?? null)) {
+634\t            $payload['facility_usage'] = array_map(function ($row) {
+635\t                if (!is_array($row)) {
+636\t                    return $row;
+637\t                }
+638\t
+639\t                $country = $this->resolveCountryByIdOrName(
+640\t                    $row['country_id'] ?? null,
+641\t                    $row['country'] ?? null
+642\t                );
+643\t
+644\t                if ($country['id']) {
+645\t                    $row['country_id'] = $country['id'];
+646\t                    $row['country'] = $country['name'];
+647\t                }
+648\t
+649\t                return $row;
+650\t            }, $payload['facility_usage']);
+651\t        }
+652\t
+653\t        return $payload;
+654\t    }
+655\t
+656\t    protected function resolveCountryByIdOrName(mixed $countryId, mixed $countryName): array
+657\t    {
+658\t        if (!empty($countryId)) {
+659\t            $country = Country::query()
+660\t                ->select(['id', 'country_name'])
+661\t                ->find($countryId);
+662\t            if ($country) {
+663\t                return ['id' => (int) $country->id, 'name' => $country->country_name];
+664\t            }
+665\t        }
+666\t
+667\t        $normalizedName = is_string($countryName) ? trim($countryName) : '';
+668\t        if ($normalizedName !== '') {
+669\t            $country = Country::query()
+670\t                ->select(['id', 'country_name'])
+671\t                ->where('country_name', $normalizedName)
+672\t                ->first();
+673\t            if ($country) {
+674\t                return ['id' => (int) $country->id, 'name' => $country->country_name];
+675\t            }
+676\t            return ['id' => null, 'name' => $normalizedName];
+677\t        }
+678\t
+679\t        return ['id' => null, 'name' => null];
+680\t    }
+681\t
+682\t    protected function syncJsonBackup(
+683\t        AccountSetup $setup,
+684\t        int $step,
+685\t        array $stepPayload,
+686\t        array $columnPayload = [],
+687\t        ?array $facilityUsage = null
+688\t    ): void {
+689\t        $data = $setup->data;
+690\t        if (!is_array($data)) {
+691\t            $data = [];
+692\t        }
+693\t
+694\t        $setupForm = $data['setup_form'] ?? [];
+695\t        if (!is_array($setupForm)) {
+696\t            $setupForm = [];
+697\t        }
+698\t        $setupForm = array_replace($setupForm, $stepPayload);
+699\t        if (is_array($facilityUsage)) {
+700\t            $setupForm['facility_usage'] = $facilityUsage;
+701\t        }
+702\t
+703\t        $setupColumns = $data['setup_columns'] ?? [];
+704\t        if (!is_array($setupColumns)) {
+705\t            $setupColumns = [];
+706\t        }
+707\t        if (!empty($columnPayload)) {
+708\t            $setupColumns = array_replace($setupColumns, $columnPayload);
+709\t        }
+710\t
+711\t        $snapshots = $data['step_snapshots'] ?? [];
+712\t        if (!is_array($snapshots)) {
+713\t            $snapshots = [];
+714\t        }
+715\t        $snapshots[(string) $step] = [
+716\t            'saved_at' => now()->toIso8601String(),
+717\t            'payload' => $stepPayload,
+718\t            'columns' => $columnPayload,
+719\t            'facility_usage' => $facilityUsage,
+720\t        ];
+721\t
+722\t        $data['setup_form'] = $setupForm;
+723\t        $data['setup_columns'] = $setupColumns;
+724\t        $data['step_snapshots'] = $snapshots;
+725\t        $data['last_saved_step'] = $step;
+726\t
+727\t        $setup->data = $data;
+728\t    }
+729\t
+730\t    protected function isBlank(mixed $value): bool
+731\t    {
+732\t        if ($value === null) {
+733\t            return true;
+734\t        }
+735\t
+736\t        if (is_string($value)) {
+737\t            return trim($value) === '';
+738\t        }
+739\t
+740\t        return false;
+741\t    }
+742\t}

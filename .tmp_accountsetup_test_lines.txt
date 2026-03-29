@@ -1,0 +1,347 @@
+1\t<?php
+2\t
+3\tnamespace Tests\Feature;
+4\t
+5\tuse App\Models\AccountSetup;
+6\tuse App\Models\User;
+7\tuse Illuminate\Foundation\Testing\RefreshDatabase;
+8\tuse Illuminate\Support\Facades\Hash;
+9\tuse Laravel\Sanctum\Sanctum;
+10\tuse Tests\TestCase;
+11\t
+12\tclass AccountSetupFlowTest extends TestCase
+13\t{
+14\t    use RefreshDatabase;
+15\t
+16\t    public function test_store_rejects_step_out_of_range(): void
+17\t    {
+18\t        $user = User::factory()->create();
+19\t        Sanctum::actingAs($user);
+20\t
+21\t        $response = $this->postJson('/api/v1/account-setup', [
+22\t            'step' => 99,
+23\t            'data' => [],
+24\t        ]);
+25\t
+26\t        $response
+27\t            ->assertStatus(422)
+28\t            ->assertJsonValidationErrors(['step']);
+29\t    }
+30\t
+31\t    public function test_complete_requires_prior_steps(): void
+32\t    {
+33\t        $user = User::factory()->create();
+34\t        Sanctum::actingAs($user);
+35\t
+36\t        $response = $this->postJson('/api/v1/account-setup/complete');
+37\t
+38\t        $response
+39\t            ->assertStatus(422)
+40\t            ->assertJsonValidationErrors(['steps']);
+41\t    }
+42\t
+43\t    public function test_store_saves_step_data_to_columns_and_json_backup(): void
+44\t    {
+45\t        $user = User::factory()->create();
+46\t        Sanctum::actingAs($user);
+47\t
+48\t        $response = $this->postJson('/api/v1/account-setup', [
+49\t            'step' => 2,
+50\t            'data' => [
+51\t                'company_address' => '123 Main Street',
+52\t                'company_city' => 'Toronto',
+53\t                'company_state' => 'Ontario',
+54\t                'company_zip' => 'M5H1A1',
+55\t                'company_country' => 'Canada',
+56\t                'company_phone' => '+1 416 555 0100',
+57\t                'custom_note' => 'after_hours_entry',
+58\t            ],
+59\t        ]);
+60\t
+61\t        $response->assertOk();
+62\t
+63\t        $setup = AccountSetup::where('user_id', $user->id)->first();
+64\t        $this->assertNotNull($setup);
+65\t        $this->assertSame('123 Main Street', $setup->company_address);
+66\t        $this->assertSame('Toronto', $setup->company_city);
+67\t        $this->assertTrue((bool) $setup->step_2_done);
+68\t
+69\t        $data = $setup->data;
+70\t        $this->assertIsArray($data);
+71\t        $this->assertSame('123 Main Street', $data['setup_columns']['company_address'] ?? null);
+72\t        $this->assertSame('after_hours_entry', $data['setup_form']['custom_note'] ?? null);
+73\t        $this->assertSame('after_hours_entry', $data['step_snapshots']['2']['payload']['custom_note'] ?? null);
+74\t        $this->assertSame(2, $data['last_saved_step'] ?? null);
+75\t    }
+76\t
+77\t    public function test_store_only_persists_columns_for_current_step(): void
+78\t    {
+79\t        $user = User::factory()->create();
+80\t        Sanctum::actingAs($user);
+81\t
+82\t        $response = $this->postJson('/api/v1/account-setup', [
+83\t            'step' => 9,
+84\t            'data' => [
+85\t                'subscription_plan' => 'enterprise',
+86\t                'company_name' => 'Should Not Save Here',
+87\t            ],
+88\t        ]);
+89\t
+90\t        $response->assertOk();
+91\t
+92\t        $setup = AccountSetup::where('user_id', $user->id)->first();
+93\t        $this->assertNotNull($setup);
+94\t        $this->assertSame('enterprise', $setup->subscription_plan);
+95\t        $this->assertNull($setup->company_name);
+96\t
+97\t        $data = $setup->data;
+98\t        $this->assertIsArray($data);
+99\t        $this->assertSame('enterprise', $data['setup_columns']['subscription_plan'] ?? null);
+100\t        $this->assertArrayNotHasKey('company_name', $data['setup_columns'] ?? []);
+101\t    }
+102\t
+103\t    public function test_step_eight_updates_login_credentials_and_security_hashes(): void
+104\t    {
+105\t        $user = User::factory()->create([
+106\t            'username' => 'old_username',
+107\t            'password' => 'OldPassword123!',
+108\t        ]);
+109\t        Sanctum::actingAs($user);
+110\t
+111\t        $response = $this->postJson('/api/v1/account-setup', [
+112\t            'step' => 8,
+113\t            'data' => [
+114\t                'security_username' => 'new_username',
+115\t                'security_password' => 'NewPassword123!',
+116\t                'security_password_confirm' => 'NewPassword123!',
+117\t                'security_pin' => '1234',
+118\t                'security_policy_ack' => true,
+119\t            ],
+120\t        ]);
+121\t
+122\t        $response->assertOk();
+123\t
+124\t        $user->refresh();
+125\t        $this->assertSame('new_username', $user->username);
+126\t        $this->assertTrue(Hash::check('NewPassword123!', $user->password));
+127\t
+128\t        $setup = AccountSetup::where('user_id', $user->id)->first();
+129\t        $this->assertNotNull($setup);
+130\t        $this->assertSame('new_username', $setup->security_username);
+131\t        $this->assertTrue(Hash::check('NewPassword123!', $setup->security_password_hash));
+132\t        $this->assertTrue(Hash::check('1234', $setup->security_pin_hash));
+133\t        $this->assertTrue((bool) $setup->step_8_done);
+134\t
+135\t        $data = $setup->data;
+136\t        $this->assertIsArray($data);
+137\t        $this->assertArrayNotHasKey('security_password', $data['setup_form'] ?? []);
+138\t        $this->assertArrayNotHasKey('security_pin', $data['setup_form'] ?? []);
+139\t        $this->assertTrue((bool) ($data['setup_form']['security_password_configured'] ?? false));
+140\t        $this->assertTrue((bool) ($data['setup_form']['security_pin_configured'] ?? false));
+141\t        $this->assertNotEmpty($data['setup_form']['security_password_hash'] ?? null);
+142\t        $this->assertNotEmpty($data['setup_form']['security_pin_hash'] ?? null);
+143\t    }
+144\t
+145\t    public function test_full_setup_flow_persists_step_fields_in_dedicated_columns(): void
+146\t    {
+147\t        $user = User::factory()->create([
+148\t            'username' => 'owner_old',
+149\t        ]);
+150\t        Sanctum::actingAs($user);
+151\t
+152\t        $steps = [
+153\t            1 => [
+154\t                'company_name' => 'DeskDrop HQ',
+155\t                'company_logo_url' => '/storage/account-logos/logo.png',
+156\t                'company_logo_path' => 'account-logos/logo.png',
+157\t            ],
+158\t            2 => [
+159\t                'company_address' => '10 King St',
+160\t                'company_city' => 'Toronto',
+161\t                'company_state' => 'Ontario',
+162\t                'company_zip' => 'M5H1A1',
+163\t                'company_country' => 'Canada',
+164\t                'company_phone' => '+1 416 555 0100',
+165\t            ],
+166\t            3 => [
+167\t                'facility_name' => 'Building A',
+168\t                'facility_part_number' => 'A-100',
+169\t                'facility_address' => '20 Front St',
+170\t                'facility_city' => 'Toronto',
+171\t                'facility_state' => 'Ontario',
+172\t                'facility_zip' => 'M5J2N8',
+173\t                'facility_country' => 'Canada',
+174\t                'facility_phone' => '+1 416 555 0101',
+175\t                'facility_email' => 'facility@example.com',
+176\t            ],
+177\t            4 => [
+178\t                'facility_usage' => [[
+179\t                    'name' => 'Building A',
+180\t                    'part' => 'A-100',
+181\t                    'city' => 'Toronto',
+182\t                    'country' => 'Canada',
+183\t                    'assigned' => 12,
+184\t                    'status' => 'active',
+185\t                ]],
+186\t            ],
+187\t            5 => [
+188\t                'contact_primary_phone' => '+1 416 555 0102',
+189\t                'contact_mobile_phone' => '+1 416 555 0103',
+190\t                'contact_business_email' => 'ops@example.com',
+191\t                'contact_alt_email' => 'alt@example.com',
+192\t                'contact_website' => 'https://example.com',
+193\t            ],
+194\t            6 => [
+195\t                'pref_timezone' => 'America/Toronto',
+196\t                'pref_language' => 'English',
+197\t                'pref_date_format' => 'YYYY-MM-DD',
+198\t            ],
+199\t            7 => [
+200\t                'notify_email' => true,
+201\t                'notify_sms' => true,
+202\t                'notify_arrival' => true,
+203\t                'notify_security' => false,
+204\t                'notify_marketing' => false,
+205\t            ],
+206\t            8 => [
+207\t                'security_username' => 'owner_new',
+208\t                'security_password' => 'SecurePass123!',
+209\t                'security_password_confirm' => 'SecurePass123!',
+210\t                'security_pin' => '9876',
+211\t                'security_2fa' => true,
+212\t                'security_policy_ack' => true,
+213\t            ],
+214\t            9 => [
+215\t                'subscription_plan' => 'standard',
+216\t            ],
+217\t            10 => [
+218\t                'license_ack' => true,
+219\t            ],
+220\t            11 => [
+221\t                'billing_method' => 'card',
+222\t                'billing_address' => '30 Bay St',
+223\t                'billing_cycle' => 'Monthly',
+224\t                'billing_auto_renew' => true,
+225\t                'billing_policy_ack' => true,
+226\t            ],
+227\t            12 => [
+228\t                'admin_first_name' => 'John',
+229\t                'admin_last_name' => 'Doe',
+230\t                'admin_role' => 'Manager',
+231\t                'admin_is_system' => true,
+232\t                'admin_phone' => '+1 416 555 0104',
+233\t                'admin_email' => 'john.doe@example.com',
+234\t                'admin_created_date' => '2026-02-20',
+235\t            ],
+236\t            13 => [
+237\t                'recovery_email' => 'recovery@example.com',
+238\t                'recovery_phone' => '+1 416 555 0105',
+239\t            ],
+240\t            14 => [
+241\t                'email_verify_status' => 'verified',
+242\t            ],
+243\t            15 => [
+244\t                'captcha_ack' => true,
+245\t            ],
+246\t            16 => [
+247\t                'safety_ack' => true,
+248\t            ],
+249\t            17 => [
+250\t                'terms_ack' => true,
+251\t                'privacy_ack' => true,
+252\t            ],
+253\t        ];
+254\t
+255\t        foreach ($steps as $step => $data) {
+256\t            $this->postJson('/api/v1/account-setup', [
+257\t                'step' => $step,
+258\t                'data' => $data,
+259\t            ])->assertOk();
+260\t        }
+261\t
+262\t        $this->postJson('/api/v1/account-setup/complete')->assertOk();
+263\t
+264\t        $setup = AccountSetup::where('user_id', $user->id)->first();
+265\t        $this->assertNotNull($setup);
+266\t
+267\t        $expectedColumns = [
+268\t            'company_name' => 'DeskDrop HQ',
+269\t            'company_logo_url' => '/storage/account-logos/logo.png',
+270\t            'company_logo_path' => 'account-logos/logo.png',
+271\t            'company_address' => '10 King St',
+272\t            'company_city' => 'Toronto',
+273\t            'company_state' => 'Ontario',
+274\t            'company_zip' => 'M5H1A1',
+275\t            'company_country' => 'Canada',
+276\t            'company_phone' => '+1 416 555 0100',
+277\t            'facility_name' => 'Building A',
+278\t            'facility_part_number' => 'A-100',
+279\t            'facility_address' => '20 Front St',
+280\t            'facility_city' => 'Toronto',
+281\t            'facility_state' => 'Ontario',
+282\t            'facility_zip' => 'M5J2N8',
+283\t            'facility_country' => 'Canada',
+284\t            'facility_phone' => '+1 416 555 0101',
+285\t            'facility_email' => 'facility@example.com',
+286\t            'contact_primary_phone' => '+1 416 555 0102',
+287\t            'contact_mobile_phone' => '+1 416 555 0103',
+288\t            'contact_business_email' => 'ops@example.com',
+289\t            'contact_alt_email' => 'alt@example.com',
+290\t            'contact_website' => 'https://example.com',
+291\t            'pref_timezone' => 'America/Toronto',
+292\t            'pref_language' => 'English',
+293\t            'pref_date_format' => 'YYYY-MM-DD',
+294\t            'notify_email' => true,
+295\t            'notify_sms' => true,
+296\t            'notify_arrival' => true,
+297\t            'notify_security' => false,
+298\t            'notify_marketing' => false,
+299\t            'security_username' => 'owner_new',
+300\t            'security_2fa' => true,
+301\t            'security_policy_ack' => true,
+302\t            'subscription_plan' => 'standard',
+303\t            'license_ack' => true,
+304\t            'billing_method' => 'card',
+305\t            'billing_address' => '30 Bay St',
+306\t            'billing_cycle' => 'Monthly',
+307\t            'billing_auto_renew' => true,
+308\t            'billing_policy_ack' => true,
+309\t            'admin_first_name' => 'John',
+310\t            'admin_last_name' => 'Doe',
+311\t            'admin_role' => 'Manager',
+312\t            'admin_is_system' => true,
+313\t            'admin_phone' => '+1 416 555 0104',
+314\t            'admin_email' => 'john.doe@example.com',
+315\t            'recovery_email' => 'recovery@example.com',
+316\t            'recovery_phone' => '+1 416 555 0105',
+317\t            'email_verify_status' => 'verified',
+318\t            'captcha_ack' => true,
+319\t            'safety_ack' => true,
+320\t            'terms_ack' => true,
+321\t            'privacy_ack' => true,
+322\t            'final_ack' => true,
+323\t        ];
+324\t
+325\t        foreach ($expectedColumns as $field => $value) {
+326\t            $this->assertSame($value, $setup->{$field}, "Mismatch on {$field}");
+327\t        }
+328\t
+329\t        $this->assertNotEmpty($setup->security_password_hash);
+330\t        $this->assertNotEmpty($setup->security_pin_hash);
+331\t        $this->assertSame(18, (int) $setup->current_step);
+332\t        $this->assertNotNull($setup->completed_at);
+333\t
+334\t        for ($i = 1; $i <= 18; $i += 1) {
+335\t            $this->assertTrue((bool) $setup->{'step_' . $i . '_done'});
+336\t        }
+337\t
+338\t        $facilityRows = $setup->facilityUsage()->get();
+339\t        $this->assertCount(1, $facilityRows);
+340\t        $this->assertSame('Building A', $facilityRows[0]->name);
+341\t        $this->assertSame('A-100', $facilityRows[0]->part);
+342\t        $this->assertSame('Toronto', $facilityRows[0]->city);
+343\t        $this->assertSame('Canada', $facilityRows[0]->country);
+344\t        $this->assertSame(12, $facilityRows[0]->assigned);
+345\t        $this->assertSame('active', $facilityRows[0]->status);
+346\t    }
+347\t}
