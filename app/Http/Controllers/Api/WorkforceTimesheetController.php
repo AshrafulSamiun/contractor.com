@@ -14,7 +14,7 @@ class WorkforceTimesheetController extends Controller
 {
     public function index(Request $request)
     {
-        $query = WorkforceTimesheet::query()->where('user_id', $request->user()->id);
+        $query = WorkforceTimesheet::query()->when($request->user()->project_id !== null, fn ($builder) => $builder->where('project_id', $request->user()->project_id), fn ($builder) => $builder->whereNull('project_id'));
 
         if ($request->filled('status')) {
             $query->where('status', $request->string('status')->toString());
@@ -26,16 +26,19 @@ class WorkforceTimesheetController extends Controller
             $query->whereDate('week_start', '<=', $request->string('to')->toString());
         }
 
-        $items = $query->orderByDesc('week_start')->get();
+        if ($request->filled('employee')) $query->where('employee_name', 'like', '%' . $request->string('employee')->toString() . '%');
+        if ($request->filled('department')) $query->where('role_title', 'like', '%' . $request->string('department')->toString() . '%');
+        if ($request->filled('job_order')) $query->where('entries_json', 'like', '%' . $request->string('job_order')->toString() . '%');
+        $sortBy = in_array($request->input('sort_by'), ['timesheet_no','week_start','employee_name','total_hours','status'], true) ? $request->input('sort_by') : 'week_start';
+        $direction = strtolower($request->input('sort_direction', 'desc')) === 'asc' ? 'asc' : 'desc';
+        $items = $query->orderBy($sortBy, $direction)->paginate(min(max((int) $request->input('per_page', 10), 1), 100))->withQueryString();
 
-        return response()->json(['success' => true, 'data' => $items]);
+        return response()->json(['success' => true, 'data' => $items->items(), 'meta' => ['current_page' => $items->currentPage(), 'last_page' => $items->lastPage(), 'per_page' => $items->perPage(), 'total' => $items->total(), 'from' => $items->firstItem(), 'to' => $items->lastItem()]]);
     }
 
     public function show(Request $request, WorkforceTimesheet $timesheet)
     {
-        if ($timesheet->user_id !== $request->user()->id) {
-            return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
-        }
+        $this->assertSameProject($request, $timesheet);
 
         return response()->json(['success' => true, 'data' => $timesheet]);
     }
@@ -57,6 +60,7 @@ class WorkforceTimesheetController extends Controller
         ]);
 
         $data['user_id'] = $request->user()->id;
+        $data['project_id'] = $request->user()->project_id;
         $totals = $this->calculateTotals($data['entries_json'] ?? []);
         $data['regular_hours'] = $data['regular_hours'] ?? $totals['regular_hours'];
         $data['overtime_hours'] = $data['overtime_hours'] ?? $totals['overtime_hours'];
@@ -73,9 +77,7 @@ class WorkforceTimesheetController extends Controller
 
     public function update(Request $request, WorkforceTimesheet $timesheet)
     {
-        if ($timesheet->user_id !== $request->user()->id) {
-            return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
-        }
+        $this->assertSameProject($request, $timesheet);
 
         $data = $request->validate([
             'week_start' => ['required', 'date'],
@@ -103,9 +105,7 @@ class WorkforceTimesheetController extends Controller
 
     public function submit(Request $request, WorkforceTimesheet $timesheet)
     {
-        if ($timesheet->user_id !== $request->user()->id) {
-            return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
-        }
+        $this->assertSameProject($request, $timesheet);
 
         $flow = app(WorkforceApprovalFlow::class);
         if (!$flow->isRoleAllowed($request->user()->role ?? null, 'submit', 'timesheet')) {
@@ -142,7 +142,7 @@ class WorkforceTimesheetController extends Controller
 
     public function approve(Request $request, WorkforceTimesheet $timesheet)
     {
-        $this->assertSameCompany($request, $timesheet->user_id);
+        $this->assertSameProject($request, $timesheet);
 
         $flow = app(WorkforceApprovalFlow::class);
         if (!$flow->isRoleAllowed($request->user()->role ?? null, 'approve', 'timesheet')) {
@@ -197,7 +197,7 @@ class WorkforceTimesheetController extends Controller
 
     public function finalize(Request $request, WorkforceTimesheet $timesheet)
     {
-        $this->assertSameCompany($request, $timesheet->user_id);
+        $this->assertSameProject($request, $timesheet);
 
         $flow = app(WorkforceApprovalFlow::class);
         if (!$flow->isRoleAllowed($request->user()->role ?? null, 'final', 'timesheet')) {
@@ -238,7 +238,7 @@ class WorkforceTimesheetController extends Controller
 
     public function reject(Request $request, WorkforceTimesheet $timesheet)
     {
-        $this->assertSameCompany($request, $timesheet->user_id);
+        $this->assertSameProject($request, $timesheet);
 
         $flow = app(WorkforceApprovalFlow::class);
         if (!$flow->isRoleAllowed($request->user()->role ?? null, 'approve', 'timesheet')) {
@@ -295,9 +295,7 @@ class WorkforceTimesheetController extends Controller
 
     public function destroy(Request $request, WorkforceTimesheet $timesheet)
     {
-        if ($timesheet->user_id !== $request->user()->id) {
-            return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
-        }
+        $this->assertSameProject($request, $timesheet);
 
         $timesheet->delete();
 
@@ -331,5 +329,10 @@ class WorkforceTimesheetController extends Controller
         if ($ownerCompany === '' || $ownerCompany !== $companyName) {
             abort(403, 'Unauthorized');
         }
+    }
+
+    private function assertSameProject(Request $request, WorkforceTimesheet $timesheet): void
+    {
+        abort_unless((string) $timesheet->project_id === (string) $request->user()->project_id, 403, 'Unauthorized');
     }
 }

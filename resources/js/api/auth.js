@@ -6,8 +6,23 @@ export const login = async (payload) => {
   return data
 }
 
+export const requestLoginVerificationCode = async (payload) => {
+  const { data } = await client.post('/login/verification-code', payload)
+  return data
+}
+
+export const verifyLoginCode = async (payload) => {
+  const { data } = await client.post('/verify', payload)
+  return data
+}
+
 export const register = async (payload) => {
   const { data } = await client.post('/register', payload)
+  return data
+}
+
+export const requestRegisterVerificationCode = async (payload) => {
+  const { data } = await client.post('/register/verification-code', payload)
   return data
 }
 
@@ -50,13 +65,15 @@ export const saveToken = (token) => {
 
 export const clearToken = () => {
   localStorage.removeItem('pm_token')
+  localStorage.removeItem('pm_verify_session')
+  localStorage.removeItem('pm_verify_via')
   setAuthToken(null)
   setAuthTokenState(null)
   clearUser()
 }
 
 export const loadMe = async () => {
-  const { data } = await getMe()
-  setUser(data?.data ?? null)
-  return data
+  const response = await getMe()
+  setUser(response?.data ?? response ?? null)
+  return response
 }

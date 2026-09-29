@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>DeskDrop Username Reminder</title>
+    <title>Contractor.com Username Reminder</title>
   </head>
   <body style="margin:0;padding:0;background:#f8fafc;font-family:Arial,Helvetica,sans-serif;color:#0f172a;">
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="padding:24px 12px;">
@@ -12,7 +12,7 @@
           <table role="presentation" width="560" cellspacing="0" cellpadding="0" style="background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e2e8f0;">
             <tr>
               <td style="padding:22px 26px;background:#1d4ed8;color:#ffffff;">
-                <div style="font-size:18px;font-weight:700;">DeskDrop</div>
+                <div style="font-size:18px;font-weight:700;">Contractor.com</div>
                 <div style="opacity:0.9;font-size:12px;margin-top:6px;">Username Reminder</div>
               </td>
             </tr>
@@ -20,7 +20,7 @@
               <td style="padding:24px 26px 12px;">
                 <div style="font-size:16px;font-weight:600;">Hi {{ $name ?? 'there' }},</div>
                 <p style="margin:10px 0 0;font-size:14px;line-height:1.7;color:#334155;">
-                  Here are your sign-in details for DeskDrop.
+                  Here are your sign-in details for Contractor.com.
                 </p>
               </td>
             </tr>

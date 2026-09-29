@@ -45,3 +45,18 @@ onMounted(refresh)
 defineExpose({ refresh })
 </script>
 
+<style scoped>
+.pm-captcha-row {
+  min-height: 64px;
+  align-items: center;
+}
+
+.pm-captcha-img {
+  height: 64px;
+  object-fit: contain;
+  object-position: center;
+  padding: 4px 0 7px;
+  box-sizing: border-box;
+  background: #f7f8fb;
+}
+</style>

@@ -1,0 +1,85 @@
+/* Keep Help Center ticket summary cards in one horizontal row. */
+.tickets-page .metrics {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  gap: 14px !important;
+  overflow-x: auto;
+  margin-bottom: 16px;
+  padding: 1px;
+}
+
+.tickets-page .metrics > article {
+  display: flex !important;
+  flex: 1 0 170px !important;
+  min-width: 170px;
+  min-height: 88px;
+  align-items: center;
+  gap: 13px;
+  padding: 13px 15px;
+  border: 1px solid #dce5f3;
+  border-radius: 9px;
+  background: #fff;
+}
+
+.tickets-page .metrics > article > i {
+  display: grid !important;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  border-radius: 50%;
+  background: #eff5ff;
+  color: #075cff;
+  font-size: 1.35rem;
+  font-style: normal;
+}
+
+.tickets-page .metrics > article b,
+.tickets-page .metrics > article strong {
+  display: block !important;
+}
+
+.tickets-page .metrics > article b { font-size: .74rem; }
+.tickets-page .metrics > article strong { margin-top: 4px; font-size: 1.5rem; }
+.tickets-page .metrics > .green i { color: #009844; background: #edfff4; }
+.tickets-page .metrics > .orange i { color: #f07100; background: #fff6e8; }
+.tickets-page .metrics > .violet i { color: #7236d9; background: #f6efff; }
+.tickets-page .metrics > .slate i { color: #162d66; background: #f0f3f8; }
+
+/* SMS notification actions must remain a single horizontal toolbar. */
+.sms-format header .actions {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  gap: 10px !important;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.sms-format header .actions > a,
+.sms-format header .actions > button {
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  width: auto !important;
+  white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+  .sms-format header .actions { justify-content: flex-start !important; }
+}
+
+/* Keep the long Super Admin navigation accessible at every screen height. */
+.sa-sidebar {
+  height: 100vh !important;
+  overflow-y: scroll !important;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #7ea9df #062b61;
+}
+
+.sa-sidebar::-webkit-scrollbar { width: 9px; }
+.sa-sidebar::-webkit-scrollbar-track { background: #062b61; }
+.sa-sidebar::-webkit-scrollbar-thumb { background: #7ea9df; border-radius: 8px; }

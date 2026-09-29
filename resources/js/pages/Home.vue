@@ -1,255 +1,141 @@
 <template>
-  <div>
+  <div class="pm-home-page">
     <PublicHeader />
 
-    <section id="home" class="pm-hero d-flex align-items-center">
-      <video
-        ref="heroVideoRef"
-        class="pm-hero-video"
-        autoplay
-        muted
-        playsinline
-        @ended="nextVideo"
-        @error="handleVideoError"
-      >
-        <source :src="heroVideos[currentVideo]" type="video/mp4" />
-      </video>
-      <div class="container text-center">
-        <div class="pm-hero-content">
-          <h1 class="fw-semibold">Smart Management System for Contractors</h1>
-          <p class="lead">
-            Manage plumbing, electrical, and service jobs efficiently with one powerful platform.
-          </p>
-          <div class="d-flex flex-wrap justify-content-center gap-2">
-            <RouterLink class="btn btn-light px-4" to="/register">Create Account</RouterLink>
-            <RouterLink class="btn btn-outline-light px-4 border-2" to="/login">Requet a Demo</RouterLink>
-          </div>
-          <div class="pm-hero-dots mt-3">
-            <span
-              v-for="(item, index) in heroVideos"
-              :key="`dot-${index}`"
-              :class="{ active: index === currentVideo }"
-              @click="setVideo(index)"
-            ></span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="pm-trust-section">
+    <section class="pm-home-hero">
       <div class="container">
-        <div class="row g-3 align-items-center">
-          <div class="col-lg-12">
-            <h3 class="fw-semibold mb-2">Trusted by busy teams</h3>
-            <p class="pm-muted">Contractor helps plumbing, electrical, and maintenance businesses manage jobs, clients, quotations, equipment, and payments in one smart system.
-Perfect for plumbers, electricians, repair technicians, maintenance teams, construction service providers, and independent contractor</p>
-          </div>
-          
-        </div>
-        
-      </div>
-    </section>
+        <div class="pm-home-hero-grid">
+          <div class="pm-home-copy">
+            <div class="pm-home-kicker">ALL-IN-ONE CONTRACTOR MANAGEMENT SOFTWARE</div>
+            <h1>Run Your Contractor Business Smarter</h1>
+            <p class="pm-home-subtitle">
+              Manage jobs, schedules, employees, invoices, payments and customers in one powerful platform.
+            </p>
 
-    <section class="pm-section" id="about">
-      <div class="container text-center">
-        <h2 class="pm-section-title-center mt-4">What Contractor Does?</h2>
-        <div class="row g-3 mt-3">
-          <div class="col-md-4">
-            <div class="pm-feature-card card p-3">
-              <div class="pm-feature-icon mb-2" style="background:#2563eb;">
-                <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0 16C0 7.16344 7.16344 0 16 0H40C48.8366 0 56 7.16344 56 16V40C56 48.8366 48.8366 56 40 56H16C7.16344 56 0 48.8366 0 40V16Z" fill="url(#paint0_linear_114_14562)"/>
-                    <path d="M41.068 25.3333C41.6769 28.3217 41.243 31.4285 39.8385 34.1357C38.434 36.8429 36.1439 38.9867 33.35 40.2097C30.5562 41.4328 27.4275 41.661 24.4857 40.8565C21.544 40.0519 18.9669 38.2632 17.1844 35.7885C15.4018 33.3139 14.5215 30.303 14.6902 27.2578C14.859 24.2127 16.0665 21.3174 18.1115 19.0549C20.1566 16.7923 22.9155 15.2992 25.9281 14.8246C28.9407 14.35 32.0251 14.9225 34.6667 16.4467" stroke="white" stroke-width="2.66667" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M24 26.6663L28 30.6663L41.3333 17.333" stroke="white" stroke-width="2.66667" stroke-linecap="round" stroke-linejoin="round"/>
-                    <defs>
-                    <linearGradient id="paint0_linear_114_14562" x1="0" y1="28" x2="56" y2="28" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#2B7FFF"/>
-                    <stop offset="1" stop-color="#155DFC"/>
-                    </linearGradient>
-                    </defs>
-                </svg>
-
+            <div class="pm-home-benefits">
+              <div class="pm-home-benefit">
+                <span class="pm-home-check">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M20 6L9 17L4 12" />
+                  </svg>
+                </span>
+                <span>Save Time</span>
               </div>
-              <div class="fw-semibold">Manage Job & Work Orders</div>
-              <div class="pm-muted"></div>
+              <div class="pm-home-benefit">
+                <span class="pm-home-check">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M20 6L9 17L4 12" />
+                  </svg>
+                </span>
+                <span>Stay Organized</span>
+              </div>
+              <div class="pm-home-benefit">
+                <span class="pm-home-check">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M20 6L9 17L4 12" />
+                  </svg>
+                </span>
+                <span>Improve Productivity</span>
+              </div>
+              <div class="pm-home-benefit">
+                <span class="pm-home-check">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M20 6L9 17L4 12" />
+                  </svg>
+                </span>
+                <span>Grow Your Business</span>
+              </div>
             </div>
           </div>
-          <div class="col-md-4">
-            <div class="pm-feature-card card p-3">
-              <div class="pm-feature-icon mb-2" style="background:#16a34a;">
-                <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0 16C0 7.16344 7.16344 0 16 0H40C48.8366 0 56 7.16344 56 16V40C56 48.8366 48.8366 56 40 56H16C7.16344 56 0 48.8366 0 40V16Z" fill="url(#paint0_linear_114_14570)"/>
-                <path d="M28 20V28L33.3333 30.6667" stroke="white" stroke-width="2.66667" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M28 41.3333C35.3638 41.3333 41.3333 35.3638 41.3333 28C41.3333 20.6362 35.3638 14.6666 28 14.6666C20.6362 14.6666 14.6666 20.6362 14.6666 28C14.6666 35.3638 20.6362 41.3333 28 41.3333Z" stroke="white" stroke-width="2.66667" stroke-linecap="round" stroke-linejoin="round"/>
-                <defs>
-                <linearGradient id="paint0_linear_114_14570" x1="0" y1="28" x2="56" y2="28" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#00C950"/>
-                <stop offset="1" stop-color="#00A63E"/>
-                </linearGradient>
-                </defs>
-                </svg>
 
-              </div>
-              <div class="fw-semibold">Manage Job & Work Orders</div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="pm-feature-card card p-3">
-              <div class="pm-feature-icon mb-2" style="background:#7c3aed;">
-                <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0 16C0 7.16344 7.16344 0 16 0H40C48.8366 0 56 7.16344 56 16V40C56 48.8366 48.8366 56 40 56H16C7.16344 56 0 48.8366 0 40V16Z" fill="url(#paint0_linear_114_14577)"/>
-                    <path d="M38.6666 29.3333C38.6666 35.9999 34 39.3333 28.4533 41.2666C28.1629 41.365 27.8474 41.3603 27.56 41.2533C22 39.3333 17.3333 35.9999 17.3333 29.3333V19.9999C17.3333 19.6463 17.4738 19.3072 17.7238 19.0571C17.9739 18.8071 18.313 18.6666 18.6666 18.6666C21.3333 18.6666 24.6666 17.0666 26.9866 15.0399C27.2691 14.7986 27.6285 14.666 28 14.666C28.3715 14.666 28.7308 14.7986 29.0133 15.0399C31.3466 17.0799 34.6666 18.6666 37.3333 18.6666C37.6869 18.6666 38.0261 18.8071 38.2761 19.0571C38.5262 19.3072 38.6666 19.6463 38.6666 19.9999V29.3333Z" stroke="white" stroke-width="2.66667" stroke-linecap="round" stroke-linejoin="round"/>
-                    <defs>
-                    <linearGradient id="paint0_linear_114_14577" x1="0" y1="28" x2="56" y2="28" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#AD46FF"/>
-                    <stop offset="1" stop-color="#9810FA"/>
-                    </linearGradient>
-                    </defs>
-                </svg>
-
-              </div>
-              <div class="fw-semibold">Create Professional Quotations</div>
-              <div class="pm-muted"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="pm-feature-card card p-3">
-              <div class="pm-feature-icon mb-2" style="background:#f97316;">
-
-                <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0 16C0 7.16344 7.16344 0 16 0H40C48.8366 0 56 7.16344 56 16V40C56 48.8366 48.8366 56 40 56H16C7.16344 56 0 48.8366 0 40V16Z" fill="url(#paint0_linear_114_14583)"/>
-                <path d="M32.636 29.1866L34.656 40.5546C34.6787 40.6885 34.6599 40.8261 34.6022 40.949C34.5445 41.0719 34.4507 41.1742 34.3333 41.2424C34.2159 41.3105 34.0804 41.3412 33.9451 41.3303C33.8098 41.3193 33.681 41.2674 33.576 41.1813L28.8027 37.5986C28.5723 37.4265 28.2923 37.3335 28.0047 37.3335C27.7171 37.3335 27.4371 37.4265 27.2067 37.5986L22.4254 41.18C22.3205 41.2659 22.1919 41.3178 22.0567 41.3287C21.9215 41.3396 21.7863 41.3091 21.6689 41.2411C21.5516 41.1732 21.4577 41.0711 21.3999 40.9484C21.3421 40.8258 21.3231 40.6884 21.3454 40.5546L23.364 29.1866" stroke="white" stroke-width="2.66667" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M28 30.667C32.4183 30.667 36 27.0853 36 22.667C36 18.2487 32.4183 14.667 28 14.667C23.5817 14.667 20 18.2487 20 22.667C20 27.0853 23.5817 30.667 28 30.667Z" stroke="white" stroke-width="2.66667" stroke-linecap="round" stroke-linejoin="round"/>
-                <defs>
-                <linearGradient id="paint0_linear_114_14583" x1="0" y1="28" x2="56" y2="28" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#FF6900"/>
-                <stop offset="1" stop-color="#F54900"/>
-                </linearGradient>
-                </defs>
-                </svg>
-
-              </div>
-              <div class="fw-semibold">Track Equipment & Materials</div>
-              <div class="pm-muted"></div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="pm-feature-card card p-3">
-              <div class="pm-feature-icon mb-2" style="background:#db2777;">
-                <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0 16C0 7.16344 7.16344 0 16 0H40C48.8366 0 56 7.16344 56 16V40C56 48.8366 48.8366 56 40 56H16C7.16344 56 0 48.8366 0 40V16Z" fill="url(#paint0_linear_114_14590)"/>
-                    <path d="M33.3334 21.333H41.3334V29.333" stroke="white" stroke-width="2.66667" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M41.3333 21.333L30 32.6663L23.3333 25.9997L14.6666 34.6663" stroke="white" stroke-width="2.66667" stroke-linecap="round" stroke-linejoin="round"/>
-                    <defs>
-                    <linearGradient id="paint0_linear_114_14590" x1="0" y1="28" x2="56" y2="28" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#F6339A"/>
-                    <stop offset="1" stop-color="#E60076"/>
-                    </linearGradient>
-                    </defs>
-                    </svg>
-
-              </div>
-              <div class="fw-semibold">Manage Client & Project Records</div>
-              <div class="pm-muted"></div>
-            </div>
+          <div class="pm-home-visual">
+            <img class="pm-home-hero-art" :src="heroVisual" alt="ContractorPro hero visual" />
           </div>
         </div>
       </div>
     </section>
 
-    <section class="pm-process pm-section" id="plans">
+    <section class="pm-home-stats">
       <div class="container">
-        <h2 class="pm-section-title-center">How It Works?</h2>
-        <p class="text-center">Simple 5-step process from arrival to delivery</p>
-        <div class="pm-process-list mt-4">
-            <div class="pm-process-step flex items-start items-center gap-3">
-                <span class="pm-step-circle">1</span>
-                <div class="flex flex-col">
-                    <span class="font-semibold">How Contractor Works</span>
-                    <span class="text-gray-500 text-sm">
-                        Simple 5-step process to manage your service jobs.
-                    </span>
-                </div>
+        <div class="pm-home-stats-grid">
+          <div class="pm-home-stat-card">
+            <div class="pm-home-stat-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M16 11C17.66 11 19 9.66 19 8S17.66 5 16 5 13 6.34 13 8s1.34 3 3 3zm-8 0c1.66 0 3-1.34 3-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5C15 14.17 10.33 13 8 13zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.96 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+              </svg>
             </div>
-            <div class="pm-process-step flex items-start items-center gap-3">
-                <span class="pm-step-circle">2</span>
-                <div class="flex flex-col">
-                    <span class="font-semibold">Create New Job Order</span>
-                    <span class="text-gray-500 text-sm">
-                       Add client details and create a new service job.
-                    </span>
-                </div>
+            <div>
+              <div class="pm-home-stat-value">5,000+</div>
+              <div class="pm-home-stat-label">Contractors</div>
             </div>
-            <div class="pm-process-step flex items-start items-center gap-3">
-                <span class="pm-step-circle">3</span>
-                <div class="flex flex-col">
-                    <span class="font-semibold">Prepare Quotation</span>
-                    <span class="text-gray-500 text-sm">
-                        Generate professional quotations with materials and labor cost.
-                    </span>
-                </div>
+          </div>
+
+          <div class="pm-home-stat-card">
+            <div class="pm-home-stat-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M10 4H4v6h6V4zm10 0h-6v6h6V4zM10 14H4v6h6v-6zm10 0h-6v6h6v-6z"/>
+              </svg>
             </div>
-            <div class="pm-process-step flex items-start items-center gap-3">
-                <span class="pm-step-circle">4</span>
-                <div class="flex flex-col">
-                    <span class="font-semibold">Track Work Progress</span>
-                    <span class="text-gray-500 text-sm">
-                        Monitor job progress, expenses, and updates in real time.
-                    </span>
-                </div>
+            <div>
+              <div class="pm-home-stat-value">50,000+</div>
+              <div class="pm-home-stat-label">Jobs Managed</div>
             </div>
-            <div class="pm-process-step flex items-start items-center gap-3">
-                <span class="pm-step-circle">5</span>
-                <div class="flex flex-col">
-                    <span class="font-semibold">Complete Job & Payment</span>
-                    <span class="text-gray-500 text-sm">
-                        Finalize the job and record payments for accurate financial tracking.
-                    </span>
-                </div>
+          </div>
+
+          <div class="pm-home-stat-card">
+            <div class="pm-home-stat-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm8 1.5V8h4.5"/>
+                <path d="M8 13h8M8 17h8M8 9h3"/>
+              </svg>
             </div>
-          
+            <div>
+              <div class="pm-home-stat-value">120,000+</div>
+              <div class="pm-home-stat-label">Invoices Sent</div>
+            </div>
+          </div>
+
+          <div class="pm-home-stat-card">
+            <div class="pm-home-stat-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M19 18H6a4 4 0 1 1 .6-7.96A6 6 0 0 1 18 11a3.5 3.5 0 0 1 1 7z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="pm-home-stat-value">99.9%</div>
+              <div class="pm-home-stat-label">Uptime</div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-
-    <section class="pm-section" id="contact">
+    <section class="pm-home-sections">
       <div class="container">
-        <div class="row g-3">
-          <div class="col-lg-6">
-            <div class="pm-contact-card card p-4">
-              <h5>Talk To Us</h5>
-              <h6 class="fw-semibold">How May We Help You!</h6>
-              <div v-if="contactSuccess" class="pm-form-success">Thanks! We will reach out shortly.</div>
-              <div v-if="contactError" class="pm-form-error">{{ contactError }}</div>
-              <div class="row g-3">
-                <div class="col-12"><input v-model="contact.name" class="form-control" placeholder="Your Name" /></div>
-                <div class="col-12"><input v-model="contact.email" class="form-control" placeholder="Your Email" /></div>
-                <div class="col-12"><input v-model="contact.phone" class="form-control" placeholder="Your Phone" /></div>
-                <div class="col-12"><input v-model="contact.subject" class="form-control" placeholder="Subject" /></div>
-                <div class="col-12"><textarea v-model="contact.message" class="form-control" rows="4" placeholder="Message"></textarea></div>
+        <div class="pm-home-sections-grid">
+          <div class="pm-home-section-block">
+            <h2>Built for Every Type of Contractor</h2>
+            <div class="pm-home-industry-grid">
+              <div v-for="industry in industries" :key="industry.name" class="pm-home-industry-card">
+                <div class="pm-home-industry-icon" :style="{ color: industry.color }" v-html="industry.icon"></div>
+                <div class="pm-home-industry-name">{{ industry.name }}</div>
               </div>
-              <button class="btn btn-primary mt-3" :disabled="contactLoading" @click="submitContact">
-                {{ contactLoading ? 'Sending...' : 'Send Message' }}
-              </button>
             </div>
+            <RouterLink class="pm-home-link" to="/about">View all industries</RouterLink>
           </div>
-          <div class="col-lg-6">
-            <div class="pm-contact-card card p-4 h-100">
-              <div class="mb-3">
-                <img class="img-fluid rounded" :src="contact_us" alt="Parcel desk" />
-              </div>
-              <h5>Contact Us</h5>
-              <p class="pm-muted">For further inquiries or assistance with setting up your marketplace, our team is ready to assist you.</p>
-              <div class="mt-3">
-                <div class="fw-semibold">Email</div>
-                <div class="pm-muted">info@contractor.com</div>
-              </div>
-              <div class="mt-3">
-                <div class="fw-semibold">Phone</div>
-                <div class="pm-muted">+1 (555) 123-4567</div>
+
+          <div class="pm-home-section-block">
+            <h2>Powerful Features to Grow Your Business</h2>
+            <div class="pm-home-feature-grid">
+              <div v-for="feature in features" :key="feature.title" class="pm-home-feature-card">
+                <div class="pm-home-feature-icon" :style="{ color: feature.color }" v-html="feature.icon"></div>
+                <div>
+                  <h3>{{ feature.title }}</h3>
+                  <p>{{ feature.text }}</p>
+                </div>
               </div>
             </div>
+            <RouterLink class="pm-home-link" to="/plans">View all features</RouterLink>
           </div>
         </div>
       </div>
@@ -258,102 +144,397 @@ Perfect for plumbers, electricians, repair technicians, maintenance teams, const
     <PublicFooter />
   </div>
 </template>
-<style scoped>
-    .pm-process-step .pm-step-desc{
-    display: block;
-    font-size: 14px;
-    color: #6b7280;
-    margin-top: 4px;
-}
-
-</style>
 
 <script setup>
-import { reactive, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import PublicHeader from '../components/PublicHeader.vue'
 import PublicFooter from '../components/PublicFooter.vue'
-import client from '../api/client'
-import heroVideo1 from '../assets/hero/hero-4.mp4'
-import heroVideo2 from '../assets/hero/hero-2.mp4'
-import contact_us from '../assets/contact-us.jpg'
-import { onMounted, onBeforeUnmount } from 'vue'
+const heroVisual = '/hero1.png'
 
-
-const contact = reactive({
-  name: '',
-  email: '',
-  phone: '',
-  subject: '',
-  message: '',
-})
-const contactLoading = ref(false)
-const contactSuccess = ref(false)
-const contactError = ref('')
-
-const heroVideos = [heroVideo1]
-const currentVideo = ref(0)
-const heroVideoRef = ref(null)
-let rotateTimer = null
-
-const nextVideo = () => {
-  currentVideo.value = (currentVideo.value + 1) % heroVideos.length
-  const el = heroVideoRef.value
-  if (el) {
-    el.load()
-    el.play().catch(() => {})
-  }
+const industryIcons = {
+  plumbing: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14 3v4.1a5 5 0 0 1-2 9.8V21h-2v-4.1a5 5 0 0 1-2-9.8V3h2v3h2V3h2Zm-4 5a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm6-5v3h2V3h2v5h-4V6h-2V3h2ZM4 3v3h2V3h2v5H4V6H2V3h2Z"/></svg>',
+  hvac: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11 2h2v5l2.6-2.6 1.4 1.4L14.4 8.4H19v2h-5l2.6 2.6-1.4 1.4L13 11.8V17h4.2l2.2-2.2 1.4 1.4-1.2 1.2H22v2h-2.4l1.2 1.2-1.4 1.4-2.2-2.2H13v2h-2v-5l-2.6 2.6-1.4-1.4 2.6-2.6H5v-2h5l-2.6-2.6 1.4-1.4L11 14.2V9H6.8L4.6 11.2 3.2 9.8 4.4 8.6H2v-2h2.4L3.2 5.4 4.6 4 6.8 6.2H11V2Z"/></svg>',
+  electrical: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13 2 5 13h5l-1 9 8-11h-5l1-9Z"/></svg>',
+  painting: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14 3h5a2 2 0 0 1 2 2v4a3 3 0 0 1-3 3h-1v7a2 2 0 0 1-2 2h-1v-9h-2V5a2 2 0 0 1 2-2Zm-8 9h5v9H8a2 2 0 0 1-2-2v-7Z"/></svg>',
+  roofing: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 12 12 4l9 8-1.3 1.5L12 6.7 4.3 13.5 3 12Zm4 2.5L12 10l5 4.5-1.3 1.5-3.7-3.2-3.7 3.2L7 14.5Z"/></svg>',
+  landscaping: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 3c-6.1.2-10.4 2.2-13 6-1.6 2.4-2.3 5.2-2 8.5 2.8.3 5.6-.4 8-2 3.9-2.5 5.9-6.9 7-12.5Zm-7.1 10.5c-1.6 1-3.4 1.5-5.4 1.5.1-2 .7-3.8 1.8-5.4 1.6-2.3 4.2-3.9 7.8-4.8-1 3.7-2.6 6.2-4.2 8.7Z"/></svg>',
+  applianceRepair: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="m7.1 7.1 2.8 2.8-1.4 1.4-2.8-2.8A5 5 0 0 0 3 13a5 5 0 0 0 8.5 3.5l6.1-6.1-2.1-2.1 1.4-1.4 2.1 2.1 1.9-1.9a2 2 0 1 1 2.8 2.8l-1.9 1.9 2.1 2.1-1.4 1.4-2.1-2.1-6.1 6.1A7 7 0 1 1 7.1 7.1Z"/></svg>',
+  handyman: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 7a2 2 0 0 1 2-2h3V3h6v2h3a2 2 0 0 1 2 2v3H4V7Zm0 5h16v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7Zm6 2v2h4v-2h-4Z"/></svg>',
+  cleaning: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M10 3h4v2h1a2 2 0 0 1 2 2v2h-2V7h-6v2H7V7a2 2 0 0 1 2-2h1V3Zm-2 7h8l1.5 10.5A1.5 1.5 0 0 1 16 22H8a1.5 1.5 0 0 1-1.5-1.5L8 10Zm9.5 1.5 2.5 2.5-1.4 1.4-2.5-2.5 1.4-1.4ZM6 10h12v2H6v-2Z"/></svg>',
+  more: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 12a2 2 0 1 1 0 .01V12Zm6 0a2 2 0 1 1 0 .01V12Zm6 0a2 2 0 1 1 0 .01V12Z"/></svg>',
 }
 
-const setVideo = (index) => {
-  if (index === currentVideo.value) return
-  currentVideo.value = index
-  const el = heroVideoRef.value
-  if (el) {
-    el.load()
-    el.play().catch(() => {})
-  }
+const featureIcons = {
+  jobManagement: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M9 2h6v3h4a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4V2Zm2 2v1h2V4h-2Zm-4 5v2h10V9H7Zm0 4v2h10v-2H7Zm0 4v2h6v-2H7Z"/></svg>',
+  scheduling: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7 2h2v2h6V2h2v2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2V2Zm12 8H5v10h14V10ZM5 8h14V6H5v2Z"/></svg>',
+  dispatch: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 1 7 7c0 4.2-4.7 9.95-6.3 11.77a1 1 0 0 1-1.4 0C9.7 18.95 5 13.2 5 9a7 7 0 0 1 7-7Zm0 4.5A2.5 2.5 0 1 0 12 11a2.5 2.5 0 0 0 0-4.5Z"/></svg>',
+  invoicing: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm1 3h-2v1.1a3.5 3.5 0 0 0 .5 6.96h1a1.5 1.5 0 1 1 0 3H9v2h2v1h2v-1.1a3.5 3.5 0 0 0-.5-6.96h-1a1.5 1.5 0 1 1 0-3H15V5h-2V4Z"/></svg>',
+  customer: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm-8 1a3 3 0 1 0-3-3 3 3 0 0 0 3 3Zm8 2c-2.67 0-8 1.34-8 4v2h14v-2c0-2.66-5.33-4-8-4ZM8 14c-.29 0-.62.02-.97.05C4.8 14.31 2 15.3 2 17v3h4v-2c0-1.48.8-2.6 1.97-3.45A12.9 12.9 0 0 0 8 14Z"/></svg>',
+  reports: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 20h16v2H2V4h2v16Zm4-2H5v-6h3v6Zm5 0h-3V8h3v10Zm5 0h-3V5h3v13Z"/></svg>',
+  employee: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16 11C17.66 11 19 9.66 19 8S17.66 5 16 5 13 6.34 13 8s1.34 3 3 3Zm-8 0c1.66 0 3-1.34 3-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3Zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5C15 14.17 10.33 13 8 13Zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.96 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5Z"/></svg>',
+  timesheets: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm1 5h-2v6l5 3 .9-1.45-3.9-2.3V7Z"/></svg>',
+  vehicle: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 11 6.5 6.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11a3 3 0 0 1 2 2.82V18h-2v2h-2v-2H7v2H5v-2H3v-4.18A3 3 0 0 1 5 11Zm2.1-1h9.8l-.9-2.7a.5.5 0 0 0-.47-.3H8.47a.5.5 0 0 0-.47.34L7.1 10ZM7 15.5A1.5 1.5 0 1 0 7 12.5a1.5 1.5 0 0 0 0 3Zm10 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"/></svg>',
 }
 
-const handleVideoError = () => {
-  if (rotateTimer) return
-  rotateTimer = setInterval(nextVideo, 12000)
-}
+const industries = [
+  { icon: industryIcons.plumbing, name: 'Plumbing', color: '#3b82f6' },
+  { icon: industryIcons.hvac, name: 'HVAC', color: '#2563eb' },
+  { icon: industryIcons.electrical, name: 'Electrical', color: '#f59e0b' },
+  { icon: industryIcons.painting, name: 'Painting', color: '#22c55e' },
+  { icon: industryIcons.roofing, name: 'Roofing', color: '#ef4444' },
+  { icon: industryIcons.landscaping, name: 'Landscaping', color: '#65a30d' },
+  { icon: industryIcons.applianceRepair, name: 'Appliance Repair', color: '#9333ea' },
+  { icon: industryIcons.handyman, name: 'Handyman', color: '#f97316' },
+  { icon: industryIcons.cleaning, name: 'Cleaning Services', color: '#3b82f6' },
+  { icon: industryIcons.more, name: 'More', color: '#64748b' },
+]
 
-onMounted(() => {
-  rotateTimer = setInterval(nextVideo, 14000)
-})
-
-onBeforeUnmount(() => {
-  if (rotateTimer) clearInterval(rotateTimer)
-  rotateTimer = null
-})
-
-
-const submitContact = async () => {
-  contactError.value = ''
-  contactSuccess.value = false
-  if (!contact.name || !contact.email || !contact.message) {
-    contactError.value = 'Please fill in name, email, and message.'
-    return
-  }
-  contactLoading.value = true
-  try {
-    const { data } = await client.post('/contact', contact)
-    if (data?.success) {
-      contactSuccess.value = true
-      contact.name = ''
-      contact.email = ''
-      contact.phone = ''
-      contact.subject = ''
-      contact.message = ''
-    } else {
-      contactError.value = data?.message || 'Failed to send message.'
-    }
-  } catch {
-    contactError.value = 'Failed to send message.'
-  } finally {
-    contactLoading.value = false
-  }
-}
+const features = [
+  { icon: featureIcons.jobManagement, title: 'Job Management', text: 'Create, assign and track jobs from start to finish.', color: '#2563eb' },
+  { icon: featureIcons.scheduling, title: 'Scheduling & Calendar', text: 'Schedule jobs, appointments and manage your time.', color: '#22c55e' },
+  { icon: featureIcons.dispatch, title: 'Dispatch & Tracking', text: 'Dispatch technicians and track in real-time.', color: '#9333ea' },
+  { icon: featureIcons.invoicing, title: 'Invoicing & Payments', text: 'Create invoices and get paid faster online.', color: '#65a30d' },
+  { icon: featureIcons.customer, title: 'Customer Management', text: 'Keep all your customers and job history in one place.', color: '#f59e0b' },
+  { icon: featureIcons.reports, title: 'Reports & Analytics', text: 'Get real-time insights and make better decisions.', color: '#2563eb' },
+  { icon: featureIcons.employee, title: 'Employee Management', text: 'Manage employees, roles and performance.', color: '#2563eb' },
+  { icon: featureIcons.timesheets, title: 'Timesheets', text: 'Track work hours and manage timesheets.', color: '#16a34a' },
+  { icon: featureIcons.vehicle, title: 'Vehicle Management', text: 'Manage vehicles, drivers, maintenance and fuel.', color: '#2563eb' },
+]
 </script>
+
+<style scoped>
+.pm-home-page {
+  background: #ffffff;
+}
+
+.pm-home-hero {
+  padding: 22px 0 8px;
+  background:
+    radial-gradient(760px 420px at 8% 12%, rgba(37, 99, 235, 0.08), transparent 60%),
+    radial-gradient(620px 340px at 92% 16%, rgba(59, 130, 246, 0.08), transparent 60%),
+    #ffffff;
+}
+
+.pm-home-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 28px;
+  align-items: center;
+}
+
+.pm-home-copy {
+  padding-top: 10px;
+}
+
+.pm-home-kicker {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #edf3ff;
+  color: #2563eb;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 18px;
+}
+
+.pm-home-copy h1 {
+  max-width: 520px;
+  margin: 0 0 16px;
+  color: #12234a;
+  font-size: clamp(1.75rem, 3.6vw, 3.05rem);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+
+.pm-home-subtitle {
+  max-width: 520px;
+  margin: 0 0 22px;
+  color: #566884;
+  font-size: 1.06rem;
+  line-height: 1.65;
+}
+
+.pm-home-benefits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 22px;
+}
+
+.pm-home-benefit {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #223154;
+  font-weight: 600;
+}
+
+.pm-home-check {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid #2563eb;
+  color: #2563eb;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pm-home-check svg {
+  width: 12px;
+  height: 12px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pm-home-visual {
+  display: flex;
+  align-items: flex-end;
+}
+
+.pm-home-hero-art {
+  width: min(100%, 980px);
+  display: block;
+  margin-left: auto;
+  filter: drop-shadow(0 28px 52px rgba(15, 23, 42, 0.16));
+}
+
+.pm-home-stats {
+  padding: 10px 0 8px;
+}
+
+.pm-home-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid #edf1f7;
+  border-bottom: 1px solid #edf1f7;
+}
+
+.pm-home-stat-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 20px 14px;
+}
+
+.pm-home-stat-card + .pm-home-stat-card {
+  border-left: 1px solid #edf1f7;
+}
+
+.pm-home-stat-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #eef4ff 0%, #e4edff 100%);
+  color: #2563eb;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.pm-home-stat-icon svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 1.2;
+}
+
+.pm-home-stat-value {
+  color: #12234a;
+  font-size: 1.95rem;
+  line-height: 1;
+  font-weight: 800;
+}
+
+.pm-home-stat-label {
+  color: #64748b;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.pm-home-sections {
+  padding: 8px 0 30px;
+}
+
+.pm-home-sections-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 22px;
+  align-items: start;
+}
+
+.pm-home-section-block h2 {
+  margin: 0 0 16px;
+  text-align: center;
+  color: #12234a;
+  font-size: 1.95rem;
+}
+
+.pm-home-industry-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.pm-home-industry-card,
+.pm-home-feature-card {
+  background: #ffffff;
+  border: 1px solid #e7eef9;
+  border-radius: 18px;
+}
+
+.pm-home-industry-card {
+  text-align: center;
+  padding: 18px 10px 16px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.04);
+}
+
+.pm-home-industry-icon {
+  width: 42px;
+  height: 42px;
+  margin: 0 auto 10px;
+  border-radius: 14px;
+  background: #f8fbff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.28rem;
+  font-weight: 800;
+}
+
+.pm-home-industry-icon :deep(svg),
+.pm-home-feature-icon :deep(svg) {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.pm-home-industry-name {
+  color: #1f2d4d;
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+
+.pm-home-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.pm-home-feature-card {
+  display: flex;
+  gap: 12px;
+  padding: 16px 14px;
+  min-height: 112px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.04);
+}
+
+.pm-home-feature-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: #f8fbff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 800;
+  flex: 0 0 auto;
+}
+
+.pm-home-feature-card h3 {
+  margin: 0 0 5px;
+  color: #12234a;
+  font-size: 0.96rem;
+}
+
+.pm-home-feature-card p {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.84rem;
+  line-height: 1.55;
+}
+
+.pm-home-link {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 18px;
+  color: #2563eb;
+  font-weight: 700;
+}
+
+.pm-home-link::after {
+  content: "->";
+  margin-left: 8px;
+}
+
+@media (max-width: 1199.98px) {
+  .pm-home-hero-grid,
+  .pm-home-sections-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pm-home-copy {
+    text-align: center;
+  }
+
+  .pm-home-copy h1,
+  .pm-home-subtitle {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .pm-home-benefits {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .pm-home-visual {
+    justify-content: center;
+  }
+
+  .pm-home-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pm-home-stat-card:nth-child(3) {
+    border-left: 0;
+  }
+
+  .pm-home-feature-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pm-home-industry-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767.98px) {
+  .pm-home-copy h1 {
+    font-size: 2.5rem;
+  }
+
+  .pm-home-stats-grid,
+  .pm-home-feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pm-home-stat-card + .pm-home-stat-card {
+    border-left: 0;
+    border-top: 1px solid #edf1f7;
+  }
+
+  .pm-home-industry-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+</style>

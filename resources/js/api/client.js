@@ -11,6 +11,16 @@ const client = axios.create({
   },
 })
 
+client.interceptors.request.use((config) => {
+  let deviceId = localStorage.getItem('pm_device_id')
+  if (!deviceId) {
+    deviceId = window.crypto?.randomUUID?.() || `device-${Date.now()}-${Math.random().toString(36).slice(2)}`
+    localStorage.setItem('pm_device_id', deviceId)
+  }
+  config.headers['X-Device-ID'] = deviceId
+  return config
+})
+
 export const setAuthToken = (token) => {
   if (token) {
     client.defaults.headers.common.Authorization = `Bearer ${token}`

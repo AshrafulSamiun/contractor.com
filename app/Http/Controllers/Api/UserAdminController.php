@@ -48,6 +48,7 @@ class UserAdminController extends Controller
             'role' => $validated['role'] ?? 'staff',
             'is_active' => true,
             'company_name' => $request->user()->company_name,
+            'project_id' => $request->user()->project_id,
         ]);
 
         app(ActivityLogService::class)->log(

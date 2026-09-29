@@ -37,6 +37,9 @@ return [
 
     // Default permission map used when database entries are missing.
     'defaults' => [
+        'super_admin' => [
+            '*' => ['*'],
+        ],
         'admin' => [
             '*' => ['*'],
         ],

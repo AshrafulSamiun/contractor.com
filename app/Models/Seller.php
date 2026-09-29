@@ -11,7 +11,12 @@ class Seller extends Model
 
     protected $fillable = [
         'user_id',
+        'project_id',
         'seller_name',
+        'contact_person',
+        'address',
+        'tax_number',
+        'vendor_category',
         'email',
         'phone',
         'website',
@@ -20,6 +25,8 @@ class Seller extends Model
     ];
 
     protected $casts = [
+        'project_id' => 'integer',
+        'user_id' => 'integer',
         'is_active' => 'boolean',
     ];
 }

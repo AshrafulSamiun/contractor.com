@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class BillingInvoice extends Model
 {
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
     protected $fillable = [
         'user_id',
         'stripe_invoice_id',
@@ -15,6 +19,8 @@ class BillingInvoice extends Model
         'amount_due',
         'amount_paid',
         'amount_remaining',
+        'plan_name',
+        'tax_amount',
         'period_start',
         'period_end',
         'hosted_invoice_url',
@@ -22,6 +28,7 @@ class BillingInvoice extends Model
     ];
 
     protected $casts = [
+        'tax_amount' => 'integer',
         'period_start' => 'datetime',
         'period_end' => 'datetime',
     ];

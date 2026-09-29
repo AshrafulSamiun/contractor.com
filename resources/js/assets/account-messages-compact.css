@@ -1,0 +1,27 @@
+.table-wrap table {
+  min-width: 1050px;
+}
+
+.table-wrap th:last-child,
+.table-wrap td:last-child {
+  width: 300px;
+  white-space: nowrap;
+}
+
+.table-wrap td:last-child .outline {
+  padding: 5px 9px;
+  font-size: 0.88rem;
+  white-space: nowrap;
+}
+
+.table-wrap td:last-child .outline + .outline {
+  margin-left: 6px;
+}
+
+/* The message action bar is inside the page, not the application footer. */
+.am-content footer {
+  background: transparent !important;
+  color: inherit !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+}

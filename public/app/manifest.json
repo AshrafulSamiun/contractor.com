@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-_KtOp9tn.css",
+    "file": "assets/app-BcSw5LVP.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "name": "app",
@@ -9,7 +9,7 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-WWExzDai.js",
+    "file": "assets/app-BWlC9U-h.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
@@ -18,39 +18,48 @@
       "resources/js/i18n/locales/bn.json"
     ],
     "css": [
-      "assets/app-BX7TDmgD.css"
+      "assets/app-D0rzp3u6.css"
     ],
     "assets": [
-      "assets/logo-white-CzbRUBaF.png",
-      "assets/hero-1-C0naI6wU.mp4",
-      "assets/hero-2-D3G5ft_j.mp4",
+      "assets/logo-white-Bp_W_8Y5.png",
+      "assets/hero-4-CB7KLfpj.mp4",
+      "assets/contact-us-CVGFdMPq.jpg",
+      "assets/pic1-BgZmSiYe.jpg",
       "assets/slide-1-CSigxqzC.png"
     ]
   },
-  "resources/js/assets/hero/hero-1.mp4": {
-    "file": "assets/hero-1-C0naI6wU.mp4",
-    "src": "resources/js/assets/hero/hero-1.mp4"
+  "resources/js/assets/about-us/pic1.jpg": {
+    "file": "assets/pic1-BgZmSiYe.jpg",
+    "src": "resources/js/assets/about-us/pic1.jpg"
+  },
+  "resources/js/assets/contact-us.jpg": {
+    "file": "assets/contact-us-CVGFdMPq.jpg",
+    "src": "resources/js/assets/contact-us.jpg"
   },
   "resources/js/assets/hero/hero-2.mp4": {
     "file": "assets/hero-2-D3G5ft_j.mp4",
     "src": "resources/js/assets/hero/hero-2.mp4"
+  },
+  "resources/js/assets/hero/hero-4.mp4": {
+    "file": "assets/hero-4-CB7KLfpj.mp4",
+    "src": "resources/js/assets/hero/hero-4.mp4"
   },
   "resources/js/assets/hero/slide-1.png": {
     "file": "assets/slide-1-CSigxqzC.png",
     "src": "resources/js/assets/hero/slide-1.png"
   },
   "resources/js/assets/logo-white.png": {
-    "file": "assets/logo-white-CzbRUBaF.png",
+    "file": "assets/logo-white-Bp_W_8Y5.png",
     "src": "resources/js/assets/logo-white.png"
   },
   "resources/js/i18n/locales/bn.json": {
-    "file": "assets/bn-C2x0z2sn.js",
+    "file": "assets/bn-CxOSdXnH.js",
     "name": "bn",
     "src": "resources/js/i18n/locales/bn.json",
     "isDynamicEntry": true
   },
   "resources/js/i18n/locales/en.json": {
-    "file": "assets/en-BjOsc5HE.js",
+    "file": "assets/en-DldBS766.js",
     "name": "en",
     "src": "resources/js/i18n/locales/en.json",
     "isDynamicEntry": true

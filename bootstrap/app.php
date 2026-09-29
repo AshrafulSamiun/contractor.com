@@ -12,9 +12,14 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $trustedProxies = array_values(array_filter(array_map('trim', explode(',', (string) env('TRUSTED_PROXIES', '')))));
+        if ($trustedProxies) $middleware->trustProxies(at: $trustedProxies);
         $middleware->alias([
             'plan.feature' => \App\Http\Middleware\EnsurePlanFeature::class,
             'permission' => \App\Http\Middleware\EnsurePermission::class,
+            'security.activity' => \App\Http\Middleware\TrackAccountSecurityActivity::class,
+            'platform.admin' => \App\Http\Middleware\EnsurePlatformAdmin::class,
+            'customer.panel' => \App\Http\Middleware\EnsureCustomerPanelAccess::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

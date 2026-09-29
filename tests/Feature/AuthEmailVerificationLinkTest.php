@@ -52,7 +52,7 @@ class AuthEmailVerificationLinkTest extends TestCase
             ['id' => $user->id, 'hash' => sha1($user->email)]
         );
 
-        $this->get($url)->assertRedirect(url('/app/login?email_verified=success'));
+        $this->get($url)->assertRedirect(url('/login?email_verified=success'));
 
         $user->refresh();
         $this->assertNotNull($user->email_verified_at);
@@ -72,7 +72,7 @@ class AuthEmailVerificationLinkTest extends TestCase
             ['id' => $user->id, 'hash' => sha1('not-the-user-email')]
         );
 
-        $this->get($url)->assertRedirect(url('/app/login?email_verified=invalid'));
+        $this->get($url)->assertRedirect(url('/login?email_verified=invalid'));
 
         $user->refresh();
         $this->assertNull($user->email_verified_at);
@@ -89,7 +89,7 @@ class AuthEmailVerificationLinkTest extends TestCase
         );
         $invalidUrl = $url . '&tampered=1';
 
-        $this->get($invalidUrl)->assertRedirect(url('/app/login?email_verified=invalid'));
+        $this->get($invalidUrl)->assertRedirect(url('/login?email_verified=invalid'));
 
         $user->refresh();
         $this->assertNull($user->email_verified_at);

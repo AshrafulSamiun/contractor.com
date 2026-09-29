@@ -9,19 +9,37 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const AppDrawer(),
-      appBar: AppBar(
-        title: const Text('ParcelTrack'),
-      ),
+      appBar: AppBar(title: const Text('ParcelTrack')),
       body: ListView(
         children: [
           const _HeroSlider(),
           _trustSection(),
           _sectionTitle('Why Choose Us?'),
-          _featureCard('C1', 'Fully digital parcel lifecycle', 'End-to-end tracking without paper.'),
-          _featureCard('C2', 'Real-time notifications', 'Instant SMS and email alerts.'),
-          _featureCard('C3', 'Secure delivery verification', 'Digital signatures and photo proof.'),
-          _featureCard('C4', 'Detailed audit trails', 'Complete history of every parcel.'),
-          _featureCard('C5', 'Scalable for any building size', 'From small offices to large complexes.'),
+          _featureCard(
+            'C1',
+            'Fully digital parcel lifecycle',
+            'End-to-end tracking without paper.',
+          ),
+          _featureCard(
+            'C2',
+            'Real-time notifications',
+            'Instant SMS and email alerts.',
+          ),
+          _featureCard(
+            'C3',
+            'Secure delivery verification',
+            'Digital signatures and photo proof.',
+          ),
+          _featureCard(
+            'C4',
+            'Detailed audit trails',
+            'Complete history of every parcel.',
+          ),
+          _featureCard(
+            'C5',
+            'Scalable for any building size',
+            'From small offices to large complexes.',
+          ),
           _processSection(),
           _contactSection(),
         ],
@@ -32,7 +50,10 @@ class HomeScreen extends StatelessWidget {
   Widget _sectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 18, 16, 8),
-      child: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+      child: Text(
+        title,
+        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+      ),
     );
   }
 
@@ -43,17 +64,26 @@ class HomeScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Trusted by busy teams', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+          const Text(
+            'Trusted by busy teams',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          ),
           const SizedBox(height: 6),
           const Text('Reduce parcel handoff time and keep residents informed.'),
           const SizedBox(height: 12),
           Row(
             children: const [
-              Expanded(child: _TrustCard(title: '10k+', subtitle: 'Parcels processed')),
+              Expanded(
+                child: _TrustCard(title: '10k+', subtitle: 'Parcels processed'),
+              ),
               SizedBox(width: 10),
-              Expanded(child: _TrustCard(title: '99.9%', subtitle: 'Confirm rate')),
+              Expanded(
+                child: _TrustCard(title: '99.9%', subtitle: 'Confirm rate'),
+              ),
               SizedBox(width: 10),
-              Expanded(child: _TrustCard(title: '35%', subtitle: 'Faster pickup')),
+              Expanded(
+                child: _TrustCard(title: '35%', subtitle: 'Faster pickup'),
+              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -95,9 +125,19 @@ class HomeScreen extends StatelessWidget {
       color: const Color(0xFF2F6FE4),
       child: Column(
         children: [
-          const Text('How It Works?', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600)),
+          const Text(
+            'How It Works?',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
           const SizedBox(height: 8),
-          _processStep('1', 'Parcel arrives at reception (staff scans barcode)'),
+          _processStep(
+            '1',
+            'Parcel arrives at reception (staff scans barcode)',
+          ),
           _processStep('2', 'Staff registers parcel in system'),
           _processStep('3', 'Receiver gets instant notification'),
           _processStep('4', 'Receiver collects parcel with verification'),
@@ -111,13 +151,19 @@ class HomeScreen extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6),
       padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: Row(
         children: [
           CircleAvatar(
             radius: 14,
             backgroundColor: const Color(0xFF2F6FE4),
-            child: Text(number, style: const TextStyle(color: Colors.white, fontSize: 12)),
+            child: Text(
+              number,
+              style: const TextStyle(color: Colors.white, fontSize: 12),
+            ),
           ),
           const SizedBox(width: 10),
           Expanded(child: Text(text)),
@@ -135,7 +181,10 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: const [
-              Text('Contact Us', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              Text(
+                'Contact Us',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
               SizedBox(height: 8),
               Text('Email: info@parceltrack.com'),
               Text('Phone: +1 (555) 123-4567'),
@@ -183,7 +232,10 @@ class _HeroSliderState extends State<_HeroSlider> {
       return;
     }
     final value = controller.value;
-    if (value.isInitialized && !value.isPlaying && value.position >= value.duration && value.duration != Duration.zero) {
+    if (value.isInitialized &&
+        !value.isPlaying &&
+        value.position >= value.duration &&
+        value.duration != Duration.zero) {
       _isSwitching = true;
       _switchToNext();
     }
@@ -242,24 +294,34 @@ class _HeroSliderState extends State<_HeroSlider> {
                   const Text(
                     'Modern parcel management for premium buildings',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'DropDesk automates parcel intake, notifications, and delivery proof so your team stays fast, compliant, and stress-free.',
+                    'Contractor.com helps you manage jobs, teams, vehicles, and billing in one place so your business stays organized and productive.',
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.white70),
                   ),
                   const SizedBox(height: 12),
                   ElevatedButton(
                     onPressed: () => Navigator.pushNamed(context, '/register'),
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: Colors.black87),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.black87,
+                    ),
                     child: const Text('Create Account'),
                   ),
                   const SizedBox(height: 8),
                   OutlinedButton(
                     onPressed: () => Navigator.pushNamed(context, '/login'),
-                    style: OutlinedButton.styleFrom(foregroundColor: Colors.white, side: const BorderSide(color: Colors.white)),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      side: const BorderSide(color: Colors.white),
+                    ),
                     child: const Text('Log In'),
                   ),
                 ],
@@ -285,13 +347,25 @@ class _TrustCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 3))],
+        boxShadow: const [
+          BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 3)),
+        ],
       ),
       child: Column(
         children: [
-          Text(title, style: const TextStyle(color: Color(0xFF1D4ED8), fontWeight: FontWeight.w700)),
+          Text(
+            title,
+            style: const TextStyle(
+              color: Color(0xFF1D4ED8),
+              fontWeight: FontWeight.w700,
+            ),
+          ),
           const SizedBox(height: 4),
-          Text(subtitle, textAlign: TextAlign.center, style: const TextStyle(fontSize: 11)),
+          Text(
+            subtitle,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 11),
+          ),
         ],
       ),
     );

@@ -14,7 +14,11 @@ class WorkforceIncidentReportController extends Controller
 {
     public function index(Request $request)
     {
-        $query = WorkforceIncidentReport::query()->where('user_id', $request->user()->id);
+        $query = WorkforceIncidentReport::query()->when(
+            $request->user()->project_id !== null,
+            fn ($builder) => $builder->where('project_id', $request->user()->project_id),
+            fn ($builder) => $builder->whereNull('project_id'),
+        );
 
         if ($request->filled('status')) {
             $query->where('status', $request->string('status')->toString());
@@ -22,17 +26,27 @@ class WorkforceIncidentReportController extends Controller
         if ($request->filled('severity')) {
             $query->where('severity', $request->string('severity')->toString());
         }
+        if ($request->filled('report_no')) $query->where('incident_no', 'like', '%' . $request->string('report_no')->toString() . '%');
+        if ($request->filled('from') || $request->filled('date_from')) $query->whereDate('occurred_at', '>=', $request->input('from', $request->input('date_from')));
+        if ($request->filled('to') || $request->filled('date_to')) $query->whereDate('occurred_at', '<=', $request->input('to', $request->input('date_to')));
+        if ($request->filled('jobsite')) $query->where('jobsite', 'like', '%' . $request->string('jobsite')->toString() . '%');
+        if ($request->filled('reported_by')) $query->where('employee_name', 'like', '%' . $request->string('reported_by')->toString() . '%');
+        if ($request->filled('incident_type')) $query->where('incident_type', 'like', '%' . $request->string('incident_type')->toString() . '%');
+        if ($request->filled('search')) {
+            $term = '%' . $request->string('search')->toString() . '%';
+            $query->where(fn ($builder) => $builder->where('incident_no', 'like', $term)->orWhere('incident_description', 'like', $term)->orWhere('employee_name', 'like', $term)->orWhere('jobsite', 'like', $term));
+        }
 
-        $items = $query->orderByDesc('occurred_at')->get();
+        $sortBy = in_array($request->input('sort_by'), ['incident_no', 'occurred_at', 'employee_name', 'status'], true) ? $request->input('sort_by') : 'occurred_at';
+        $direction = strtolower($request->input('sort_direction', 'desc')) === 'asc' ? 'asc' : 'desc';
+        $reports = $query->orderBy($sortBy, $direction)->paginate(min(max((int) $request->input('per_page', 10), 1), 100))->withQueryString();
 
-        return response()->json(['success' => true, 'data' => $items]);
+        return response()->json(['success' => true, 'data' => $reports->items(), 'meta' => ['current_page' => $reports->currentPage(), 'last_page' => $reports->lastPage(), 'per_page' => $reports->perPage(), 'total' => $reports->total(), 'from' => $reports->firstItem(), 'to' => $reports->lastItem()]]);
     }
 
     public function show(Request $request, WorkforceIncidentReport $incident)
     {
-        if ($incident->user_id !== $request->user()->id) {
-            return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
-        }
+        $this->assertSameProject($request, $incident);
 
         return response()->json(['success' => true, 'data' => $incident]);
     }
@@ -72,6 +86,7 @@ class WorkforceIncidentReportController extends Controller
         ]);
 
         $data['user_id'] = $request->user()->id;
+        $data['project_id'] = $request->user()->project_id;
 
         $incident = WorkforceIncidentReport::create($data);
         if (!$incident->incident_no) {
@@ -84,9 +99,7 @@ class WorkforceIncidentReportController extends Controller
 
     public function update(Request $request, WorkforceIncidentReport $incident)
     {
-        if ($incident->user_id !== $request->user()->id) {
-            return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
-        }
+        $this->assertSameProject($request, $incident);
 
         $data = $request->validate([
             'occurred_at' => ['required', 'date'],
@@ -127,9 +140,7 @@ class WorkforceIncidentReportController extends Controller
 
     public function destroy(Request $request, WorkforceIncidentReport $incident)
     {
-        if ($incident->user_id !== $request->user()->id) {
-            return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
-        }
+        $this->assertSameProject($request, $incident);
 
         $incident->delete();
 
@@ -138,9 +149,7 @@ class WorkforceIncidentReportController extends Controller
 
     public function submit(Request $request, WorkforceIncidentReport $incident)
     {
-        if ($incident->user_id !== $request->user()->id) {
-            return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
-        }
+        $this->assertSameProject($request, $incident);
 
         $flow = app(WorkforceApprovalFlow::class);
         if (!$flow->isRoleAllowed($request->user()->role ?? null, 'submit', 'incident_report')) {
@@ -177,7 +186,7 @@ class WorkforceIncidentReportController extends Controller
 
     public function approve(Request $request, WorkforceIncidentReport $incident)
     {
-        $this->assertSameCompany($request, $incident->user_id);
+        $this->assertSameProject($request, $incident);
 
         $flow = app(WorkforceApprovalFlow::class);
         if (!$flow->isRoleAllowed($request->user()->role ?? null, 'approve', 'incident_report')) {
@@ -227,7 +236,7 @@ class WorkforceIncidentReportController extends Controller
 
     public function finalize(Request $request, WorkforceIncidentReport $incident)
     {
-        $this->assertSameCompany($request, $incident->user_id);
+        $this->assertSameProject($request, $incident);
 
         $flow = app(WorkforceApprovalFlow::class);
         if (!$flow->isRoleAllowed($request->user()->role ?? null, 'final', 'incident_report')) {
@@ -263,7 +272,7 @@ class WorkforceIncidentReportController extends Controller
 
     public function reject(Request $request, WorkforceIncidentReport $incident)
     {
-        $this->assertSameCompany($request, $incident->user_id);
+        $this->assertSameProject($request, $incident);
 
         $flow = app(WorkforceApprovalFlow::class);
         if (!$flow->isRoleAllowed($request->user()->role ?? null, 'approve', 'incident_report')) {
@@ -324,5 +333,10 @@ class WorkforceIncidentReportController extends Controller
         if ($ownerCompany === '' || $ownerCompany !== $companyName) {
             abort(403, 'Unauthorized');
         }
+    }
+
+    private function assertSameProject(Request $request, WorkforceIncidentReport $incident): void
+    {
+        abort_unless((string) $incident->project_id === (string) $request->user()->project_id, 403, 'Unauthorized');
     }
 }

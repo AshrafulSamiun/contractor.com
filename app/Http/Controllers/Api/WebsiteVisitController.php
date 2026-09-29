@@ -1,0 +1,3 @@
+<?php
+namespace App\Http\Controllers\Api;use App\Http\Controllers\Controller;use App\Models\WebsiteVisit;use Illuminate\Http\Request;
+class WebsiteVisitController extends Controller{public function track(Request $r){$d=$r->validate(['path'=>'nullable|string|max:255','referrer'=>'nullable|string|max:500','visitor_key'=>'nullable|string|max:64']);WebsiteVisit::create(['visitor_key'=>$d['visitor_key']??hash('sha256',($r->ip()?:'').'|'.$r->userAgent()),'path'=>$d['path']??null,'referrer'=>$d['referrer']??null,'ip_address'=>$r->ip(),'user_agent'=>substr((string)$r->userAgent(),0,1000)]);return response()->json(['success'=>true],201);}}

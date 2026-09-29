@@ -163,12 +163,12 @@ class CalendarEventController extends Controller
         $lines = [
             'BEGIN:VCALENDAR',
             'VERSION:2.0',
-            'PRODID:-//DropDesk//Calendar//EN',
+            'PRODID:-//Contractor.com//Calendar//EN',
         ];
 
         foreach ($items as $event) {
             $lines[] = 'BEGIN:VEVENT';
-            $lines[] = 'UID:' . $event->id . '@dropdesk.local';
+            $lines[] = 'UID:' . $event->id . '@contractor.com';
             $lines[] = 'DTSTAMP:' . now()->utc()->format('Ymd\\THis\\Z');
             $lines[] = 'DTSTART:' . $event->start_at->utc()->format('Ymd\\THis\\Z');
             if ($event->end_at) {
@@ -354,8 +354,7 @@ class CalendarEventController extends Controller
         int $interval,
         array $rules = [],
         ?Carbon $startAt = null
-    ): ?Carbon
-    {
+    ): ?Carbon {
         if ($freq === 'daily') {
             return $cursor->addDays($interval);
         }
@@ -417,7 +416,7 @@ class CalendarEventController extends Controller
                 }
             }
             $weekdayLookup = [0 => 'sun', 1 => 'mon', 2 => 'tue', 3 => 'wed', 4 => 'thu', 5 => 'fri', 6 => 'sat'];
-            $data['recurrence_days_json'] = collect($days)->map(fn ($day) => $weekdayLookup[$day] ?? null)->filter()->values()->all();
+            $data['recurrence_days_json'] = collect($days)->map(fn($day) => $weekdayLookup[$day] ?? null)->filter()->values()->all();
             $data['recurrence_rules_json'] = null;
         } elseif (($data['recurrence_freq'] ?? null) === 'monthly') {
             $startAt = !empty($data['start_at']) ? Carbon::parse($data['start_at']) : Carbon::now();
@@ -524,13 +523,27 @@ class CalendarEventController extends Controller
         }
 
         $lookup = [
-            'sun' => 0, 'sunday' => 0, 0 => 0,
-            'mon' => 1, 'monday' => 1, 1 => 1,
-            'tue' => 2, 'tuesday' => 2, 2 => 2,
-            'wed' => 3, 'wednesday' => 3, 3 => 3,
-            'thu' => 4, 'thursday' => 4, 4 => 4,
-            'fri' => 5, 'friday' => 5, 5 => 5,
-            'sat' => 6, 'saturday' => 6, 6 => 6,
+            'sun' => 0,
+            'sunday' => 0,
+            0 => 0,
+            'mon' => 1,
+            'monday' => 1,
+            1 => 1,
+            'tue' => 2,
+            'tuesday' => 2,
+            2 => 2,
+            'wed' => 3,
+            'wednesday' => 3,
+            3 => 3,
+            'thu' => 4,
+            'thursday' => 4,
+            4 => 4,
+            'fri' => 5,
+            'friday' => 5,
+            5 => 5,
+            'sat' => 6,
+            'saturday' => 6,
+            6 => 6,
         ];
 
         $normalized = [];

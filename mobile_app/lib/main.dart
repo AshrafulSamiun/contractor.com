@@ -15,11 +15,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final auth = AuthProvider();
   await auth.init();
-  runApp(DropDeskApp(auth: auth));
+  runApp(ContractorApp(auth: auth));
 }
 
-class DropDeskApp extends StatelessWidget {
-  const DropDeskApp({super.key, required this.auth});
+class ContractorApp extends StatelessWidget {
+  const ContractorApp({super.key, required this.auth});
 
   final AuthProvider auth;
 
@@ -28,7 +28,7 @@ class DropDeskApp extends StatelessWidget {
     return ChangeNotifierProvider.value(
       value: auth,
       child: MaterialApp(
-        title: 'DropDesk',
+        title: 'Contractor.com',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF2F6FE4)),
           useMaterial3: true,
@@ -54,7 +54,9 @@ class DropDeskApp extends StatelessWidget {
               backgroundColor: const Color(0xFF2F6FE4),
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               textStyle: const TextStyle(fontWeight: FontWeight.w600),
             ),
           ),
@@ -62,13 +64,17 @@ class DropDeskApp extends StatelessWidget {
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.white,
               side: const BorderSide(color: Colors.white70),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
           ),
           cardTheme: CardTheme(
             elevation: 6,
             margin: const EdgeInsets.symmetric(vertical: 8),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
           ),
         ),
         initialRoute: auth.verifySession != null ? '/verify' : '/',

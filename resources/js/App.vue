@@ -207,6 +207,11 @@ onMounted(() => {
   if (canPollNotifications.value) {
     startPolling()
   }
+  if (!route.meta?.requiresAuth) {
+    const visitorKey = localStorage.getItem('pm_visitor_key') || crypto.randomUUID()
+    localStorage.setItem('pm_visitor_key', visitorKey)
+    client.post('/website-visits', { visitor_key: visitorKey, path: route.path, referrer: document.referrer || null }).catch(() => {})
+  }
 })
 
 function startPolling() {

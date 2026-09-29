@@ -1,0 +1,57 @@
+.pm-dashboard-main:has(.emp-page),
+.pm-dashboard-content:has(.emp-page),
+.pm-dashboard-main:has(.bank-page),
+.pm-dashboard-content:has(.bank-page) {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.pm-dashboard-main:has(.insurance-page),
+.pm-dashboard-content:has(.insurance-page) {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.emp-page,
+.bank-page {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+}
+
+.insurance-page {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+}
+
+.emp-directory,
+.emp-editor,
+.bank-summary,
+.bank-list-panel,
+.form-block {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.emp-table-wrap {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.bank-table-wrap {
+  box-sizing: border-box;
+  width: calc(100% - 28px);
+  max-width: calc(100% - 28px);
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}

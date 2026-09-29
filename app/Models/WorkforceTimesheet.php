@@ -11,6 +11,7 @@ class WorkforceTimesheet extends Model
 
     protected $fillable = [
         'user_id',
+        'project_id',
         'timesheet_no',
         'employee_name',
         'employee_code',
@@ -28,6 +29,7 @@ class WorkforceTimesheet extends Model
     ];
 
     protected $casts = [
+        'project_id' => 'integer',
         'week_start' => 'date',
         'week_end' => 'date',
         'entries_json' => 'array',

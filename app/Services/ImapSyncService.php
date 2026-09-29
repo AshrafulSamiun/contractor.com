@@ -63,7 +63,7 @@ class ImapSyncService
             return ['success' => true, 'imported' => 0];
         }
 
-        $uids = array_filter($uids, fn ($uid) => $uid > $lastUid);
+        $uids = array_filter($uids, fn($uid) => $uid > $lastUid);
         $uids = array_slice($uids, -$limit);
         $imported = 0;
 
@@ -96,7 +96,7 @@ class ImapSyncService
             $references = $this->extractHeader($headers, 'References');
 
             $threadId = $this->resolveThreadId($userId, $inReplyTo, $references, $subject);
-            $messageId = $messageId ?: ('<' . Str::uuid()->toString() . '@dropdesk.local>');
+            $messageId = $messageId ?: ('<' . Str::uuid()->toString() . '@contractor.com>');
 
             $spam = $this->scoreSpam($subject, $bodyText, $bodyHtml);
 
@@ -327,8 +327,18 @@ class ImapSyncService
         $text = strtolower(trim(($subject ?? '') . ' ' . ($bodyText ?? '') . ' ' . strip_tags($bodyHtml ?? '')));
         $score = 0;
         $keywords = [
-            'free', 'winner', 'urgent', 'limited time', 'click here', 'verify account',
-            'password', 'bank', 'invoice', 'wire transfer', 'bitcoin', 'gift card',
+            'free',
+            'winner',
+            'urgent',
+            'limited time',
+            'click here',
+            'verify account',
+            'password',
+            'bank',
+            'invoice',
+            'wire transfer',
+            'bitcoin',
+            'gift card',
         ];
         foreach ($keywords as $word) {
             if (str_contains($text, $word)) {

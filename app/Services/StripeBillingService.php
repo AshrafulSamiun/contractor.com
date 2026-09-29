@@ -117,6 +117,8 @@ class StripeBillingService
                 'amount_due' => $payload['amount_due'] ?? null,
                 'amount_paid' => $payload['amount_paid'] ?? null,
                 'amount_remaining' => $payload['amount_remaining'] ?? null,
+                'plan_name' => $payload['plan_name'] ?? null,
+                'tax_amount' => $payload['tax_amount'] ?? null,
                 'period_start' => $payload['period_start'] ?? null,
                 'period_end' => $payload['period_end'] ?? null,
                 'hosted_invoice_url' => $payload['hosted_invoice_url'] ?? null,

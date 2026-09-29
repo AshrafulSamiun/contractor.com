@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>DeskDrop Verification Code</title>
+    <title>Contractor.com Verification Code</title>
   </head>
   <body style="margin:0;padding:0;background:#0b1220;font-family:Arial,Helvetica,sans-serif;color:#0f172a;">
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#0b1220;padding:32px 12px;">
@@ -12,7 +12,7 @@
           <table role="presentation" width="560" cellspacing="0" cellpadding="0" style="background:#ffffff;border-radius:18px;overflow:hidden;box-shadow:0 18px 50px rgba(2,6,23,0.35);">
             <tr>
               <td style="background:linear-gradient(135deg,#0f1e3a,#1e40af);padding:26px 30px;color:#ffffff;">
-                <div style="font-size:18px;font-weight:700;letter-spacing:0.5px;">DeskDrop</div>
+                <div style="font-size:18px;font-weight:700;letter-spacing:0.5px;">Contractor.com</div>
                 <div style="font-size:12px;opacity:0.9;margin-top:6px;text-transform:uppercase;letter-spacing:1.6px;">Verification</div>
               </td>
             </tr>
@@ -20,7 +20,7 @@
               <td style="padding:30px 30px 8px;">
                 <div style="font-size:16px;font-weight:600;margin-bottom:8px;color:#0f172a;">Hi {{ $name ?? 'there' }},</div>
                 <div style="font-size:14px;line-height:1.7;color:#475569;">
-                  Here is your one-time verification code to complete your DeskDrop sign-in.
+                  Here is your one-time verification code to complete your Contractor.com sign-in.
                 </div>
               </td>
             </tr>
@@ -55,7 +55,7 @@
             </tr>
             <tr>
               <td style="background:#0f172a;padding:16px 30px;font-size:12px;color:#cbd5f5;">
-                DeskDrop Security - Never share this code.
+                Contractor.com Security - Never share this code.
               </td>
             </tr>
           </table>

@@ -31,6 +31,7 @@ class User extends Authenticatable
         'avatar_url',
         'role',
         'is_active',
+        'project_id',
         'selected_plan',
         'email_otp',
         'phone_otp',
@@ -41,6 +42,8 @@ class User extends Authenticatable
         'stripe_subscription_status',
         'stripe_payment_method_id',
         'password',
+        'security_pin_code',
+        'expiry_date',
     ];
 
     /**
@@ -50,6 +53,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
+        'security_pin_code',
         'remember_token',
     ];
 
@@ -66,6 +70,8 @@ class User extends Authenticatable
             'otp_expires_at' => 'datetime',
             'account_setup_completed_at' => 'datetime',
             'password' => 'hashed',
+            'security_pin_code' => 'hashed',
+            'expiry_date' => 'date',
         ];
     }
 }

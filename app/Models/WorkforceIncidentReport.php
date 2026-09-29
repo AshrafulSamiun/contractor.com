@@ -11,6 +11,7 @@ class WorkforceIncidentReport extends Model
 
     protected $fillable = [
         'user_id',
+        'project_id',
         'incident_no',
         'jobsite',
         'shift_name',
@@ -44,6 +45,7 @@ class WorkforceIncidentReport extends Model
     ];
 
     protected $casts = [
+        'project_id' => 'integer',
         'occurred_at' => 'datetime',
         'expire_date' => 'date',
         'incident_categories' => 'array',

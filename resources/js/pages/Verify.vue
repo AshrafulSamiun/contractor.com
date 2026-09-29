@@ -82,23 +82,23 @@ const resendCooldown = ref(45)
 let cooldownTimer = null
 
 const verifySession = localStorage.getItem('pm_verify_session')
-const verifyVia = localStorage.getItem('pm_verify_via') || 'email'
+const verifyVia = ref(localStorage.getItem('pm_verify_via') || 'email')
 
-const viaLabel = computed(() => (verifyVia === 'sms' ? 'phone' : 'email'))
+const viaLabel = computed(() => (verifyVia.value === 'sms' ? 'phone' : 'email'))
 const verificationIntro = computed(() =>
-  verifyVia === 'sms'
+  verifyVia.value === 'sms'
     ? 'We sent a 6-digit code to your phone.'
     : 'We sent a 6-digit code and a secure verification link to your email.'
 )
 const deliveryHint = computed(() =>
-  verifyVia === 'sms'
+  verifyVia.value === 'sms'
     ? "Didn't receive it? Check your SMS inbox."
     : "Didn't receive it? Check spam or resend."
 )
 const resendLabel = computed(() =>
   resendCooldown.value > 0
     ? `Resend in ${resendCooldown.value}s`
-    : verifyVia === 'sms'
+    : verifyVia.value === 'sms'
       ? 'Resend code'
       : 'Resend email'
 )
@@ -148,7 +148,11 @@ const onVerify = async () => {
       success.value = true
       localStorage.removeItem('pm_verify_session')
       localStorage.removeItem('pm_verify_via')
-      if (data.data.user?.account_setup_completed_at) {
+      const isSuperAdmin = data.data.user?.is_super_admin
+        || String(data.data.user?.role || '').trim().toLowerCase().replace(/[\s-]+/g, '_') === 'super_admin'
+      if (isSuperAdmin) {
+        router.push('/super-admin/dashboard')
+      } else if (data.data.user?.account_access_ready) {
         router.push('/dashboard')
       } else {
         router.push('/account-setup')
@@ -178,7 +182,11 @@ const resend = async () => {
   if (resendCooldown.value > 0) return
   resendLoading.value = true
   try {
-    await client.post('/verify/resend', { verify_session: verifySession })
+    const { data } = await client.post('/verify/resend', { verify_session: verifySession })
+    if (data?.data?.verify_via) {
+      verifyVia.value = data.data.verify_via
+      localStorage.setItem('pm_verify_via', data.data.verify_via)
+    }
     startCooldown()
   } catch (e) {
     if (e?.response?.status === 429) {

@@ -247,7 +247,7 @@ class EmailMessageController extends Controller
             $bodyText = $bodyText ? $bodyText . "\n\n" . $settings['signature_text'] : $settings['signature_text'];
         }
 
-        $messageId = $message->message_id ? trim($message->message_id, '<>') : (Str::uuid()->toString() . '@dropdesk.local');
+        $messageId = $message->message_id ? trim($message->message_id, '<>') : (Str::uuid()->toString() . '@contractor.com');
         $message->message_id = $messageId;
 
         $attachments = $message->attachments()->get();
@@ -394,7 +394,7 @@ class EmailMessageController extends Controller
         $maxUserTotalBytes = $maxUserTotalMb * 1024 * 1024;
 
         $currentTotal = (int) $message->attachments()->sum('size');
-        $incomingTotal = collect($validated['files'])->sum(fn ($file) => $file->getSize());
+        $incomingTotal = collect($validated['files'])->sum(fn($file) => $file->getSize());
         $maxTotalBytes = $maxTotalMb * 1024 * 1024;
         if ($currentTotal + $incomingTotal > $maxTotalBytes) {
             return response()->json([

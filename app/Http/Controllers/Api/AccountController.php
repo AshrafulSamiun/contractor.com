@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AccountSetup;
 use App\Models\BillingInvoice;
 use App\Models\Country;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -14,10 +15,10 @@ class AccountController extends Controller
 {
     protected function setup(Request $request): AccountSetup
     {
-        return AccountSetup::firstOrCreate(
-            ['user_id' => $request->user()->id],
-            ['current_step' => 1]
-        );
+        $projectId = (int) $request->user()->project_id;
+        abort_if($projectId < 1, 404, 'No account setup is assigned to this project.');
+
+        return AccountSetup::query()->findOrFail($projectId);
     }
 
     protected function mergeSetup(AccountSetup $setup, array $payload): AccountSetup
@@ -38,6 +39,13 @@ class AccountController extends Controller
             'data' => [
                 'user' => $user,
                 'profile' => $setup->data['profile'] ?? [],
+                'system_admin' => $setup->data['system_admin'] ?? [],
+                'account_info' => [
+                    'account_number' => 'ACC-' . str_pad((string) $user->id, 6, '0', STR_PAD_LEFT),
+                    'created_at' => $user->created_at,
+                    'status' => $user->is_active ? 'Active' : 'Inactive',
+                    'position' => $user->role ? ucfirst(str_replace('_', ' ', $user->role)) : 'User',
+                ],
             ],
         ]);
     }
@@ -57,6 +65,7 @@ class AccountController extends Controller
             'country' => ['nullable', 'string', 'max:100'],
             'postal_code' => ['nullable', 'string', 'max:30'],
             'avatar_url' => ['nullable', 'string', 'max:500'],
+            'position' => ['nullable', 'string', 'max:100'],
         ], [
             'phone.regex' => 'Phone number must be in E.164 format (e.g. +14165550100).',
         ]);
@@ -73,6 +82,9 @@ class AccountController extends Controller
                 'address_line2' => $request->input('address_line2'),
                 'city' => $request->input('city'),
                 'state' => $request->input('state'),
+            ]),
+            'system_admin' => array_merge($setup->data['system_admin'] ?? [], [
+                'position' => $request->input('position'),
             ]),
         ]);
 
@@ -105,40 +117,109 @@ class AccountController extends Controller
     public function billing(Request $request)
     {
         $setup = $this->setup($request);
+        $form = data_get($setup->data, 'setup_form', []);
+        $schedule = is_array($form['payment_schedule_items'] ?? null)
+            ? collect($form['payment_schedule_items'])->sortBy('auto_charge_date')->values()
+            : collect();
+        $today = now()->startOfDay();
+        $upcoming = $schedule->filter(fn ($item) => ! empty($item['auto_charge_date']) && Carbon::parse($item['auto_charge_date'])->startOfDay()->gte($today))->values();
+        $next = $upcoming->first();
 
         return response()->json([
             'success' => true,
-            'data' => $setup->data['billing'] ?? [],
+            'data' => [
+                'account_setup_id' => $setup->id,
+                'company_name' => $setup->company_name,
+                'currency' => $setup->currency_code ?: 'CAD',
+                'billing_cycle' => $setup->billing_cycle,
+                'subscription_plan' => $setup->subscription_plan,
+                'next_payment_date' => $next['auto_charge_date'] ?? null,
+                'next_payment_amount' => $next['amount'] ?? ($form['payment_schedule_amount'] ?? null),
+                'outstanding_balance' => null,
+                'tax_rate' => 5,
+                'card_type' => $setup->primary_card_type,
+                'card_last_four' => $setup->primary_card_last_four,
+                'card_expiry' => $setup->primary_card_expiry,
+                'card_status' => $setup->primary_card_last_four ? 'Default' : 'Not configured',
+                'payment_schedule' => $schedule->all(),
+                'updated_at' => optional($setup->updated_at)->toDateString(),
+            ],
         ]);
     }
 
     public function updateBilling(Request $request)
     {
-        $validated = $request->validate([
-            'billing_address' => ['nullable', 'string', 'max:255'],
-            'billing_city' => ['nullable', 'string', 'max:100'],
-            'billing_state' => ['nullable', 'string', 'max:100'],
-            'billing_zip' => ['nullable', 'string', 'max:30'],
-            'billing_country_id' => ['nullable', 'integer', Rule::exists('countries', 'id')],
-            'billing_country' => ['nullable', 'string', 'max:100'],
-            'tax_id' => ['nullable', 'string', 'max:50'],
-            'invoice_email' => ['nullable', 'email'],
-            'billing_cycle' => ['nullable', 'in:monthly,annual'],
-            'auto_renew' => ['nullable', 'boolean'],
-            'payment_method' => ['nullable', 'string', 'max:100'],
-            'last4' => ['nullable', 'string', 'max:8'],
-        ]);
-        $validated = $this->normalizeCountryPayload($validated, 'billing_country_id', 'billing_country');
-
         $setup = $this->setup($request);
-        $this->mergeSetup($setup, [
-            'billing' => array_merge($setup->data['billing'] ?? [], $validated),
+        $validated = $request->validate([
+            'primary_card_type' => ['nullable', 'string', 'max:50'],
+            'primary_card_last_four' => ['nullable', 'regex:/^\d{4}$/'],
+            'primary_card_expiry' => ['nullable', 'regex:/^(0[1-9]|1[0-2])\/\d{2}$/'],
+            'primary_cardholder_name' => ['nullable', 'string', 'max:150'],
         ]);
+        $setup->fill($validated);
+        $setup->save();
 
         return response()->json([
             'success' => true,
-            'data' => $setup->data['billing'] ?? [],
+            'data' => $validated,
         ]);
+    }
+
+    /** Paid subscription invoices, with values returned in major currency units. */
+    public function taxReport(Request $request)
+    {
+        $validated = $request->validate([
+            'from_date' => ['nullable', 'date'],
+            'to_date' => ['nullable', 'date', 'after_or_equal:from_date'],
+            'status' => ['nullable', 'in:paid,all'],
+        ]);
+
+        $setup = $this->setup($request);
+        $from = isset($validated['from_date']) ? Carbon::parse($validated['from_date'])->startOfDay() : now()->startOfMonth();
+        $to = isset($validated['to_date']) ? Carbon::parse($validated['to_date'])->endOfDay() : now()->endOfMonth();
+        $taxRate = 5.0;
+
+        $invoices = BillingInvoice::query()
+            ->where('user_id', $request->user()->id)
+            ->when(($validated['status'] ?? 'paid') === 'paid', fn ($query) => $query->where('status', 'paid'))
+            ->orderBy('period_start')
+            ->get()
+            ->filter(function (BillingInvoice $invoice) use ($from, $to) {
+                $date = $invoice->period_start ?: $invoice->created_at;
+                return $date && $date->betweenIncluded($from, $to);
+            })
+            ->values()
+            ->map(function (BillingInvoice $invoice) use ($setup, $taxRate) {
+                $paidCents = (int) ($invoice->amount_paid ?? 0);
+                $taxCents = $invoice->tax_amount !== null
+                    ? (int) $invoice->tax_amount
+                    : (int) round($paidCents * $taxRate / (100 + $taxRate));
+                $subtotalCents = max(0, $paidCents - $taxCents);
+
+                return [
+                    'date' => optional($invoice->period_start ?: $invoice->created_at)->toDateString(),
+                    'invoice_number' => $invoice->stripe_invoice_id,
+                    'details' => $invoice->plan_name ?: ($setup->subscription_plan ? ucfirst($setup->subscription_plan) . ' Service Plan' : 'Software Service Plan'),
+                    'subtotal' => round($subtotalCents / 100, 2),
+                    'tax_name' => 'GST',
+                    'tax_rate' => $taxRate,
+                    'tax' => round($taxCents / 100, 2),
+                    'total_payment' => round($paidCents / 100, 2),
+                    'status' => ucfirst($invoice->status ?: 'paid'),
+                ];
+            });
+
+        return response()->json(['success' => true, 'data' => [
+            'company_name' => $setup->company_name,
+            'account_number' => 'AC-' . str_pad((string) $setup->id, 6, '0', STR_PAD_LEFT),
+            'country' => $setup->company_country ?: 'Not set',
+            'currency' => $setup->currency_code ?: 'CAD',
+            'tax_number' => $setup->tax_number ?: 'Not set',
+            'tax_name' => 'GST', 'tax_rate' => $taxRate,
+            'from_date' => $from->toDateString(), 'to_date' => $to->toDateString(),
+            'rows' => $invoices->all(),
+            'totals' => ['subtotal' => round($invoices->sum('subtotal'), 2), 'tax' => round($invoices->sum('tax'), 2), 'total_payment' => round($invoices->sum('total_payment'), 2)],
+        ]]);
     }
 
     public function security(Request $request)

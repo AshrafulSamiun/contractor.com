@@ -3,15 +3,18 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\Concerns\ResolvesAccountSetupProject;
 use App\Models\Seller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class SellerController extends Controller
 {
+    use ResolvesAccountSetupProject;
+
     public function index(Request $request)
     {
-        $query = Seller::query()->where('user_id', $request->user()->id);
+        $query = Seller::query()->where('project_id', $this->accountSetupProjectId($request));
 
         if ($request->filled('seller_name')) {
             $query->where('seller_name', 'like', '%' . $request->seller_name . '%');
@@ -46,17 +49,18 @@ class SellerController extends Controller
 
     public function show(Request $request, Seller $seller)
     {
-        if ($response = $this->denyUnlessOwns($request, $seller)) {
-            return $response;
-        }
+        $this->ensureProjectOwns($request, $seller);
 
         return response()->json(['success' => true, 'data' => $seller]);
     }
 
     public function store(Request $request)
     {
+        $projectId = $this->accountSetupProjectId($request);
+
         $request->merge([
             'seller_name' => $this->normalizeTextValue($request->input('seller_name'), false),
+            'contact_person' => $this->normalizeTextValue($request->input('contact_person')),
             'email' => $this->normalizeTextValue($request->input('email')),
             'phone' => $this->normalizePhoneValue($request->input('phone')),
             'website' => $this->normalizeTextValue($request->input('website')),
@@ -69,8 +73,12 @@ class SellerController extends Controller
                 'string',
                 'min:2',
                 'max:255',
-                Rule::unique('sellers', 'seller_name')->where(fn ($q) => $q->where('user_id', $request->user()->id)),
+                Rule::unique('sellers', 'seller_name')->where(fn ($q) => $q->where('project_id', $projectId)),
             ],
+            'contact_person' => ['nullable', 'string', 'max:255'],
+            'address' => ['nullable', 'string', 'max:2000'],
+            'tax_number' => ['nullable', 'string', 'max:100'],
+            'vendor_category' => ['nullable', 'string', 'max:100'],
             'email' => ['nullable', 'email', 'max:255', 'required_without:phone'],
             'phone' => ['nullable', 'string', 'max:20', 'regex:/^\+[1-9]\d{7,14}$/', 'required_without:email'],
             'website' => ['nullable', 'url:http,https', 'max:255'],
@@ -88,6 +96,7 @@ class SellerController extends Controller
         ]);
 
         $data['user_id'] = $request->user()->id;
+        $data['project_id'] = $projectId;
 
         $seller = Seller::create($data);
 
@@ -96,12 +105,12 @@ class SellerController extends Controller
 
     public function update(Request $request, Seller $seller)
     {
-        if ($response = $this->denyUnlessOwns($request, $seller)) {
-            return $response;
-        }
+        $projectId = $this->accountSetupProjectId($request);
+        $this->ensureProjectOwns($request, $seller, $projectId);
 
         $request->merge([
             'seller_name' => $this->normalizeTextValue($request->input('seller_name'), false),
+            'contact_person' => $this->normalizeTextValue($request->input('contact_person')),
             'email' => $this->normalizeTextValue($request->input('email')),
             'phone' => $this->normalizePhoneValue($request->input('phone')),
             'website' => $this->normalizeTextValue($request->input('website')),
@@ -115,9 +124,13 @@ class SellerController extends Controller
                 'min:2',
                 'max:255',
                 Rule::unique('sellers', 'seller_name')
-                    ->where(fn ($q) => $q->where('user_id', $request->user()->id))
+                    ->where(fn ($q) => $q->where('project_id', $projectId))
                     ->ignore($seller->id),
             ],
+            'contact_person' => ['nullable', 'string', 'max:255'],
+            'address' => ['nullable', 'string', 'max:2000'],
+            'tax_number' => ['nullable', 'string', 'max:100'],
+            'vendor_category' => ['nullable', 'string', 'max:100'],
             'email' => ['nullable', 'email', 'max:255', 'required_without:phone'],
             'phone' => ['nullable', 'string', 'max:20', 'regex:/^\+[1-9]\d{7,14}$/', 'required_without:email'],
             'website' => ['nullable', 'url:http,https', 'max:255'],
@@ -141,13 +154,18 @@ class SellerController extends Controller
 
     public function destroy(Request $request, Seller $seller)
     {
-        if ($response = $this->denyUnlessOwns($request, $seller)) {
-            return $response;
-        }
+        $this->ensureProjectOwns($request, $seller);
 
         $seller->delete();
 
         return response()->json(['success' => true]);
+    }
+
+    protected function ensureProjectOwns(Request $request, Seller $seller, ?int $projectId = null): void
+    {
+        $projectId ??= $this->accountSetupProjectId($request);
+
+        abort_unless((int) $seller->project_id === $projectId, 404);
     }
 
     protected function normalizePhoneValue(mixed $value): ?string

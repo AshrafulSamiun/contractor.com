@@ -8,16 +8,10 @@ export default defineConfig({
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.js'],
             refresh: true,
-            buildDirectory: 'app',
         }),
         vue(),
         tailwindcss(),
     ],
-    base: '/app/',
-    build: {
-        outDir: 'public/app',
-        emptyOutDir: true,
-    },
     server: {
         host: '127.0.0.1',
         port: 5173,

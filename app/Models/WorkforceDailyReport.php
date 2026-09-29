@@ -11,6 +11,7 @@ class WorkforceDailyReport extends Model
 
     protected $fillable = [
         'user_id',
+        'project_id',
         'report_no',
         'report_location',
         'report_date',
@@ -20,18 +21,26 @@ class WorkforceDailyReport extends Model
         'summary',
         'report_notes',
         'employee_name',
+        'employee_code',
+        'employee_phone',
+        'employee_email',
         'expire_date',
         'licence_no',
         'is_valid',
+        'worked_on_stat_holiday',
         'metrics_json',
+        'details_json',
         'status',
     ];
 
     protected $casts = [
+        'project_id' => 'integer',
         'report_date' => 'date',
         'shift_time' => 'string',
         'expire_date' => 'date',
         'metrics_json' => 'array',
+        'details_json' => 'array',
         'is_valid' => 'boolean',
+        'worked_on_stat_holiday' => 'boolean',
     ];
 }

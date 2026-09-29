@@ -1,0 +1,3 @@
+<?php
+use Illuminate\Database\Migrations\Migration;use Illuminate\Database\Schema\Blueprint;use Illuminate\Support\Facades\Schema;
+return new class extends Migration {public function up():void{Schema::create('support_ticket_activities',function(Blueprint $t){$t->id();$t->foreignId('support_ticket_id')->constrained()->cascadeOnDelete();$t->unsignedBigInteger('actor_id')->nullable();$t->string('actor_name',150);$t->string('actor_type',40)->default('staff');$t->string('activity_type',80);$t->text('message')->nullable();$t->string('status',40)->nullable();$t->timestamps();});}public function down():void{Schema::dropIfExists('support_ticket_activities');}};

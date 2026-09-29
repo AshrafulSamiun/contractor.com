@@ -47,7 +47,8 @@
       </div>
 
       <section class="pm-dashboard-content">
-        <div class="container">
+        <template v-if="bare"><slot /></template>
+        <div v-else class="container">
           <div class="pm-page-head">
             <div>
               <h2>{{ title }}</h2>
@@ -69,8 +70,9 @@ import AppSidebar from './AppSidebar.vue'
 import { authState } from '../store/auth'
 
 defineProps({
-  title: { type: String, required: true },
-  subtitle: { type: String, required: true },
+  title: { type: String, default: '' },
+  subtitle: { type: String, default: '' },
+  bare: { type: Boolean, default: false },
 })
 
 const search = ref('')

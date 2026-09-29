@@ -1,0 +1,2 @@
+<?php
+namespace App\Models;use Illuminate\Database\Eloquent\Model;use Illuminate\Database\Eloquent\SoftDeletes;class ChartOfAccount extends Model{use SoftDeletes;protected $fillable=['project_id','account_number','account_name','account_sub_type','opening_balance','opening_balance_date','currency_id','sales_tax_id','dedicated_account_holders','status_active','notes','description','created_by','updated_by'];protected $casts=['opening_balance'=>'decimal:2','opening_balance_date'=>'date','status_active'=>'boolean','dedicated_account_holders'=>'array'];}

@@ -1,102 +1,52 @@
 <template>
-  <AccountLayout title="Account Security" subtitle="Update passwords and security preferences.">
-    <template #actions>
-      <button class="btn btn-primary" type="button" @click="saveSecurity">Save Security</button>
-    </template>
-
-    <div class="pm-dash-card pm-panel mb-4">
-      <h4 class="mb-3">Password Update</h4>
-      <div class="row g-3">
-        <div class="col-md-4">
-          <label class="pm-field-label">Current Password</label>
-          <input v-model="form.current_password" type="password" class="form-control" placeholder="Current password" />
-        </div>
-        <div class="col-md-4">
-          <label class="pm-field-label">New Password</label>
-          <input v-model="form.new_password" type="password" class="form-control" placeholder="New password" />
-        </div>
-        <div class="col-md-4">
-          <label class="pm-field-label">Security PIN</label>
-          <input v-model="form.security_pin" class="form-control" placeholder="PIN" />
-        </div>
+  <AccountLayout bare>
+    <div class="security-page">
+      <div class="security-heading"><h1>Account Security</h1><p>Last Updated: {{ formatDate(security.updated_at || new Date()) }}</p></div>
+      <div class="security-notice"><span>My Account Status: <strong>Active</strong></span><span class="notice-message"><b>i</b> Re-login required after changing your password, PIN, or 2FA settings.</span></div>
+      <div v-if="message" class="security-feedback success">{{ message }}</div><div v-if="error" class="security-feedback error">{{ error }}</div>
+      <div class="security-grid">
+        <section class="security-card credentials-card"><h2>1. Password &amp; Security PIN</h2><div class="credential-columns"><div><h3>Password</h3><p>Last Changed: {{ formatDate(security.password_changed_at) }}</p><button class="outline-button" type="button" @click="openDialog('password')">Change Password</button></div><div><h3>Security PIN Code</h3><p class="pin-dots">••••</p><button class="outline-button" type="button" @click="openDialog('pin')">Change PIN</button></div></div></section>
+        <section class="security-card twofa-card"><h2>2. Two-Factor Authentication (2FA)</h2><div class="twofa-content"><div><span>Status</span><strong>{{ security.mfa_enabled ? 'Enabled' : 'Disabled' }}</strong></div><div><span>Verification Method</span><strong>{{ security.verification_method || 'Email & Phone' }}</strong></div><button class="toggle" :class="{ on: security.mfa_enabled }" type="button" :aria-pressed="security.mfa_enabled" @click="toggleMfa"><i></i></button><button class="outline-button" type="button" @click="manage2fa">Manage 2FA</button></div></section>
+        <section class="security-card devices-card"><h2>3. Registered Devices</h2><p class="card-note"><b>i</b> Device Limit: Maximum two registered devices per user.</p><div class="security-table-wrap"><table class="security-table"><thead><tr><th>Device Name</th><th>Device Type</th><th>Registered Date</th><th>Status</th><th>Action</th></tr></thead><tbody><tr v-for="device in security.registered_devices" :key="device.id"><td>{{ device.name }}</td><td>{{ device.type }}</td><td>{{ formatDate(device.registered_date) }}</td><td>{{ device.status }}</td><td><button class="small-button" type="button" @click="removeDevice(device)">Remove</button></td></tr><tr v-if="!security.registered_devices?.length"><td colspan="5" class="empty">No registered devices.</td></tr></tbody></table></div></section>
+        <section class="security-card sessions-card"><h2>4. Active Sessions</h2><div class="security-table-wrap"><table class="security-table"><thead><tr><th>Device</th><th>Browser</th><th>Location</th><th>Last Active</th><th>Status</th></tr></thead><tbody><tr v-for="session in security.active_sessions" :key="session.id"><td>{{ session.device }}</td><td>{{ session.browser }}</td><td>{{ session.location }}</td><td>{{ formatDate(session.last_active) }}</td><td>{{ session.status }}</td></tr><tr v-if="!security.active_sessions?.length"><td colspan="5" class="empty">No active sessions.</td></tr></tbody></table></div><button class="logout-button" type="button" @click="logoutAll">Log Out from All Devices</button></section>
       </div>
+      <section class="security-card history-card"><h2>5. Login History</h2><div class="security-table-wrap"><table class="security-table"><thead><tr><th>Date</th><th>Device</th><th>Location</th><th>Result</th></tr></thead><tbody><tr v-for="(login, index) in security.login_history" :key="`${login.date}-${index}`"><td>{{ formatDate(login.date) }}</td><td>{{ login.device }}</td><td>{{ login.location }}</td><td>{{ login.result }}</td></tr><tr v-if="!security.login_history?.length"><td colspan="4" class="empty">No login history available.</td></tr></tbody></table></div></section>
     </div>
-
-    <div class="pm-dash-card pm-panel">
-      <h4 class="mb-3">Security Preferences</h4>
-      <div class="row g-3">
-        <div class="col-md-4">
-          <label class="pm-field-label">MFA Enabled</label>
-          <select v-model="form.mfa_enabled" class="form-control">
-            <option :value="true">Enabled</option>
-            <option :value="false">Disabled</option>
-          </select>
-        </div>
-        <div class="col-md-4">
-          <label class="pm-field-label">Login Alerts</label>
-          <select v-model="form.login_alerts" class="form-control">
-            <option :value="true">Enabled</option>
-            <option :value="false">Disabled</option>
-          </select>
-        </div>
-        <div class="col-md-4">
-          <label class="pm-field-label">Session Timeout (min)</label>
-          <input v-model.number="form.session_timeout" type="number" class="form-control" min="5" max="240" />
-        </div>
-        <div class="col-md-4">
-          <label class="pm-field-label">Device Limit</label>
-          <input v-model.number="form.device_limit" type="number" class="form-control" min="1" max="50" />
-        </div>
-      </div>
-      <div v-if="message" class="text-success mt-3">{{ message }}</div>
-      <div v-if="error" class="text-danger mt-3">{{ error }}</div>
-    </div>
+    <div v-if="dialog" class="dialog-backdrop" @click.self="closeDialog"><form class="security-dialog" @submit.prevent="submitDialog"><button class="dialog-close" type="button" aria-label="Close" @click="closeDialog">×</button><h2>Change {{ dialog === 'password' ? 'Password' : 'Security PIN' }}</h2><label>Current {{ dialog === 'password' ? 'Password' : 'PIN' }}<input v-model="credential.current" required :type="showCredential ? 'text' : 'password'" autocomplete="current-password" /></label><label>New {{ dialog === 'password' ? 'Password' : 'PIN' }}<input v-model="credential.newValue" required :type="showCredential ? 'text' : 'password'" :minlength="dialog === 'password' ? 8 : 4" autocomplete="new-password" /></label><label>Confirm New {{ dialog === 'password' ? 'Password' : 'PIN' }}<input v-model="credential.confirmation" required :type="showCredential ? 'text' : 'password'" autocomplete="new-password" /></label><label class="show-credential"><input v-model="showCredential" type="checkbox" /> Show values</label><p v-if="dialogError" class="dialog-error">{{ dialogError }}</p><div class="dialog-actions"><button class="outline-button" type="button" @click="closeDialog">Cancel</button><button class="solid-button" :disabled="saving">{{ saving ? 'Saving…' : 'Save Changes' }}</button></div></form></div>
   </AccountLayout>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import AccountLayout from '../components/AccountLayout.vue'
 import client from '../api/client'
 import { setFlash } from '../store/flash'
-
-const form = ref({
-  security_pin: '',
-  mfa_enabled: false,
-  login_alerts: true,
-  session_timeout: 30,
-  device_limit: 5,
-  current_password: '',
-  new_password: '',
-})
-
-const message = ref('')
-const error = ref('')
-
-const loadSecurity = async () => {
-  try {
-    const { data } = await client.get('/account/security')
-    if (data?.success && data.data) {
-      form.value = { ...form.value, ...data.data }
-    }
-  } catch {
-    // ignore
-  }
+const security = reactive({ mfa_enabled: true, verification_method: 'Email & Phone', registered_devices: [], active_sessions: [], login_history: [] })
+const message = ref(''), error = ref(''), dialog = ref(''), saving = ref(false), showCredential = ref(false), dialogError = ref('')
+const credential = reactive({ current: '', newValue: '', confirmation: '' })
+const formatDate = (value) => {
+  if (!value) return 'Not available'
+  const date = value instanceof Date
+    ? value
+    : new Date(/^\d{4}-\d{2}-\d{2}$/.test(String(value)) ? `${value}T12:00:00` : value)
+  return Number.isNaN(date.getTime())
+    ? 'Not available'
+    : new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(date)
 }
-
-const saveSecurity = async () => {
-  message.value = ''
-  error.value = ''
-  try {
-    await client.put('/account/security', form.value)
-    message.value = 'Security settings saved.'
-    setFlash('Security updated.', 'success', 2000)
-    form.value.current_password = ''
-    form.value.new_password = ''
-  } catch (e) {
-    error.value = e?.response?.data?.message || 'Failed to update security.'
-  }
-}
-
+const applySecurity = (data) => Object.assign(security, data || {}, { registered_devices: data?.registered_devices || [], active_sessions: data?.active_sessions || [], login_history: data?.login_history || [] })
+const loadSecurity = async () => { try { applySecurity((await client.get('/account/security')).data.data) } catch (e) { error.value = e?.response?.data?.message || 'Unable to load account security.' } }
+const flash = (text) => { message.value = text; error.value = ''; setFlash(text, 'success', 2500) }
+const fail = (e, fallback) => { error.value = e?.response?.data?.message || fallback }
+const toggleMfa = async () => { try { applySecurity((await client.put('/account/security', { mfa_enabled: !security.mfa_enabled })).data.data); flash(`Two-factor authentication ${security.mfa_enabled ? 'enabled' : 'disabled'}.`) } catch (e) { fail(e, 'Unable to update two-factor authentication.') } }
+const manage2fa = () => { const method = window.prompt('Verification method', security.verification_method); if (method?.trim()) client.put('/account/security', { verification_method: method.trim() }).then(({ data }) => { applySecurity(data.data); flash('Verification method updated.') }).catch((e) => fail(e, 'Unable to update verification method.')) }
+const removeDevice = async (device) => { if (!window.confirm(`Remove ${device.name}?`)) return; try { applySecurity((await client.delete(`/account/security/devices/${device.id}`)).data.data); flash(`${device.name} removed.`) } catch (e) { fail(e, 'Unable to remove device.') } }
+const logoutAll = async () => { if (!window.confirm('Log out every other device?')) return; try { applySecurity((await client.post('/account/security/logout-all-devices')).data.data); flash('All other devices were logged out.') } catch (e) { fail(e, 'Unable to log out devices.') } }
+const openDialog = (type) => { dialog.value = type; dialogError.value = ''; showCredential.value = false; Object.assign(credential, { current: '', newValue: '', confirmation: '' }) }
+const closeDialog = () => { dialog.value = ''; dialogError.value = '' }
+const submitDialog = async () => { if (credential.newValue !== credential.confirmation) { dialogError.value = 'The new values do not match.'; return }; saving.value = true; dialogError.value = ''; try { const endpoint = dialog.value === 'password' ? '/account/security/password' : '/account/security/pin'; const payload = dialog.value === 'password' ? { current_password: credential.current, new_password: credential.newValue, new_password_confirmation: credential.confirmation } : { current_pin: credential.current, security_pin: credential.newValue, security_pin_confirmation: credential.confirmation }; const { data } = await client.put(endpoint, payload); await loadSecurity(); closeDialog(); flash(data.message) } catch (e) { dialogError.value = e?.response?.data?.message || 'Unable to save your changes.' } finally { saving.value = false } }
 onMounted(loadSecurity)
 </script>
+
+<style scoped>
+.security-page{max-width:1240px;margin:0 auto;padding:20px 26px 30px;color:#061b90;font-family:Roboto,Arial,sans-serif}.security-heading{display:flex;align-items:center;gap:20px}.security-heading h1,.security-card h2{margin:0;color:#fff;background:linear-gradient(105deg,#073a77,#001e61);border-radius:6px;font-weight:700}.security-heading h1{flex:1;padding:3px 20px 7px;font-size:2.35rem;line-height:1.1}.security-heading p{margin:0;font-weight:700;font-size:1.08rem;white-space:nowrap}.security-notice{display:flex;justify-content:space-between;align-items:center;gap:20px;min-height:52px;margin:9px 6px 16px;padding:8px 24px;border:1px solid #c2cddd;border-radius:6px;font-size:1rem}.notice-message,.card-note{display:flex;align-items:center;gap:12px}.notice-message b,.card-note b{display:inline-grid;place-items:center;width:23px;height:23px;border:2px solid currentColor;border-radius:50%;font-family:serif}.security-grid{display:grid;grid-template-columns:.92fr 1.08fr;gap:16px 22px}.security-card{overflow:hidden;border:1px solid #b9c5d7;border-radius:6px;background:rgba(255,255,255,.84)}.security-card h2{padding:8px 18px;border-radius:0;font-size:1.12rem}.credential-columns,.twofa-content{display:grid;min-height:181px}.credential-columns{grid-template-columns:1.2fr 1fr;padding:21px 34px}.credential-columns>div+div{padding-left:48px;border-left:1px solid #bbc6d7;text-align:center}.credential-columns h3,.twofa-content span{margin:0 0 10px;font-size:1rem;font-weight:400}.credential-columns p{margin:0 0 20px}.pin-dots{letter-spacing:5px;font-weight:700}.outline-button,.small-button,.logout-button,.solid-button{border:1px solid #0755ff;border-radius:5px;background:#fff;color:#0643d7;cursor:pointer;font:inherit}.outline-button{min-width:178px;padding:9px 15px}.twofa-content{grid-template-columns:113px 178px 65px 1fr;align-items:center;padding:21px 35px;gap:18px}.twofa-content>div+div{padding-left:29px;border-left:1px solid #bbc6d7}.twofa-content span,.twofa-content strong{display:block}.twofa-content strong{font-size:1.05rem;white-space:nowrap}.toggle{position:relative;width:64px;height:36px;border:0;border-radius:20px;background:#aab7c9;cursor:pointer}.toggle i{position:absolute;top:4px;left:4px;width:28px;height:28px;border-radius:50%;background:#fff;transition:.2s}.toggle.on{background:#0756ee}.toggle.on i{left:32px}.card-note{margin:0;padding:13px 15px;border-bottom:1px solid #cbd4e0;font-size:.9rem}.security-table{width:100%;border-collapse:collapse;text-align:center}.security-table th,.security-table td{padding:11px 10px;border-right:1px solid #d1d8e2;border-bottom:1px solid #d1d8e2;font-size:.91rem;font-weight:400}.security-table th:last-child,.security-table td:last-child{border-right:0}.security-table tbody tr:last-child td{border-bottom:0}.small-button{padding:6px 9px}.empty{color:#657390}.logout-button{display:block;width:calc(100% - 38px);margin:15px auto 8px;padding:10px}.history-card{margin-top:16px}.security-feedback{margin:0 0 12px;padding:10px 14px;border-radius:5px}.success{color:#12692a;background:#edfff1;border:1px solid #a9dfb3}.error,.dialog-error{color:#a21e1e}.error{background:#fff0f0;border:1px solid #f0b3b3}.dialog-backdrop{position:fixed;z-index:1000;inset:0;display:grid;place-items:center;padding:16px;background:rgba(0,20,65,.45)}.security-dialog{position:relative;width:min(100%,430px);padding:27px;border-radius:8px;background:#fff;color:#071b75;box-shadow:0 12px 35px rgba(0,0,0,.25)}.security-dialog h2{margin:0 0 20px;color:#06266d;font-size:1.35rem}.security-dialog label:not(.show-credential){display:grid;gap:6px;margin:12px 0;font-weight:600}.security-dialog input:not([type=checkbox]){padding:9px;border:1px solid #acb9cc;border-radius:4px}.dialog-close{position:absolute;top:7px;right:11px;border:0;background:none;color:#061b90;font-size:1.7rem;cursor:pointer}.show-credential{display:flex;gap:7px;margin-top:14px;font-size:.9rem}.dialog-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.solid-button{padding:9px 15px;color:#fff;background:#0755ee}.solid-button:disabled{opacity:.6;cursor:wait}@media(max-width:900px){.security-grid{grid-template-columns:1fr}.twofa-content{grid-template-columns:1fr 1fr}.twofa-content>div+div{padding-left:0;border-left:0}.security-heading{align-items:flex-start;flex-direction:column;gap:8px}.security-heading h1{width:100%}.security-notice{align-items:flex-start;flex-direction:column;gap:7px}.security-table-wrap{overflow-x:auto}.security-table{min-width:600px}}@media(max-width:560px){.security-page{padding:14px}.security-heading h1{font-size:1.85rem}.credential-columns{grid-template-columns:1fr;gap:22px;padding:20px}.credential-columns>div+div{padding:20px 0 0;border:0;border-top:1px solid #bbc6d7}.twofa-content{grid-template-columns:1fr;padding:20px}.security-notice{margin-inline:0;padding:11px 14px}.notice-message{align-items:flex-start}.outline-button{width:100%}.security-heading p{font-size:.9rem}.history-card{margin-top:14px}}
+</style>

@@ -7,7 +7,7 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## DropDesk Permission Test Runbook
+## Contractor.com Permission Test Runbook
 
 Run the full permission regression suite:
 
